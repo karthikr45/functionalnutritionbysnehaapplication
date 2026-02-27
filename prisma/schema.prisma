@@ -1,0 +1,277 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  PATIENT
+  DOCTOR
+  ADMIN
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum AppointmentType {
+  CONSULTATION
+  FOLLOW_UP
+  PACKAGE_SESSION
+}
+
+enum PackageBookingStatus {
+  ACTIVE
+  COMPLETED
+  EXPIRED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+
+enum DocumentType {
+  PRESCRIPTION
+  DIET_PLAN
+  LAB_REPORT
+  MEDICAL_REPORT
+  CONSENT_FORM
+  OTHER
+}
+
+// ─── Auth Models (NextAuth) ────────────────────────────────────────────────────
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── Core User Model ──────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  phone     String?
+  role      UserRole @default(PATIENT)
+  image     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accounts       Account[]
+  sessions       Session[]
+  doctorProfile  DoctorProfile?
+  patientProfile PatientProfile?
+  documents      Document[]
+}
+
+// ─── Doctor Profile ───────────────────────────────────────────────────────────
+
+model DoctorProfile {
+  id                 String  @id @default(cuid())
+  userId             String  @unique
+  bio                String? @db.Text
+  shortBio           String?
+  specialization     String?
+  qualifications     String?
+  experience         Int?    // years
+  consultationFee    Float   @default(500)
+  followUpFee        Float   @default(300)
+  profileImage       String?
+  isAcceptingPatients Boolean @default(true)
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  availability Availability[]
+  blockedDates BlockedDate[]
+  appointments Appointment[] @relation("DoctorAppointments")
+}
+
+// ─── Patient Profile ──────────────────────────────────────────────────────────
+
+model PatientProfile {
+  id                 String    @id @default(cuid())
+  userId             String    @unique
+  dateOfBirth        DateTime?
+  gender             String?
+  phone              String?
+  address            String?
+  city               String?
+  state              String?
+  pincode            String?
+  medicalHistory     String?   @db.Text
+  allergies          String?
+  currentMedications String?
+  healthGoals        String?
+
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  appointments    Appointment[]
+  packageBookings PackageBooking[]
+}
+
+// ─── Doctor Availability ──────────────────────────────────────────────────────
+
+model Availability {
+  id           String  @id @default(cuid())
+  doctorId     String
+  dayOfWeek    Int     // 0=Sun, 1=Mon ... 6=Sat
+  startTime    String  // "09:00"
+  endTime      String  // "17:00"
+  slotDuration Int     @default(45) // minutes
+  isActive     Boolean @default(true)
+
+  doctor DoctorProfile @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+}
+
+model BlockedDate {
+  id       String   @id @default(cuid())
+  doctorId String
+  date     DateTime
+  reason   String?
+
+  doctor DoctorProfile @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+}
+
+// ─── Appointments ─────────────────────────────────────────────────────────────
+
+model Appointment {
+  id               String            @id @default(cuid())
+  patientId        String
+  doctorId         String
+  date             DateTime
+  startTime        String
+  endTime          String
+  status           AppointmentStatus @default(PENDING)
+  type             AppointmentType   @default(CONSULTATION)
+  healthConcerns   String?           @db.Text
+  doctorNotes      String?           @db.Text
+  dietPlanUrl      String?
+  videoCallLink    String?
+  packageBookingId String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  patient        PatientProfile  @relation(fields: [patientId], references: [id])
+  doctor         DoctorProfile   @relation("DoctorAppointments", fields: [doctorId], references: [id])
+  packageBooking PackageBooking? @relation(fields: [packageBookingId], references: [id])
+  payment        Payment?
+  documents      Document[]
+}
+
+// ─── Packages ─────────────────────────────────────────────────────────────────
+
+model Package {
+  id          String  @id @default(cuid())
+  name        String
+  description String  @db.Text
+  price       Float
+  sessions    Int
+  validity    Int     // days
+  features    Json    // string[]
+  isActive    Boolean @default(true)
+  isPopular   Boolean @default(false)
+  sortOrder   Int     @default(0)
+
+  createdAt DateTime @default(now())
+
+  bookings PackageBooking[]
+}
+
+model PackageBooking {
+  id            String               @id @default(cuid())
+  patientId     String
+  packageId     String
+  totalSessions Int
+  usedSessions  Int                  @default(0)
+  expiryDate    DateTime
+  status        PackageBookingStatus @default(ACTIVE)
+  createdAt     DateTime             @default(now())
+
+  patient      PatientProfile @relation(fields: [patientId], references: [id])
+  package      Package        @relation(fields: [packageId], references: [id])
+  appointments Appointment[]
+  payment      Payment?
+}
+
+// ─── Payments ─────────────────────────────────────────────────────────────────
+
+model Payment {
+  id                  String        @id @default(cuid())
+  razorpayOrderId     String        @unique
+  razorpayPaymentId   String?
+  razorpaySignature   String?
+  amount              Float
+  currency            String        @default("INR")
+  status              PaymentStatus @default(PENDING)
+  appointmentId       String?       @unique
+  packageBookingId    String?       @unique
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  appointment    Appointment?    @relation(fields: [appointmentId], references: [id])
+  packageBooking PackageBooking? @relation(fields: [packageBookingId], references: [id])
+}
+
+// ─── Documents ────────────────────────────────────────────────────────────────
+
+model Document {
+  id            String       @id @default(cuid())
+  uploadedById  String
+  title         String
+  type          DocumentType
+  fileUrl       String
+  filePublicId  String?      // Cloudinary public_id for deletion
+  fileType      String       // mime type
+  fileSize      Int?
+  notes         String?
+  appointmentId String?
+  isShared      Boolean      @default(false) // shared between doctor and patient
+  createdAt     DateTime     @default(now())
+
+  uploadedBy  User         @relation(fields: [uploadedById], references: [id])
+  appointment Appointment? @relation(fields: [appointmentId], references: [id])
+}

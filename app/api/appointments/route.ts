@@ -1,0 +1,96 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { getAuthSession } from '@/lib/auth';
+
+// GET /api/appointments - list appointments for current user
+export async function GET(req: NextRequest) {
+  const session = await getAuthSession();
+  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const { searchParams } = new URL(req.url);
+  const status = searchParams.get('status');
+  const page = parseInt(searchParams.get('page') || '1');
+  const limit = parseInt(searchParams.get('limit') || '10');
+  const skip = (page - 1) * limit;
+
+  let where: any = {};
+
+  if (session.user.role === 'PATIENT') {
+    const profile = await prisma.patientProfile.findUnique({ where: { userId: session.user.id } });
+    if (!profile) return NextResponse.json({ appointments: [] });
+    where.patientId = profile.id;
+  } else if (session.user.role === 'DOCTOR') {
+    const profile = await prisma.doctorProfile.findUnique({ where: { userId: session.user.id } });
+    if (!profile) return NextResponse.json({ appointments: [] });
+    where.doctorId = profile.id;
+  }
+
+  if (status) where.status = status;
+
+  const [appointments, total] = await Promise.all([
+    prisma.appointment.findMany({
+      where,
+      skip,
+      take: limit,
+      orderBy: { date: 'desc' },
+      include: {
+        patient: { include: { user: { select: { name: true, email: true, phone: true } } } },
+        doctor: { include: { user: { select: { name: true, image: true } } } },
+        payment: true,
+        packageBooking: { include: { package: true } },
+      },
+    }),
+    prisma.appointment.count({ where }),
+  ]);
+
+  return NextResponse.json({ appointments, total, page, limit });
+}
+
+// POST /api/appointments - create new appointment
+export async function POST(req: NextRequest) {
+  const session = await getAuthSession();
+  if (!session || session.user.role !== 'PATIENT') {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const { doctorId, date, startTime, endTime, type, healthConcerns, packageBookingId } = await req.json();
+
+  if (!doctorId || !date || !startTime || !endTime) {
+    return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+  }
+
+  const patientProfile = await prisma.patientProfile.findUnique({
+    where: { userId: session.user.id },
+  });
+  if (!patientProfile) return NextResponse.json({ error: 'Patient profile not found' }, { status: 404 });
+
+  // Check slot not already booked
+  const conflict = await prisma.appointment.findFirst({
+    where: {
+      doctorId,
+      date: new Date(date),
+      startTime,
+      status: { notIn: ['CANCELLED'] },
+    },
+  });
+  if (conflict) return NextResponse.json({ error: 'Slot already booked' }, { status: 409 });
+
+  const appointment = await prisma.appointment.create({
+    data: {
+      patientId: patientProfile.id,
+      doctorId,
+      date: new Date(date),
+      startTime,
+      endTime,
+      type: type || 'CONSULTATION',
+      healthConcerns,
+      packageBookingId: packageBookingId || null,
+      status: 'PENDING',
+    },
+    include: {
+      doctor: { include: { user: { select: { name: true } } } },
+    },
+  });
+
+  return NextResponse.json({ appointment }, { status: 201 });
+}

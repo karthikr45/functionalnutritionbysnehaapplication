@@ -1,0 +1,48 @@
+import { withAuth } from 'next-auth/middleware';
+import { NextResponse } from 'next/server';
+
+export default withAuth(
+  function middleware(req) {
+    const { pathname } = req.nextUrl;
+    const token = req.nextauth.token;
+    const role = token?.role;
+
+    // Redirect based on role after login
+    if (pathname === '/dashboard') {
+      if (role === 'DOCTOR') return NextResponse.redirect(new URL('/doctor/dashboard', req.url));
+      if (role === 'PATIENT') return NextResponse.redirect(new URL('/patient/dashboard', req.url));
+    }
+
+    // Protect doctor routes
+    if (pathname.startsWith('/doctor') && role !== 'DOCTOR') {
+      return NextResponse.redirect(new URL('/login?error=unauthorized', req.url));
+    }
+
+    // Protect patient routes
+    if (pathname.startsWith('/patient') && role !== 'PATIENT') {
+      return NextResponse.redirect(new URL('/login?error=unauthorized', req.url));
+    }
+
+    // Protect studio (admin / doctor only)
+    if (pathname.startsWith('/studio') && role !== 'DOCTOR' && role !== 'ADMIN') {
+      return NextResponse.redirect(new URL('/login?error=unauthorized', req.url));
+    }
+
+    return NextResponse.next();
+  },
+  {
+    callbacks: {
+      authorized: ({ token, req }) => {
+        const { pathname } = req.nextUrl;
+        const publicPaths = ['/', '/login', '/signup', '/blog', '/api/auth', '/api/packages'];
+        const isPublic = publicPaths.some((p) => pathname === p || pathname.startsWith(p));
+        if (isPublic) return true;
+        return !!token;
+      },
+    },
+  }
+);
+
+export const config = {
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)'],
+};
