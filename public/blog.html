@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog | Functional Nutrition by Sneha</title>
+  <meta name="description" content="Read the latest articles on functional nutrition, gut health, anti-inflammatory eating, and holistic wellness by Sneha." />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <span class="logo-icon"><i class="fas fa-leaf"></i></span>
+        <div class="logo-text">
+          <span class="logo-main">Sneha</span>
+          <span class="logo-sub">Functional Nutrition</span>
+        </div>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/services">Services</a></li>
+        <li><a href="/blog" class="active">Blog</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/contact" class="nav-cta">Book Consultation</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <div class="page-hero-content">
+      <span class="section-tag">Knowledge Hub</span>
+      <h1>Nutrition <span class="highlight">Blog</span></h1>
+      <p>Evidence-based insights, tips, and research on functional nutrition and holistic wellness.</p>
+    </div>
+  </section>
+
+  <!-- Blog Filter & Grid -->
+  <section class="blog-section section">
+    <div class="container">
+
+      <!-- Category Filter -->
+      <div class="blog-filter">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="Nutrition">Nutrition</button>
+        <button class="filter-btn" data-filter="Wellness">Wellness</button>
+        <button class="filter-btn" data-filter="Diet">Diet</button>
+        <button class="filter-btn" data-filter="Food">Food</button>
+      </div>
+
+      <!-- Search -->
+      <div class="blog-search">
+        <i class="fas fa-search"></i>
+        <input type="text" id="blogSearch" placeholder="Search articles..." />
+      </div>
+
+      <!-- Blog Grid -->
+      <div class="blog-grid full" id="blogGrid">
+        <!-- Loaded via JS -->
+        <div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Loading articles...</div>
+      </div>
+
+      <!-- No results message -->
+      <div id="noResults" class="no-results hidden">
+        <i class="fas fa-search"></i>
+        <p>No articles found. Try a different search term or category.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter-section section bg-light">
+    <div class="container">
+      <div class="newsletter-box animate-on-scroll">
+        <div class="newsletter-icon"><i class="fas fa-envelope-open-text"></i></div>
+        <h2>Get Weekly Nutrition Tips</h2>
+        <p>Join 5,000+ health-conscious readers and receive practical nutrition insights, recipes, and wellness tips every week.</p>
+        <form class="newsletter-form" id="newsletterForm">
+          <input type="email" placeholder="Enter your email address" required />
+          <button type="submit" class="btn btn-primary">Subscribe Free</button>
+        </form>
+        <p class="newsletter-note"><i class="fas fa-lock"></i> No spam, ever. Unsubscribe anytime.</p>
+        <div id="newsletterMsg" class="form-message hidden"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Modal -->
+  <div class="modal-overlay" id="blogModal">
+    <div class="modal-content blog-modal">
+      <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <div class="cta-icon"><i class="fas fa-leaf"></i></div>
+        <h2>Ready to Apply This Knowledge?</h2>
+        <p>Book a consultation and get a personalized nutrition plan designed specifically for you.</p>
+        <a href="/contact" class="btn btn-white">Book Free Consultation</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="nav-logo">
+            <span class="logo-icon"><i class="fas fa-leaf"></i></span>
+            <div class="logo-text">
+              <span class="logo-main">Sneha</span>
+              <span class="logo-sub">Functional Nutrition</span>
+            </div>
+          </a>
+          <p>Empowering you to take control of your health through the transformative power of functional nutrition.</p>
+          <div class="social-links">
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About Sneha</a></li>
+            <li><a href="/services">Services</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Categories</h4>
+          <ul>
+            <li><a href="/blog">Nutrition Science</a></li>
+            <li><a href="/blog">Gut Health</a></li>
+            <li><a href="/blog">Meal Planning</a></li>
+            <li><a href="/blog">Mindful Eating</a></li>
+            <li><a href="/blog">Wellness Tips</a></li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <h4>Get In Touch</h4>
+          <ul>
+            <li><i class="fas fa-envelope"></i> sneha@functionalnutrition.com</li>
+            <li><i class="fas fa-phone"></i> +91 98765 43210</li>
+            <li><i class="fas fa-map-marker-alt"></i> Mumbai, India</li>
+            <li><i class="fas fa-clock"></i> Mon–Sat: 9 AM – 6 PM</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Functional Nutrition by Sneha. All rights reserved.</p>
+        <p>Made with <i class="fas fa-heart" style="color:#e53935;"></i> for your health journey.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

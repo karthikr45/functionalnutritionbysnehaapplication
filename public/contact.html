@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | Functional Nutrition by Sneha</title>
+  <meta name="description" content="Get in touch with Sneha to book a consultation or ask about her nutrition services." />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <span class="logo-icon"><i class="fas fa-leaf"></i></span>
+        <div class="logo-text">
+          <span class="logo-main">Sneha</span>
+          <span class="logo-sub">Functional Nutrition</span>
+        </div>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/services">Services</a></li>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/contact" class="active">Contact</a></li>
+        <li><a href="/contact" class="nav-cta">Book Consultation</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <div class="page-hero-content">
+      <span class="section-tag">Let's Connect</span>
+      <h1>Get In <span class="highlight">Touch</span></h1>
+      <p>Have questions or ready to start your health transformation? I'd love to hear from you.</p>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact-section section">
+    <div class="container">
+      <div class="contact-grid">
+
+        <!-- Contact Info -->
+        <div class="contact-info animate-on-scroll">
+          <h2>Let's Start Your <span class="highlight">Health Journey</span></h2>
+          <p>Whether you have questions about my services, want to book a consultation, or simply want to learn more about functional nutrition, I'm here to help.</p>
+
+          <div class="contact-details">
+            <div class="contact-detail-item">
+              <div class="contact-detail-icon"><i class="fas fa-envelope"></i></div>
+              <div>
+                <strong>Email</strong>
+                <span>sneha@functionalnutrition.com</span>
+              </div>
+            </div>
+            <div class="contact-detail-item">
+              <div class="contact-detail-icon"><i class="fas fa-phone"></i></div>
+              <div>
+                <strong>Phone / WhatsApp</strong>
+                <span>+91 98765 43210</span>
+              </div>
+            </div>
+            <div class="contact-detail-item">
+              <div class="contact-detail-icon"><i class="fas fa-map-marker-alt"></i></div>
+              <div>
+                <strong>Location</strong>
+                <span>Mumbai, Maharashtra, India<br />(Also available online worldwide)</span>
+              </div>
+            </div>
+            <div class="contact-detail-item">
+              <div class="contact-detail-icon"><i class="fas fa-clock"></i></div>
+              <div>
+                <strong>Office Hours</strong>
+                <span>Monday – Saturday: 9 AM – 6 PM IST<br />Sunday: By appointment only</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-social">
+            <h4>Follow Me</h4>
+            <div class="social-links">
+              <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+              <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+              <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+
+          <div class="free-call-box">
+            <div class="free-call-icon"><i class="fas fa-phone-alt"></i></div>
+            <div>
+              <strong>Free 30-Min Discovery Call</strong>
+              <p>Not sure where to start? Book a free call — no commitment required.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="contact-form-wrapper animate-on-scroll">
+          <div class="contact-form-header">
+            <h3>Send a Message</h3>
+            <p>Fill in the form below and I'll get back to you within 24 hours.</p>
+          </div>
+
+          <form id="contactForm" class="contact-form" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name">Full Name <span class="required">*</span></label>
+                <input type="text" id="name" name="name" placeholder="Your full name" required />
+                <span class="field-error" id="nameError"></span>
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address <span class="required">*</span></label>
+                <input type="email" id="email" name="email" placeholder="your@email.com" required />
+                <span class="field-error" id="emailError"></span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="phone">Phone / WhatsApp</label>
+                <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210" />
+              </div>
+              <div class="form-group">
+                <label for="subject">Subject</label>
+                <select id="subject" name="subject">
+                  <option value="General Inquiry">General Inquiry</option>
+                  <option value="Book Consultation">Book a Consultation</option>
+                  <option value="Custom Meal Plan">Custom Meal Planning</option>
+                  <option value="Gut Health Reset">Gut Health Reset Program</option>
+                  <option value="Group Program">Group Wellness Program</option>
+                  <option value="Corporate Wellness">Corporate Wellness</option>
+                  <option value="Free Discovery Call">Free Discovery Call</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="message">Your Message <span class="required">*</span></label>
+              <textarea id="message" name="message" rows="5" placeholder="Tell me about your health goals, challenges, or any questions you have..." required></textarea>
+              <span class="field-error" id="messageError"></span>
+            </div>
+
+            <div class="form-footer">
+              <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+                <span id="btnText"><i class="fas fa-paper-plane"></i> Send Message</span>
+                <span id="btnLoading" class="hidden"><i class="fas fa-spinner fa-spin"></i> Sending...</span>
+              </button>
+            </div>
+
+            <div id="formMessage" class="form-message hidden"></div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="process-section section bg-light">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Simple Process</span>
+        <h2>What Happens <span class="highlight">After You Reach Out</span></h2>
+      </div>
+      <div class="process-steps">
+        <div class="process-step animate-on-scroll">
+          <div class="process-icon"><i class="fas fa-paper-plane"></i></div>
+          <div class="process-number">1</div>
+          <h3>Submit Your Message</h3>
+          <p>Fill out the contact form or send a WhatsApp message with your health goals and questions.</p>
+        </div>
+        <div class="process-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="process-step animate-on-scroll">
+          <div class="process-icon"><i class="fas fa-phone-alt"></i></div>
+          <div class="process-number">2</div>
+          <h3>Free Discovery Call</h3>
+          <p>We schedule a free 30-min call to discuss your goals, current situation, and how I can best support you.</p>
+        </div>
+        <div class="process-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="process-step animate-on-scroll">
+          <div class="process-icon"><i class="fas fa-file-alt"></i></div>
+          <div class="process-number">3</div>
+          <h3>Custom Plan Created</h3>
+          <p>After the deep dive assessment, I create your personalized nutrition plan tailored to your unique needs.</p>
+        </div>
+        <div class="process-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="process-step animate-on-scroll">
+          <div class="process-icon"><i class="fas fa-chart-line"></i></div>
+          <div class="process-number">4</div>
+          <h3>Transform & Thrive</h3>
+          <p>With ongoing support and regular check-ins, we work together toward your health goals and celebrate your wins.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Questions</span>
+        <h2>Before You Reach Out <span class="highlight">—</span> FAQs</h2>
+      </div>
+      <div class="faq-grid">
+        <div class="faq-item animate-on-scroll">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>How quickly will you respond?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>I respond to all messages within 24 hours on business days (Mon–Sat). For urgent matters, WhatsApp is the fastest way to reach me.</p>
+          </div>
+        </div>
+        <div class="faq-item animate-on-scroll">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Is the discovery call really free?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Yes, absolutely! The 30-minute discovery call is completely free with no obligation. It's a chance for us to see if we're a good fit before you commit to any program.</p>
+          </div>
+        </div>
+        <div class="faq-item animate-on-scroll">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Do you work with international clients?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Yes! I work with clients worldwide via Zoom, Skype, or phone calls. Sessions are scheduled according to mutual availability across time zones.</p>
+          </div>
+        </div>
+        <div class="faq-item animate-on-scroll">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>What payment methods do you accept?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>I accept UPI, bank transfer, credit/debit cards, and PayPal for international clients. Payment plans are available for multi-month programs.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="nav-logo">
+            <span class="logo-icon"><i class="fas fa-leaf"></i></span>
+            <div class="logo-text">
+              <span class="logo-main">Sneha</span>
+              <span class="logo-sub">Functional Nutrition</span>
+            </div>
+          </a>
+          <p>Empowering you to take control of your health through the transformative power of functional nutrition.</p>
+          <div class="social-links">
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About Sneha</a></li>
+            <li><a href="/services">Services</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="/services">Nutrition Consultation</a></li>
+            <li><a href="/services">Custom Meal Planning</a></li>
+            <li><a href="/services">Gut Health Reset</a></li>
+            <li><a href="/services">Group Programs</a></li>
+            <li><a href="/services">Corporate Wellness</a></li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <h4>Get In Touch</h4>
+          <ul>
+            <li><i class="fas fa-envelope"></i> sneha@functionalnutrition.com</li>
+            <li><i class="fas fa-phone"></i> +91 98765 43210</li>
+            <li><i class="fas fa-map-marker-alt"></i> Mumbai, India</li>
+            <li><i class="fas fa-clock"></i> Mon–Sat: 9 AM – 6 PM</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Functional Nutrition by Sneha. All rights reserved.</p>
+        <p>Made with <i class="fas fa-heart" style="color:#e53935;"></i> for your health journey.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>
