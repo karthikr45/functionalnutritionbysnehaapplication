@@ -34,6 +34,9 @@
     "sanity": "^3.22.0",
     "styled-components": "^6.1.8"
   },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.11.0",

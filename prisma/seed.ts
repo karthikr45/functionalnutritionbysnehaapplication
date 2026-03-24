@@ -6,30 +6,30 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Starting seed...');
 
-  // ── Create Doctor ────────────────────────────────────────────────────────
+  // ── Create Doctor (Sneha) ──────────────────────────────────────────────
   const doctorPassword = await bcrypt.hash('Doctor@123', 10);
   const doctor = await prisma.user.upsert({
-    where: { email: 'dr.priya@nutritioncare.com' },
+    where: { email: 'sneha@functionalnutrition.com' },
     update: {},
     create: {
-      name: 'Dr. Priya Sharma',
-      email: 'dr.priya@nutritioncare.com',
+      name: 'Sneha',
+      email: 'sneha@functionalnutrition.com',
       password: doctorPassword,
       phone: '+91-9876543210',
       role: UserRole.DOCTOR,
       doctorProfile: {
         create: {
-          bio: `Dr. Priya Sharma is a certified Clinical Nutritionist and Dietitian with over 10 years of experience in personalized nutrition therapy. She holds a Master's degree in Food Science and Nutrition from Delhi University and is a registered member of the Indian Dietetic Association (IDA).
+          bio: `Sneha is a certified Functional Nutrition Consultant with over 8 years of experience in personalized nutrition therapy. She combines the principles of functional medicine with evidence-based nutrition to create lasting health transformations.
 
-She specializes in weight management, therapeutic diets for diabetes, PCOS, thyroid disorders, and sports nutrition. Her evidence-based, holistic approach combines nutritional science with behavioral psychology to create sustainable, lifestyle-based solutions for her clients.
+She specializes in hormonal imbalances (PCOS, thyroid), gut health issues (IBS, bloating, acid reflux), diabetes management, weight management, and autoimmune conditions. Her approach goes beyond calorie counting — she looks at the complete health picture including lab work, lifestyle, stress, sleep, and gut health.
 
-Dr. Priya has helped over 5,000 patients achieve their health goals through personalized nutrition plans that are practical, culturally appropriate, and scientifically sound.`,
-          shortBio: 'Certified Clinical Nutritionist & Dietitian | 10+ Years Experience | 5000+ Patients Transformed',
-          specialization: 'Clinical Nutrition, Weight Management, Therapeutic Diets, Sports Nutrition',
-          qualifications: 'M.Sc. Food Science & Nutrition (Delhi University), Registered Dietitian (RD), Certified Diabetes Educator (CDE)',
-          experience: 10,
-          consultationFee: 800,
-          followUpFee: 500,
+Sneha has helped over 500 clients achieve their health goals through personalized nutrition plans that are practical, rooted in Indian food habits, and scientifically sound.`,
+          shortBio: 'Certified Functional Nutrition Consultant | 8+ Years Experience | 500+ Clients Transformed',
+          specialization: 'Functional Nutrition, PCOS, Thyroid, Gut Health, Weight Management, Diabetes',
+          qualifications: 'Certified Functional Nutrition Consultant, Advanced Clinical Nutrition & Dietetics, Functional Medicine Approach, Gut Microbiome & Hormonal Health Specialist',
+          experience: 8,
+          consultationFee: 1499,
+          followUpFee: 799,
           isAcceptingPatients: true,
         },
       },
@@ -37,7 +37,7 @@ Dr. Priya has helped over 5,000 patients achieve their health goals through pers
     include: { doctorProfile: true },
   });
 
-  // ── Doctor Availability (Mon–Sat, 9 AM–6 PM, 45-min slots) ─────────────
+  // ── Doctor Availability (Mon–Sat, 9 AM–7 PM, 45-min slots) ─────────────
   if (doctor.doctorProfile) {
     await prisma.availability.deleteMany({ where: { doctorId: doctor.doctorProfile.id } });
     const workingDays = [1, 2, 3, 4, 5, 6]; // Mon-Sat
@@ -47,7 +47,7 @@ Dr. Priya has helped over 5,000 patients achieve their health goals through pers
           doctorId: doctor.doctorProfile.id,
           dayOfWeek: day,
           startTime: '09:00',
-          endTime: '18:00',
+          endTime: '19:00',
           slotDuration: 45,
           isActive: true,
         },
@@ -80,11 +80,11 @@ Dr. Priya has helped over 5,000 patients achieve their health goals through pers
   // ── Create Admin ──────────────────────────────────────────────────────────
   const adminPassword = await bcrypt.hash('Admin@123', 10);
   await prisma.user.upsert({
-    where: { email: 'admin@nutritioncare.com' },
+    where: { email: 'admin@functionalnutrition.com' },
     update: {},
     create: {
       name: 'Admin User',
-      email: 'admin@nutritioncare.com',
+      email: 'admin@functionalnutrition.com',
       password: adminPassword,
       role: UserRole.ADMIN,
     },
@@ -96,66 +96,64 @@ Dr. Priya has helped over 5,000 patients achieve their health goals through pers
   await prisma.package.createMany({
     data: [
       {
-        name: 'Starter Plan',
-        description: 'Perfect for those beginning their nutrition journey. Includes a comprehensive assessment and personalized diet plan.',
-        price: 1999,
-        sessions: 2,
+        name: 'Single Consultation',
+        description: 'Perfect for a one-time nutrition assessment and personalized diet plan to get you started.',
+        price: 1499,
+        sessions: 1,
         validity: 30,
         isActive: true,
         isPopular: false,
         sortOrder: 1,
         features: JSON.stringify([
-          '1 Initial Consultation (45 min)',
-          '1 Follow-up Session (30 min)',
-          'Personalized Diet Plan',
-          'Body Composition Analysis',
-          'WhatsApp Support for 30 days',
-          'Diet Chart & Meal Prep Guide',
+          '60-min video consultation',
+          'Complete health assessment',
+          'Personalized diet plan',
+          'Grocery list & recipes',
+          '7-day WhatsApp support',
+          'Lab report review',
         ]),
       },
       {
         name: 'Transformation Plan',
-        description: 'Our most popular 3-month program for sustainable weight management and lifestyle transformation.',
+        description: 'Our most popular plan for lasting health transformation with regular follow-ups and ongoing support.',
         price: 4999,
-        sessions: 6,
+        sessions: 4,
         validity: 90,
         isActive: true,
         isPopular: true,
         sortOrder: 2,
         features: JSON.stringify([
-          '1 Initial Consultation (60 min)',
-          '5 Follow-up Sessions (45 min each)',
-          'Customized Meal Plans (updated monthly)',
-          'Grocery Shopping Guide',
-          'Recipe Book (50+ healthy recipes)',
-          'Body Composition Tracking',
-          'WhatsApp Support for 90 days',
-          'Supplement Recommendations',
-          'Exercise & Nutrition Sync',
+          '4 video consultations (60 min each)',
+          'Detailed root cause analysis',
+          'Monthly diet plan updates',
+          'WhatsApp support throughout',
+          'Lab report analysis & guidance',
+          'Recipe booklet (50+ recipes)',
+          'Supplement recommendations',
+          'Progress tracking',
         ]),
       },
       {
-        name: 'Premium Wellness',
-        description: 'Comprehensive 6-month wellness program with priority access, lab interpretation, and continuous support.',
+        name: 'Complete Wellness',
+        description: 'Comprehensive 6-month program for complex health conditions requiring deep functional nutrition intervention.',
         price: 8999,
-        sessions: 12,
+        sessions: 8,
         validity: 180,
         isActive: true,
         isPopular: false,
         sortOrder: 3,
         features: JSON.stringify([
-          '1 Initial Consultation (60 min)',
-          '11 Follow-up Sessions (45 min each)',
-          'Priority Appointment Booking',
-          'Lab Report Interpretation',
-          'Quarterly Health Assessment',
-          'Customized Meal Plans (updated bi-weekly)',
-          'Exclusive Recipe Database Access',
-          'WhatsApp Priority Support (180 days)',
-          'Supplement & Nutraceutical Plan',
-          'Hormonal Balance Nutrition',
-          'Mindful Eating Workshop (online)',
-          'Family Meal Planning Guide',
+          '8 video consultations (60 min each)',
+          'Advanced functional assessment',
+          'Bi-weekly diet plan updates',
+          'Priority WhatsApp support',
+          'Comprehensive lab interpretation',
+          'Supplement & nutraceutical plan',
+          'Meal prep guides & recipes',
+          'Hormonal balance protocol',
+          'Gut healing protocol',
+          'Progress tracking dashboard',
+          'Family meal planning guide',
         ]),
       },
     ],
@@ -163,9 +161,9 @@ Dr. Priya has helped over 5,000 patients achieve their health goals through pers
 
   console.log('✅ Seed completed successfully!');
   console.log('\n📋 Test Credentials:');
-  console.log('  Doctor:  dr.priya@nutritioncare.com  | Doctor@123');
-  console.log('  Patient: patient@example.com          | Patient@123');
-  console.log('  Admin:   admin@nutritioncare.com      | Admin@123');
+  console.log('  Doctor:  sneha@functionalnutrition.com    | Doctor@123');
+  console.log('  Patient: patient@example.com               | Patient@123');
+  console.log('  Admin:   admin@functionalnutrition.com    | Admin@123');
 }
 
 main()
