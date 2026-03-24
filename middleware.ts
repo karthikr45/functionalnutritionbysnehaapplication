@@ -34,8 +34,21 @@ export default withAuth(
     callbacks: {
       authorized: ({ token, req }) => {
         const { pathname } = req.nextUrl;
-        const publicPaths = ['/', '/login', '/signup', '/blog', '/api/auth', '/api/packages'];
-        const isPublic = publicPaths.some((p) => pathname === p || pathname.startsWith(p));
+        // Public paths — accessible without login
+        const publicPaths = [
+          '/',
+          '/login',
+          '/signup',
+          '/blog',
+          '/privacy',
+          '/terms',
+          '/refund',
+          '/api/auth',
+          '/api/packages',
+          '/api/availability',
+          '/api/doctor/profile',
+        ];
+        const isPublic = publicPaths.some((p) => pathname === p || pathname.startsWith(p + '/') || pathname.startsWith(p));
         if (isPublic) return true;
         return !!token;
       },

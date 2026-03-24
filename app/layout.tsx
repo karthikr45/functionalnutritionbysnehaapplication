@@ -4,13 +4,13 @@ import { Providers } from './providers';
 import { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
-  title: 'NutritionCare — Personalized Nutrition by Dr. Priya Sharma',
+  title: 'Functional Nutrition by Sneha — Heal from the Root Cause',
   description:
-    'Get expert, personalized nutrition guidance from Dr. Priya Sharma, a certified Clinical Nutritionist with 10+ years of experience. Book online consultations for weight management, diabetes, PCOS, and more.',
-  keywords: 'nutritionist, dietitian, online consultation, weight loss, diabetes diet, PCOS nutrition, India',
+    'Personalized functional nutrition consultations by Sneha. Science-backed diet plans for PCOS, thyroid, gut health, diabetes, weight management, and more. Book online consultations today.',
+  keywords: 'functional nutrition, nutritionist, PCOS diet, thyroid nutrition, gut health, weight loss, diabetes diet, online consultation, India, Sneha',
   openGraph: {
-    title: 'NutritionCare — Personalized Nutrition',
-    description: 'Transform your health through expert nutrition guidance.',
+    title: 'Functional Nutrition by Sneha',
+    description: 'Heal from the root cause with personalized, science-backed functional nutrition. Book your consultation today.',
     type: 'website',
   },
 };

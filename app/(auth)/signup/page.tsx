@@ -52,7 +52,7 @@ export default function SignupPage() {
         return;
       }
 
-      toast.success('Welcome to NutritionCare! 🎉');
+      toast.success('Welcome to Functional Nutrition!');
       router.push(packageId ? `/patient/packages?highlight=${packageId}` : '/patient/dashboard');
     } catch (err) {
       toast.error('Something went wrong. Please try again.');
@@ -62,12 +62,12 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-white flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-white flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 justify-center mb-4">
-            <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">N</div>
-            <span className="text-xl font-bold text-gray-900">NutritionCare</span>
+            <div className="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center text-white font-bold text-sm">FN</div>
+            <span className="text-xl font-bold text-gray-900">Functional Nutrition</span>
           </Link>
           <h1 className="text-2xl font-bold text-gray-900 font-serif">Create your account</h1>
           <p className="text-gray-500 mt-1 text-sm">Start your health transformation journey today</p>

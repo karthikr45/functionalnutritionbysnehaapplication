@@ -21,8 +21,8 @@ export default function PatientSidebar() {
       {/* Logo */}
       <div className="p-5 border-b border-gray-100">
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center text-white font-bold">N</div>
-          <span className="font-bold text-gray-800">NutritionCare</span>
+          <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">FN</div>
+          <span className="font-bold text-gray-800">Functional Nutrition</span>
         </Link>
       </div>
 

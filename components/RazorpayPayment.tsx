@@ -54,10 +54,10 @@ export default function RazorpayPayment({
       const { orderId, currency } = await orderRes.json();
 
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '',
         amount: Math.round(amount * 100),
         currency: currency || 'INR',
-        name: 'NutritionCare',
+        name: 'Functional Nutrition by Sneha',
         description: type === 'appointment' ? 'Consultation Booking' : 'Package Booking',
         order_id: orderId,
         prefill: {

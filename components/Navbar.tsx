@@ -14,7 +14,9 @@ export default function Navbar() {
     { href: '/#about', label: 'About' },
     { href: '/#services', label: 'Services' },
     { href: '/#packages', label: 'Packages' },
+    { href: '/#testimonials', label: 'Testimonials' },
     { href: '/blog', label: 'Blog' },
+    { href: '/#faq', label: 'FAQ' },
     { href: '/#contact', label: 'Contact' },
   ];
 
@@ -31,22 +33,22 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 bg-primary-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
-              N
+            <div className="w-9 h-9 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+              FN
             </div>
             <div>
-              <span className="font-bold text-gray-900 text-lg leading-tight">NutritionCare</span>
-              <p className="text-primary-600 text-xs leading-tight">by Dr. Priya Sharma</p>
+              <span className="font-bold text-gray-900 text-lg leading-tight">Functional Nutrition</span>
+              <p className="text-green-600 text-xs leading-tight">by Sneha</p>
             </div>
           </Link>
 
           {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-6">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-gray-600 hover:text-primary-600 font-medium text-sm transition-colors"
+                className="text-gray-600 hover:text-green-600 font-medium text-sm transition-colors"
               >
                 {link.label}
               </Link>
@@ -59,7 +61,7 @@ export default function Navbar() {
               <>
                 <Link
                   href={dashboardHref}
-                  className="px-4 py-2 text-primary-600 font-medium text-sm hover:bg-primary-50 rounded-lg transition-colors"
+                  className="px-4 py-2 text-green-600 font-medium text-sm hover:bg-green-50 rounded-lg transition-colors"
                 >
                   Dashboard
                 </Link>
@@ -79,8 +81,8 @@ export default function Navbar() {
                   Login
                 </Link>
                 <Link
-                  href="/signup"
-                  className="px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-semibold text-sm rounded-xl transition-colors shadow-sm"
+                  href="/#packages"
+                  className="px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white font-semibold text-sm rounded-xl transition-colors shadow-sm"
                 >
                   Book Now
                 </Link>
@@ -90,7 +92,7 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <button
-            className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100"
+            className="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100"
             onClick={() => setOpen(!open)}
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -106,13 +108,13 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="md:hidden border-t border-gray-100 bg-white px-4 py-4 space-y-3">
+        <div className="lg:hidden border-t border-gray-100 bg-white px-4 py-4 space-y-3">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="block py-2 text-gray-700 font-medium hover:text-primary-600"
+              className="block py-2 text-gray-700 font-medium hover:text-green-600"
             >
               {link.label}
             </Link>
@@ -120,7 +122,7 @@ export default function Navbar() {
           <div className="pt-3 border-t border-gray-100 flex flex-col gap-2">
             {session ? (
               <>
-                <Link href={dashboardHref} onClick={() => setOpen(false)} className="block py-2.5 px-4 bg-primary-50 text-primary-700 rounded-lg font-medium text-center">
+                <Link href={dashboardHref} onClick={() => setOpen(false)} className="block py-2.5 px-4 bg-green-50 text-green-700 rounded-lg font-medium text-center">
                   Dashboard
                 </Link>
                 <button onClick={() => signOut({ callbackUrl: '/' })} className="py-2.5 px-4 border border-gray-200 text-gray-700 rounded-lg font-medium">
@@ -132,7 +134,7 @@ export default function Navbar() {
                 <Link href="/login" onClick={() => setOpen(false)} className="block py-2.5 px-4 border border-gray-200 text-gray-700 rounded-lg font-medium text-center">
                   Login
                 </Link>
-                <Link href="/signup" onClick={() => setOpen(false)} className="block py-2.5 px-4 bg-primary-600 text-white rounded-xl font-semibold text-center">
+                <Link href="/#packages" onClick={() => setOpen(false)} className="block py-2.5 px-4 bg-green-600 text-white rounded-xl font-semibold text-center">
                   Book Now
                 </Link>
               </>

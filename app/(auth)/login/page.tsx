@@ -37,13 +37,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-white flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-white flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 justify-center mb-4">
-            <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">N</div>
-            <span className="text-xl font-bold text-gray-900">NutritionCare</span>
+            <div className="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center text-white font-bold text-sm">FN</div>
+            <span className="text-xl font-bold text-gray-900">Functional Nutrition</span>
           </Link>
           <h1 className="text-2xl font-bold text-gray-900 font-serif">Welcome back</h1>
           <p className="text-gray-500 mt-1 text-sm">Sign in to your account to continue</p>
@@ -99,7 +99,7 @@ export default function LoginPage() {
           <div className="mt-6 p-4 bg-gray-50 rounded-xl text-xs text-gray-500 space-y-1">
             <p className="font-semibold text-gray-700 mb-2">Demo Credentials:</p>
             <p>Patient: patient@example.com / Patient@123</p>
-            <p>Doctor: dr.priya@nutritioncare.com / Doctor@123</p>
+            <p>Doctor: sneha@functionalnutrition.com / Doctor@123</p>
           </div>
         </div>
 

@@ -20,15 +20,15 @@ export default async function BlogPage() {
       <Navbar />
       <main>
         {/* Hero */}
-        <div className="bg-gradient-to-br from-primary-50 to-white py-16 text-center">
+        <div className="bg-gradient-to-br from-green-50 to-white py-16 text-center">
           <div className="max-w-3xl mx-auto px-4">
-            <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">Expert Insights</p>
+            <p className="text-green-600 font-semibold text-sm uppercase tracking-wide">Expert Insights</p>
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 font-serif mt-3">
               Nutrition Blog
             </h1>
             <p className="text-gray-600 text-lg mt-4">
               Evidence-based articles on nutrition, health, wellness, and lifestyle transformation.
-              Written by Dr. Priya Sharma.
+              Written by Sneha, Functional Nutrition Consultant.
             </p>
           </div>
         </div>
@@ -40,7 +40,7 @@ export default async function BlogPage() {
               <h3 className="text-xl font-semibold text-gray-700 mb-2">Articles Coming Soon</h3>
               <p className="text-gray-400">
                 Check back soon for expert nutrition insights.{' '}
-                <Link href="/#contact" className="text-primary-600 hover:underline">Subscribe for updates.</Link>
+                <Link href="/#contact" className="text-green-600 hover:underline">Subscribe for updates.</Link>
               </p>
             </div>
           ) : (
@@ -49,9 +49,9 @@ export default async function BlogPage() {
                 <Link
                   key={post._id}
                   href={`/blog/${post.slug?.current}`}
-                  className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md hover:border-primary-200 transition-all duration-200 group flex flex-col"
+                  className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md hover:border-green-200 transition-all duration-200 group flex flex-col"
                 >
-                  <div className="aspect-video bg-gradient-to-br from-primary-50 to-green-50 flex items-center justify-center overflow-hidden">
+                  <div className="aspect-video bg-gradient-to-br from-green-50 to-green-50 flex items-center justify-center overflow-hidden">
                     {post.mainImage ? (
                       <img src={post.mainImage} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                     ) : (
@@ -61,7 +61,7 @@ export default async function BlogPage() {
                   <div className="p-6 flex flex-col flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       {post.categories?.[0] && (
-                        <span className="px-2.5 py-1 bg-primary-50 text-primary-600 text-xs font-medium rounded-full">
+                        <span className="px-2.5 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full">
                           {post.categories[0].title}
                         </span>
                       )}
@@ -71,7 +71,7 @@ export default async function BlogPage() {
                         </span>
                       )}
                     </div>
-                    <h2 className="font-bold text-gray-900 text-lg leading-snug group-hover:text-primary-600 transition-colors flex-1">
+                    <h2 className="font-bold text-gray-900 text-lg leading-snug group-hover:text-green-600 transition-colors flex-1">
                       {post.title}
                     </h2>
                     {post.excerpt && (

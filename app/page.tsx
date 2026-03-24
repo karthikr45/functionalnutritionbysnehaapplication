@@ -5,8 +5,10 @@ import Services from '@/components/Services';
 import HowItWorks from '@/components/HowItWorks';
 import Packages from '@/components/Packages';
 import Testimonials from '@/components/Testimonials';
+import FAQ from '@/components/FAQ';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
+import WhatsAppButton from '@/components/WhatsAppButton';
 import { client } from '@/sanity/lib/client';
 import { RECENT_POSTS_QUERY } from '@/sanity/lib/queries';
 import Link from 'next/link';
@@ -40,10 +42,10 @@ export default async function HomePage() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between mb-10">
                 <div>
-                  <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">Latest Articles</p>
+                  <p className="text-green-600 font-semibold text-sm uppercase tracking-wide">Latest Articles</p>
                   <h2 className="text-3xl font-bold text-gray-900 font-serif mt-1">Nutrition Tips & Insights</h2>
                 </div>
-                <Link href="/blog" className="text-primary-600 hover:text-primary-700 font-medium text-sm">
+                <Link href="/blog" className="text-green-600 hover:text-green-700 font-medium text-sm">
                   View All Articles →
                 </Link>
               </div>
@@ -52,9 +54,9 @@ export default async function HomePage() {
                   <Link
                     key={post._id}
                     href={`/blog/${post.slug?.current}`}
-                    className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md border border-gray-100 hover:border-primary-200 transition-all group"
+                    className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md border border-gray-100 hover:border-green-200 transition-all group"
                   >
-                    <div className="aspect-video bg-primary-50 flex items-center justify-center text-6xl">
+                    <div className="aspect-video bg-green-50 flex items-center justify-center text-6xl">
                       {post.mainImage ? (
                         <img src={post.mainImage} alt={post.title} className="w-full h-full object-cover" />
                       ) : (
@@ -63,11 +65,11 @@ export default async function HomePage() {
                     </div>
                     <div className="p-5">
                       {post.categories?.[0] && (
-                        <span className="text-xs font-medium text-primary-600 uppercase tracking-wide">
+                        <span className="text-xs font-medium text-green-600 uppercase tracking-wide">
                           {post.categories[0].title}
                         </span>
                       )}
-                      <h3 className="font-bold text-gray-900 mt-1 group-hover:text-primary-600 transition-colors line-clamp-2">
+                      <h3 className="font-bold text-gray-900 mt-1 group-hover:text-green-600 transition-colors line-clamp-2">
                         {post.title}
                       </h3>
                       {post.excerpt && (
@@ -85,29 +87,33 @@ export default async function HomePage() {
           </section>
         )}
 
+        <FAQ />
+
         {/* Final CTA */}
-        <section className="py-20 bg-primary-600 text-white text-center">
+        <section className="py-20 bg-green-600 text-white text-center">
           <div className="max-w-3xl mx-auto px-4">
             <h2 className="text-3xl sm:text-4xl font-bold font-serif mb-4">
-              Ready to Transform Your Health?
+              Ready to Heal from the Root Cause?
             </h2>
-            <p className="text-primary-100 text-lg mb-8">
-              Join 5,000+ patients who have achieved their health goals with personalized nutrition guidance.
-              Your journey to better health starts with a single consultation.
+            <p className="text-green-100 text-lg mb-8">
+              Join hundreds of clients who have transformed their health through functional nutrition.
+              Your journey to lasting wellness starts with a single consultation.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/signup"
-                className="inline-flex items-center justify-center px-8 py-4 bg-white text-primary-600 font-bold rounded-xl hover:bg-primary-50 transition-colors shadow-lg"
-              >
-                Book Your First Consultation
-              </Link>
-              <Link
                 href="/#packages"
-                className="inline-flex items-center justify-center px-8 py-4 border-2 border-white/50 text-white font-semibold rounded-xl hover:bg-primary-700 transition-colors"
+                className="inline-flex items-center justify-center px-8 py-4 bg-white text-green-600 font-bold rounded-xl hover:bg-green-50 transition-colors shadow-lg"
               >
-                View Packages
+                View Packages & Book
               </Link>
+              <a
+                href="https://wa.me/919876543210?text=Hi%20Sneha%2C%20I%27d%20like%20to%20book%20a%20consultation."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-8 py-4 border-2 border-white/50 text-white font-semibold rounded-xl hover:bg-green-700 transition-colors"
+              >
+                💬 Chat on WhatsApp
+              </a>
             </div>
           </div>
         </section>
@@ -115,6 +121,7 @@ export default async function HomePage() {
         <Contact />
       </main>
       <Footer />
+      <WhatsAppButton />
     </div>
   );
 }

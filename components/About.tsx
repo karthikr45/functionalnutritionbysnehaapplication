@@ -1,8 +1,9 @@
 export default function About() {
   const credentials = [
-    { icon: '🎓', label: 'M.Sc. Food Science & Nutrition, Delhi University' },
-    { icon: '🏅', label: 'Registered Dietitian (RD), Indian Dietetic Association' },
-    { icon: '💊', label: 'Certified Diabetes Educator (CDE)' },
+    { icon: '🎓', label: 'Certified Functional Nutrition Consultant' },
+    { icon: '🏅', label: 'Advanced Clinical Nutrition & Dietetics' },
+    { icon: '💊', label: 'Certified in Functional Medicine Approach' },
+    { icon: '🧬', label: 'Gut Microbiome & Hormonal Health Specialist' },
     { icon: '🏃', label: 'Sports & Performance Nutrition Certified' },
   ];
 
@@ -12,19 +13,19 @@ export default function About() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Image side */}
           <div className="relative">
-            <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-3xl p-8 text-center">
+            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-3xl p-8 text-center">
               <div className="w-48 h-48 bg-white rounded-full mx-auto shadow-lg flex items-center justify-center text-8xl mb-6">
-                👩‍⚕️
+                🌿
               </div>
               <div className="grid grid-cols-2 gap-4 mt-6">
                 {[
-                  { number: '10+', label: 'Years Experience' },
-                  { number: '5000+', label: 'Patients Helped' },
+                  { number: '8+', label: 'Years Experience' },
+                  { number: '500+', label: 'Clients Transformed' },
                   { number: '95%', label: 'Success Rate' },
-                  { number: '4.9★', label: 'Patient Rating' },
+                  { number: '4.9★', label: 'Client Rating' },
                 ].map((stat) => (
                   <div key={stat.label} className="bg-white rounded-2xl p-4 shadow-sm">
-                    <p className="text-2xl font-bold text-primary-600">{stat.number}</p>
+                    <p className="text-2xl font-bold text-green-600">{stat.number}</p>
                     <p className="text-xs text-gray-500 mt-1">{stat.label}</p>
                   </div>
                 ))}
@@ -35,29 +36,30 @@ export default function About() {
           {/* Content side */}
           <div className="space-y-6">
             <div>
-              <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">About Me</p>
+              <p className="text-green-600 font-semibold text-sm uppercase tracking-wide">About Me</p>
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-serif mt-2">
-                Meet Dr. Priya Sharma
+                Hi, I&apos;m Sneha
               </h2>
             </div>
             <p className="text-gray-600 leading-relaxed text-lg">
-              I am a certified Clinical Nutritionist and Dietitian with over 10 years of experience in
-              personalized nutrition therapy. My approach combines cutting-edge nutritional science with
-              an understanding of Indian food culture and lifestyle.
+              I&apos;m a certified Functional Nutrition Consultant passionate about helping people heal
+              from the root cause — not just manage symptoms. With over 8 years of experience, I combine
+              the principles of functional medicine with personalized nutrition to create lasting health transformations.
             </p>
             <p className="text-gray-600 leading-relaxed">
-              I specialize in weight management, therapeutic diets for diabetes, PCOS, thyroid disorders,
-              and sports nutrition. Every diet plan I create is evidence-based, sustainable, and tailored
-              to your unique body chemistry, food preferences, and lifestyle.
+              I specialize in hormonal imbalances (PCOS, thyroid), gut health issues (IBS, bloating, acid reflux),
+              diabetes management, weight loss, and autoimmune conditions. My approach goes beyond calorie counting —
+              I look at your complete health picture including lab work, lifestyle, stress, sleep, and gut health.
             </p>
             <p className="text-gray-600 leading-relaxed">
-              My philosophy is simple: <strong className="text-primary-700">real food, real results.</strong>{' '}
-              No crash diets, no starvation, no supplements you don&apos;t need. Just a practical, holistic
-              approach to nutrition that you can follow for life.
+              My philosophy is simple: <strong className="text-green-700">food is medicine.</strong>{' '}
+              When you give your body the right nutrition, it has an incredible ability to heal itself.
+              Every plan I create is rooted in science, customized to Indian food habits, and designed
+              for real life — not just theory.
             </p>
 
-            <div className="space-y-3">
-              <h4 className="font-semibold text-gray-800">Qualifications & Certifications</h4>
+            <div className="space-y-3 pt-2">
+              <h4 className="font-semibold text-gray-800">Qualifications & Expertise</h4>
               {credentials.map((c) => (
                 <div key={c.label} className="flex items-center gap-3">
                   <span className="text-2xl">{c.icon}</span>

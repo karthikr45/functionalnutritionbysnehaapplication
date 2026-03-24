@@ -8,22 +8,27 @@ export default function Footer() {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2 space-y-4">
             <Link href="/" className="flex items-center gap-2.5">
-              <div className="w-9 h-9 bg-primary-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
-                N
+              <div className="w-9 h-9 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                FN
               </div>
               <div>
-                <span className="font-bold text-white text-lg leading-tight">NutritionCare</span>
-                <p className="text-primary-400 text-xs leading-tight">by Dr. Priya Sharma</p>
+                <span className="font-bold text-white text-lg leading-tight">Functional Nutrition</span>
+                <p className="text-green-400 text-xs leading-tight">by Sneha</p>
               </div>
             </Link>
             <p className="text-sm leading-relaxed max-w-sm">
-              Evidence-based, personalized nutrition therapy that transforms your health through sustainable
-              dietary changes — no fad diets, no shortcuts.
+              Heal from the root cause with personalized, science-backed functional nutrition.
+              No fad diets, no quick fixes — just sustainable health transformation through the power of real food.
             </p>
             <div className="flex gap-4">
-              {['Instagram', 'YouTube', 'LinkedIn', 'Facebook'].map((s) => (
-                <span key={s} className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-primary-600 cursor-pointer transition-colors text-xs font-medium">
-                  {s[0]}
+              {[
+                { name: 'Instagram', letter: 'I' },
+                { name: 'YouTube', letter: 'Y' },
+                { name: 'LinkedIn', letter: 'L' },
+                { name: 'Facebook', letter: 'F' },
+              ].map((s) => (
+                <span key={s.name} className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-green-600 cursor-pointer transition-colors text-xs font-medium">
+                  {s.letter}
                 </span>
               ))}
             </div>
@@ -34,14 +39,16 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2.5 text-sm">
               {[
-                { href: '/#about', label: 'About Dr. Priya' },
+                { href: '/#about', label: 'About Sneha' },
                 { href: '/#services', label: 'Services' },
-                { href: '/#packages', label: 'Packages' },
+                { href: '/#packages', label: 'Packages & Pricing' },
+                { href: '/#testimonials', label: 'Success Stories' },
                 { href: '/blog', label: 'Blog' },
+                { href: '/#faq', label: 'FAQ' },
                 { href: '/#contact', label: 'Contact' },
               ].map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="hover:text-primary-400 transition-colors">
+                  <Link href={link.href} className="hover:text-green-400 transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -53,13 +60,14 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">Contact</h4>
             <ul className="space-y-2.5 text-sm">
-              <li>📧 dr.priya@nutritioncare.com</li>
+              <li>📧 sneha@functionalnutritionbysneha.com</li>
               <li>📱 +91 98765 43210</li>
-              <li>🕐 Mon–Sat, 9 AM – 6 PM</li>
+              <li>🕐 Mon–Sat, 9 AM – 7 PM</li>
+              <li>📍 Online Consultations (Pan India)</li>
               <li className="mt-4">
                 <Link
-                  href="/signup"
-                  className="inline-block px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-colors"
+                  href="/#packages"
+                  className="inline-block px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-xl text-sm font-semibold transition-colors"
                 >
                   Book Consultation →
                 </Link>
@@ -69,10 +77,11 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
-          <p>© {new Date().getFullYear()} NutritionCare by Dr. Priya Sharma. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Functional Nutrition by Sneha. All rights reserved.</p>
           <div className="flex gap-6">
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="/refund" className="hover:text-white transition-colors">Refund Policy</Link>
           </div>
         </div>
       </div>
