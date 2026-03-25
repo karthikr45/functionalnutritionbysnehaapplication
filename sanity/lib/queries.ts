@@ -1,3 +1,16 @@
+export const ALL_VIDEOS_QUERY = `
+  *[_type == "video" && isActive == true] | order(sortOrder asc) {
+    _id,
+    title,
+    description,
+    youtubeUrl,
+    "videoFileUrl": videoFile.asset->url,
+    "thumbnail": thumbnail.asset->url,
+    category,
+    sortOrder
+  }
+`;
+
 export const SITE_SETTINGS_QUERY = `
   *[_type == "siteSettings"][0] {
     heroBadge,

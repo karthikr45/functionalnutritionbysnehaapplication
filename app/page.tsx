@@ -5,6 +5,7 @@ import Services from '@/components/Services';
 import HowItWorks from '@/components/HowItWorks';
 import Packages from '@/components/Packages';
 import Testimonials from '@/components/Testimonials';
+import VideoCarousel from '@/components/VideoCarousel';
 import FAQ from '@/components/FAQ';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
@@ -43,6 +44,7 @@ export default async function HomePage() {
         <HowItWorks />
         <Packages />
         <Testimonials />
+        <VideoCarousel />
 
         {/* Blog Preview */}
         {posts.length > 0 && (
