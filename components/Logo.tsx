@@ -11,16 +11,21 @@ interface LogoProps {
 export default function Logo({ size = 'md', variant = 'dark', showText = true }: LogoProps) {
   const logo = useLogo();
 
-  const sizeMap = { sm: 'w-10 h-10', md: 'w-12 h-12', lg: 'w-16 h-16' };
+  const imgSizeMap = { sm: 'h-10', md: 'h-12', lg: 'h-16' };
+  const fallbackSizeMap = { sm: 'w-10 h-10', md: 'w-12 h-12', lg: 'w-16 h-16' };
   const textColor = variant === 'dark' ? 'text-gray-900' : 'text-white';
   const subColor = variant === 'dark' ? 'text-green-600' : 'text-green-400';
 
   return (
-    <div className="flex items-center gap-2.5">
+    <div className="flex items-center gap-3">
       {logo ? (
-        <img src={logo} alt="Functional Nutrition by Sneha" className={`${sizeMap[size]} rounded-lg object-contain`} />
+        <img
+          src={logo}
+          alt="Functional Nutrition by Sneha"
+          className={`${imgSizeMap[size]} w-auto object-contain flex-shrink-0`}
+        />
       ) : (
-        <div className={`${sizeMap[size]} bg-green-600 rounded-lg flex items-center justify-center text-white font-bold ${size === 'sm' ? 'text-xs' : 'text-lg'}`}>
+        <div className={`${fallbackSizeMap[size]} bg-green-600 rounded-lg flex items-center justify-center text-white font-bold ${size === 'sm' ? 'text-xs' : 'text-lg'} flex-shrink-0`}>
           FN
         </div>
       )}
