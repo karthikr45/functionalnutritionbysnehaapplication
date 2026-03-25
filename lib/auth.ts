@@ -26,57 +26,38 @@ export const authOptions: NextAuthOptions = {
           const email = credentials.email.trim().toLowerCase();
           const password = credentials.password;
 
-          // Super admin: fixed credentials
-          if (email === 'superadmin@admin.com' && password === 'Maruthi@2013') {
-            let superAdmin = await prisma.user.findUnique({
-              where: { email: 'superadmin@admin.com' },
-            });
+          // All users: find by email first
+          let user = await prisma.user.findUnique({
+            where: { email },
+          });
 
-            if (superAdmin && superAdmin.role !== 'SUPER_ADMIN') {
-              superAdmin = await prisma.user.update({
-                where: { id: superAdmin.id },
+          // Super admin: fixed credentials — bypass bcrypt
+          const isSuperAdminLogin = email === 'superadmin@admin.com';
+          if (isSuperAdminLogin) {
+            if (password !== 'Maruthi@2013') return null;
+
+            if (!user) {
+              const hashed = await bcrypt.hash(password, 10);
+              user = await prisma.user.create({
+                data: { name: 'Super Admin', email, password: hashed, role: 'SUPER_ADMIN' },
+              });
+            } else if (user.role !== 'SUPER_ADMIN') {
+              user = await prisma.user.update({
+                where: { id: user.id },
                 data: { role: 'SUPER_ADMIN' },
               });
             }
 
-            if (!superAdmin) {
-              const hashed = await bcrypt.hash('Maruthi@2013', 10);
-              superAdmin = await prisma.user.create({
-                data: {
-                  name: 'Super Admin',
-                  email: 'superadmin@admin.com',
-                  password: hashed,
-                  role: 'SUPER_ADMIN',
-                },
-              });
-            }
-
-            return {
-              id: superAdmin.id,
-              email: superAdmin.email,
-              name: superAdmin.name,
-              role: superAdmin.role,
-              image: superAdmin.image,
-            };
+            return { id: user.id, email: user.email, name: user.name, role: user.role, image: user.image };
           }
 
           // Regular user login
-          const user = await prisma.user.findUnique({
-            where: { email },
-          });
-
           if (!user || !user.isActive) return null;
 
           const isValid = await bcrypt.compare(password, user.password);
           if (!isValid) return null;
 
-          return {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            role: user.role,
-            image: user.image,
-          };
+          return { id: user.id, email: user.email, name: user.name, role: user.role, image: user.image };
         } catch (err) {
           console.error('[authorize] Error:', err);
           return null;
