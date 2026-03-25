@@ -67,18 +67,23 @@ export default function ConsultationPage() {
           startWithVideoMuted: false,
           prejoinPageEnabled: true,
           disableDeepLinking: true,
-          brandingRoomAlias: `Functional Nutrition by Sneha`,
+          enableLobbyChat: false,
+          hideLobbyButton: true,
+          requireDisplayName: false,
+          enableInsecureRoomNameWarning: false,
+          // Disable lobby/moderator requirement so anyone with the link can join
+          'lobby.autoKnock': true,
+          'lobby.enableChat': false,
+          disableModeratorIndicator: true,
+          enableNoAudioDetection: false,
+          enableNoisyMicDetection: false,
         },
         interfaceConfigOverwrite: {
           SHOW_JITSI_WATERMARK: false,
           SHOW_WATERMARK_FOR_GUESTS: false,
-          TOOLBAR_BUTTONS: [
-            'microphone', 'camera', 'desktop', 'fullscreen',
-            'fodeviceselection', 'hangup', 'chat', 'raisehand',
-            'videoquality', 'tileview', 'select-background',
-            'settings',
-          ],
           DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
+          MOBILE_APP_PROMO: false,
+          HIDE_INVITE_MORE_HEADER: true,
         },
         userInfo: {
           displayName: session?.user?.name || 'User',
@@ -89,14 +94,21 @@ export default function ConsultationPage() {
       const api = new (window as any).JitsiMeetExternalAPI(domain, options);
       apiRef.current = api;
 
-      api.addEventListener('readyToClose', () => {
+      const redirectToDashboard = () => {
+        if (apiRef.current) {
+          apiRef.current.dispose();
+          apiRef.current = null;
+        }
         const role = session?.user?.role;
         if (role === 'DOCTOR') {
-          router.push('/doctor/appointments');
+          router.push('/doctor/dashboard');
         } else {
-          router.push('/patient/appointments');
+          router.push('/patient/dashboard');
         }
-      });
+      };
+
+      api.addEventListener('readyToClose', redirectToDashboard);
+      api.addEventListener('videoConferenceLeft', redirectToDashboard);
     };
 
     // Load Jitsi external API script
@@ -162,9 +174,12 @@ export default function ConsultationPage() {
           </span>
           <button
             onClick={() => {
-              if (apiRef.current) apiRef.current.dispose();
+              if (apiRef.current) {
+                apiRef.current.dispose();
+                apiRef.current = null;
+              }
               const role = session?.user?.role;
-              router.push(role === 'DOCTOR' ? '/doctor/appointments' : '/patient/appointments');
+              router.push(role === 'DOCTOR' ? '/doctor/dashboard' : '/patient/dashboard');
             }}
             className="px-4 py-2 bg-red-50 text-red-600 text-sm font-medium rounded-xl hover:bg-red-100 transition-colors"
           >
