@@ -2,9 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getAuthSession } from '@/lib/auth';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const session = await getAuthSession();
+  // Doctors see all packages (including inactive) for management
+  const showAll = session?.user?.role === 'DOCTOR';
   const packages = await prisma.package.findMany({
-    where: { isActive: true },
+    where: showAll ? {} : { isActive: true },
     orderBy: { sortOrder: 'asc' },
   });
   return NextResponse.json({ packages });
