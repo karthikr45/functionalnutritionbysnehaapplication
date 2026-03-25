@@ -1,3 +1,21 @@
+export const SITE_SETTINGS_QUERY = `
+  *[_type == "siteSettings"][0] {
+    heroBadge,
+    heroTitle,
+    heroSubtitle,
+    heroHighlights,
+    heroStats,
+    "doctorImage": doctorImage.asset->url,
+    aboutName,
+    aboutTitle,
+    aboutDescription,
+    aboutCredentials,
+    aboutStats,
+    aboutSpecializations,
+    "aboutImage": aboutImage.asset->url
+  }
+`;
+
 export const ALL_POSTS_QUERY = `
   *[_type == "post" && defined(slug.current)] | order(publishedAt desc) {
     _id,

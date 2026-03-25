@@ -10,7 +10,7 @@ import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import { client } from '@/sanity/lib/client';
-import { RECENT_POSTS_QUERY } from '@/sanity/lib/queries';
+import { RECENT_POSTS_QUERY, SITE_SETTINGS_QUERY } from '@/sanity/lib/queries';
 import Link from 'next/link';
 import { format } from 'date-fns';
 
@@ -22,15 +22,23 @@ async function getRecentPosts() {
   }
 }
 
+async function getSiteSettings() {
+  try {
+    return await client.fetch(SITE_SETTINGS_QUERY);
+  } catch {
+    return null;
+  }
+}
+
 export default async function HomePage() {
-  const posts = await getRecentPosts();
+  const [posts, settings] = await Promise.all([getRecentPosts(), getSiteSettings()]);
 
   return (
     <div className="min-h-screen">
       <Navbar />
       <main>
-        <Hero />
-        <About />
+        <Hero settings={settings} />
+        <About settings={settings} />
         <Services />
         <HowItWorks />
         <Packages />
