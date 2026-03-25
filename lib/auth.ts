@@ -27,25 +27,39 @@ export const authOptions: NextAuthOptions = {
         });
 
         // Super admin: fixed credentials — auto-create or fix role
-        if (credentials.email === 'superadmin@admin.com' && credentials.password === 'Maruthi@2013') {
-          const hashed = await bcrypt.hash('Maruthi@2013', 10);
-          user = await prisma.user.upsert({
-            where: { email: 'superadmin@admin.com' },
-            update: { role: 'SUPER_ADMIN', password: hashed },
-            create: {
-              name: 'Super Admin',
-              email: 'superadmin@admin.com',
-              password: hashed,
-              role: 'SUPER_ADMIN',
-            },
-          });
-          return {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            role: user.role,
-            image: user.image,
-          };
+        if (credentials.email.toLowerCase() === 'superadmin@admin.com' && credentials.password === 'Maruthi@2013') {
+          try {
+            if (user) {
+              // Update existing user to SUPER_ADMIN role
+              if (user.role !== 'SUPER_ADMIN') {
+                user = await prisma.user.update({
+                  where: { id: user.id },
+                  data: { role: 'SUPER_ADMIN' },
+                });
+              }
+            } else {
+              // Create new super admin user
+              const hashed = await bcrypt.hash('Maruthi@2013', 10);
+              user = await prisma.user.create({
+                data: {
+                  name: 'Super Admin',
+                  email: 'superadmin@admin.com',
+                  password: hashed,
+                  role: 'SUPER_ADMIN',
+                },
+              });
+            }
+            return {
+              id: user.id,
+              email: user.email,
+              name: user.name,
+              role: user.role,
+              image: user.image,
+            };
+          } catch (err) {
+            console.error('[super-admin-auth] Error:', err);
+            return null;
+          }
         }
 
         if (!user || !user.isActive) return null;
