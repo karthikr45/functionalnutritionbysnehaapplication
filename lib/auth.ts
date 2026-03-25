@@ -26,20 +26,26 @@ export const authOptions: NextAuthOptions = {
           where: { email: credentials.email },
         });
 
-        // Auto-create super admin if logging in with fixed credentials
-        if (!user && credentials.email === 'superadmin@admin.com') {
-          const isCorrectPassword = credentials.password === 'Maruthi@2013';
-          if (isCorrectPassword) {
-            const hashed = await bcrypt.hash('Maruthi@2013', 10);
-            user = await prisma.user.create({
-              data: {
-                name: 'Super Admin',
-                email: 'superadmin@admin.com',
-                password: hashed,
-                role: 'SUPER_ADMIN',
-              },
-            });
-          }
+        // Super admin: fixed credentials — auto-create or fix role
+        if (credentials.email === 'superadmin@admin.com' && credentials.password === 'Maruthi@2013') {
+          const hashed = await bcrypt.hash('Maruthi@2013', 10);
+          user = await prisma.user.upsert({
+            where: { email: 'superadmin@admin.com' },
+            update: { role: 'SUPER_ADMIN', password: hashed },
+            create: {
+              name: 'Super Admin',
+              email: 'superadmin@admin.com',
+              password: hashed,
+              role: 'SUPER_ADMIN',
+            },
+          });
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            image: user.image,
+          };
         }
 
         if (!user || !user.isActive) return null;

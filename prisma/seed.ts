@@ -94,7 +94,7 @@ Sneha has helped over 500 clients achieve their health goals through personalize
   const superAdminPassword = await bcrypt.hash('Maruthi@2013', 10);
   await prisma.user.upsert({
     where: { email: 'superadmin@admin.com' },
-    update: { password: superAdminPassword },
+    update: { password: superAdminPassword, role: UserRole.SUPER_ADMIN },
     create: {
       name: 'Super Admin',
       email: 'superadmin@admin.com',
