@@ -13,6 +13,7 @@ enum UserRole {
   PATIENT
   DOCTOR
   ADMIN
+  SUPER_ADMIN
 }
 
 enum AppointmentStatus {
@@ -108,6 +109,8 @@ model User {
   doctorProfile  DoctorProfile?
   patientProfile PatientProfile?
   documents      Document[]
+  auditLogsPerformed   AuditLog[] @relation("AuditBySuperAdmin")
+  auditLogsTargeted    AuditLog[] @relation("AuditImpersonatedUser")
 }
 
 // ─── Doctor Profile ───────────────────────────────────────────────────────────
@@ -254,6 +257,23 @@ model Payment {
 
   appointment    Appointment?    @relation(fields: [appointmentId], references: [id])
   packageBooking PackageBooking? @relation(fields: [packageBookingId], references: [id])
+}
+
+// ─── Audit Logs ──────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id                String   @id @default(cuid())
+  superAdminId      String
+  impersonatedUserId String
+  action            String   // e.g. "VIEW_DASHBOARD", "UPDATE_APPOINTMENT", "CREATE_PACKAGE"
+  entity            String?  // e.g. "Appointment", "Package"
+  entityId          String?
+  details           String?  @db.Text
+  ipAddress         String?
+  createdAt         DateTime @default(now())
+
+  superAdmin        User @relation("AuditBySuperAdmin", fields: [superAdminId], references: [id])
+  impersonatedUser  User @relation("AuditImpersonatedUser", fields: [impersonatedUserId], references: [id])
 }
 
 // ─── Documents ────────────────────────────────────────────────────────────────

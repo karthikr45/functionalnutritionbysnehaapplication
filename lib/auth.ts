@@ -59,7 +59,46 @@ export const authOptions: NextAuthOptions = {
   },
 };
 
-export const getAuthSession = () => getServerSession(authOptions);
+export const getAuthSession = async () => {
+  const session = await getServerSession(authOptions);
+  if (!session) return null;
+
+  // If super admin is impersonating, return a modified session
+  // that looks like the impersonated user for API compatibility
+  if (session.user.role === 'SUPER_ADMIN') {
+    try {
+      const { cookies } = await import('next/headers');
+      const cookieStore = cookies();
+      const raw = cookieStore.get('impersonation')?.value;
+      if (raw) {
+        const impersonation = JSON.parse(raw);
+        const impersonatedUser = await prisma.user.findUnique({
+          where: { id: impersonation.impersonatedUserId },
+          select: { id: true, name: true, email: true, role: true, image: true },
+        });
+        if (impersonatedUser) {
+          return {
+            ...session,
+            user: {
+              id: impersonatedUser.id,
+              name: impersonatedUser.name,
+              email: impersonatedUser.email,
+              role: impersonatedUser.role,
+              image: impersonatedUser.image,
+            },
+            superAdmin: {
+              id: session.user.id,
+              name: session.user.name,
+              email: session.user.email,
+            },
+          };
+        }
+      }
+    } catch {}
+  }
+
+  return session;
+};
 
 // Extend next-auth types
 declare module 'next-auth' {
@@ -73,6 +112,11 @@ declare module 'next-auth' {
       email: string;
       role: UserRole;
       image?: string | null;
+    };
+    superAdmin?: {
+      id: string;
+      name: string;
+      email: string;
     };
   }
 }

@@ -90,6 +90,19 @@ Sneha has helped over 500 clients achieve their health goals through personalize
     },
   });
 
+  // ── Create Super Admin ──────────────────────────────────────────────────
+  const superAdminPassword = await bcrypt.hash('Maruthi@2013', 10);
+  await prisma.user.upsert({
+    where: { email: 'superadmin@admin.com' },
+    update: { password: superAdminPassword },
+    create: {
+      name: 'Super Admin',
+      email: 'superadmin@admin.com',
+      password: superAdminPassword,
+      role: UserRole.SUPER_ADMIN,
+    },
+  });
+
   // ── Create Packages ────────────────────────────────────────────────────────
   await prisma.package.deleteMany();
 
@@ -164,6 +177,7 @@ Sneha has helped over 500 clients achieve their health goals through personalize
   console.log('  Doctor:  sneha@functionalnutrition.com    | Doctor@123');
   console.log('  Patient: patient@example.com               | Patient@123');
   console.log('  Admin:   admin@functionalnutrition.com    | Admin@123');
+  console.log('  SuperAdmin: superadmin@admin.com         | Maruthi@2013');
 }
 
 main()

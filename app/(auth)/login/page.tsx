@@ -100,6 +100,7 @@ export default function LoginPage() {
             <p className="font-semibold text-gray-700 mb-2">Demo Credentials:</p>
             <p>Patient: patient@example.com / Patient@123</p>
             <p>Doctor: sneha@functionalnutrition.com / Doctor@123</p>
+            <p>Super Admin: superadmin@admin.com / Maruthi@2013</p>
           </div>
         </div>
 
