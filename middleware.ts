@@ -64,6 +64,7 @@ export default withAuth(
           '/api/doctor/profile',
           '/api/services',
           '/services',
+          '/studio',
         ];
         const isPublic = publicPaths.some((p) => pathname === p || pathname.startsWith(p + '/') || pathname.startsWith(p));
         if (isPublic) return true;
