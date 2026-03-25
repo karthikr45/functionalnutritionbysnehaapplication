@@ -42,6 +42,36 @@ export const FEATURED_POSTS_QUERY = `
   }
 `;
 
+export const ALL_SERVICES_QUERY = `
+  *[_type == "service" && isActive == true] | order(sortOrder asc) {
+    _id,
+    title,
+    slug,
+    subtitle,
+    description,
+    icon,
+    "image": image.asset->url,
+    benefits,
+    conditions,
+    sortOrder
+  }
+`;
+
+export const SERVICE_BY_SLUG_QUERY = `
+  *[_type == "service" && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    subtitle,
+    description,
+    icon,
+    "image": image.asset->url,
+    body,
+    benefits,
+    conditions
+  }
+`;
+
 export const RECENT_POSTS_QUERY = `
   *[_type == "post"] | order(publishedAt desc)[0...3] {
     _id,
