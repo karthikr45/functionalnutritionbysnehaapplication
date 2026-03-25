@@ -5,6 +5,15 @@ export default defineType({
   title: 'Site Settings',
   type: 'document',
   fields: [
+    // Branding
+    defineField({
+      name: 'logo',
+      title: 'Site Logo',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Upload your logo. Used in Navbar, Footer, Sidebars, and Login page.',
+    }),
+
     // Hero Section
     defineField({ name: 'heroBadge', title: 'Hero Badge Text', type: 'string', initialValue: 'Certified Functional Nutrition Consultant' }),
     defineField({ name: 'heroTitle', title: 'Hero Title', type: 'string', initialValue: 'Heal Your Body with Functional Nutrition' }),

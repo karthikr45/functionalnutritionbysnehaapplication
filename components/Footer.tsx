@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import Logo from './Logo';
 
 export default function Footer() {
   return (
@@ -7,14 +10,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2 space-y-4">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="w-9 h-9 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
-                FN
-              </div>
-              <div>
-                <span className="font-bold text-white text-lg leading-tight">Functional Nutrition</span>
-                <p className="text-green-400 text-xs leading-tight">by Sneha</p>
-              </div>
+            <Link href="/">
+              <Logo variant="light" />
             </Link>
             <p className="text-sm leading-relaxed max-w-sm">
               Heal from the root cause with personalized, science-backed functional nutrition.

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
+import Logo from './Logo';
 
 const navItems = [
   { href: '/patient/dashboard', label: 'Dashboard', icon: '🏠' },
@@ -20,9 +21,8 @@ export default function PatientSidebar() {
     <aside className="w-64 bg-white border-r border-gray-200 flex flex-col h-full shadow-sm">
       {/* Logo */}
       <div className="p-5 border-b border-gray-100">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">FN</div>
-          <span className="font-bold text-gray-800">Functional Nutrition</span>
+        <Link href="/">
+          <Logo size="sm" />
         </Link>
       </div>
 

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
+import Logo from './Logo';
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -32,14 +33,8 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
-              FN
-            </div>
-            <div>
-              <span className="font-bold text-gray-900 text-lg leading-tight">Functional Nutrition</span>
-              <p className="text-green-600 text-xs leading-tight">by Sneha</p>
-            </div>
+          <Link href="/">
+            <Logo />
           </Link>
 
           {/* Desktop nav */}

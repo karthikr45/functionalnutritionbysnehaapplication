@@ -5,6 +5,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import Logo from '@/components/Logo';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -41,9 +42,8 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 justify-center mb-4">
-            <div className="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center text-white font-bold text-sm">FN</div>
-            <span className="text-xl font-bold text-gray-900">Functional Nutrition</span>
+          <Link href="/" className="inline-flex justify-center mb-4">
+            <Logo size="lg" />
           </Link>
           <h1 className="text-2xl font-bold text-gray-900 font-serif">Welcome back</h1>
           <p className="text-gray-500 mt-1 text-sm">Sign in to your account to continue</p>

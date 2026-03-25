@@ -13,6 +13,7 @@ export const ALL_VIDEOS_QUERY = `
 
 export const SITE_SETTINGS_QUERY = `
   *[_type == "siteSettings"][0] {
+    "logo": logo.asset->url,
     heroBadge,
     heroTitle,
     heroSubtitle,

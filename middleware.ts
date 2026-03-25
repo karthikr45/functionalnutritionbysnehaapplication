@@ -59,6 +59,7 @@ export default withAuth(
           '/api/doctor/profile',
           '/api/services',
           '/api/videos',
+          '/api/site-settings',
           '/services',
           '/studio',
         ];

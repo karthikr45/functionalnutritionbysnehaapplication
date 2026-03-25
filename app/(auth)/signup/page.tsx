@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Logo from '@/components/Logo';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -65,9 +66,8 @@ export default function SignupPage() {
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-white flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 justify-center mb-4">
-            <div className="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center text-white font-bold text-sm">FN</div>
-            <span className="text-xl font-bold text-gray-900">Functional Nutrition</span>
+          <Link href="/" className="inline-flex justify-center mb-4">
+            <Logo size="lg" />
           </Link>
           <h1 className="text-2xl font-bold text-gray-900 font-serif">Create your account</h1>
           <p className="text-gray-500 mt-1 text-sm">Start your health transformation journey today</p>
