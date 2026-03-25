@@ -103,9 +103,19 @@ export default async function DoctorDashboard() {
                     <p className="text-xs text-gray-500">{appt.patient.user.email}</p>
                     {appt.patient.user.phone && <p className="text-xs text-gray-400">{appt.patient.user.phone}</p>}
                   </div>
-                  <span className={`px-2.5 py-1 rounded-full text-xs font-medium flex-shrink-0 ${STATUS_COLORS[appt.status]}`}>
-                    {appt.status}
-                  </span>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    {appt.status === 'CONFIRMED' && (
+                      <Link
+                        href={`/consultation/${appt.id}`}
+                        className="px-3 py-1.5 bg-indigo-50 text-indigo-700 text-xs font-medium rounded-lg hover:bg-indigo-100 transition-colors"
+                      >
+                        📹 Start Call
+                      </Link>
+                    )}
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${STATUS_COLORS[appt.status]}`}>
+                      {appt.status}
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import { STATUS_COLORS, formatTime, formatDate } from '@/lib/utils';
 import DocumentUpload from '@/components/DocumentUpload';
@@ -16,6 +17,7 @@ export default function DoctorAppointmentsPage() {
   const [dietPlanUrl, setDietPlanUrl] = useState('');
   const [updating, setUpdating] = useState(false);
   const [showDietUpload, setShowDietUpload] = useState(false);
+  const router = useRouter();
 
   const fetchAppointments = async () => {
     setLoading(true);
@@ -110,6 +112,14 @@ export default function DoctorAppointmentsPage() {
                 </div>
 
                 <div className="flex flex-wrap gap-2 flex-shrink-0">
+                  {appt.status === 'CONFIRMED' && (
+                    <button
+                      onClick={() => router.push(`/consultation/${appt.id}`)}
+                      className="px-3 py-2 bg-indigo-50 text-indigo-700 text-xs font-medium rounded-xl hover:bg-indigo-100"
+                    >
+                      📹 Start Call
+                    </button>
+                  )}
                   {appt.status === 'PENDING' && (
                     <button
                       onClick={() => handleUpdate(appt.id, 'CONFIRMED')}
@@ -162,15 +172,13 @@ export default function DoctorAppointmentsPage() {
                     />
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1.5">Video Call Link</label>
-                      <input
-                        type="url"
-                        value={videoLink}
-                        onChange={(e) => setVideoLink(e.target.value)}
-                        placeholder="https://meet.google.com/..."
-                        className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:border-primary-400 outline-none"
-                      />
+                    <div className="flex items-end">
+                      <div className="w-full p-3 bg-indigo-50 rounded-xl border border-indigo-100">
+                        <p className="text-xs font-medium text-indigo-700 mb-1">Video Consultation</p>
+                        <p className="text-xs text-indigo-600">
+                          Jitsi Meet is auto-configured for this appointment. Click &quot;Start Call&quot; to begin.
+                        </p>
+                      </div>
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-gray-600 mb-1.5">Diet Plan URL</label>

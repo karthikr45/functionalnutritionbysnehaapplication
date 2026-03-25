@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import { STATUS_COLORS, formatTime, formatDate } from '@/lib/utils';
 import toast from 'react-hot-toast';
@@ -10,6 +11,7 @@ export default function PatientAppointmentsPage() {
   const [appointments, setAppointments] = useState<any[]>([]);
   const [filter, setFilter] = useState('ALL');
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   const fetchAppointments = async () => {
     setLoading(true);
@@ -104,15 +106,13 @@ export default function PatientAppointmentsPage() {
 
                 {/* Actions */}
                 <div className="flex flex-col gap-2 flex-shrink-0">
-                  {appt.videoCallLink && (
-                    <a
-                      href={appt.videoCallLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 bg-blue-50 text-blue-700 text-sm font-medium rounded-xl hover:bg-blue-100 transition-colors text-center"
+                  {appt.status === 'CONFIRMED' && (
+                    <button
+                      onClick={() => router.push(`/consultation/${appt.id}`)}
+                      className="px-4 py-2 bg-indigo-50 text-indigo-700 text-sm font-medium rounded-xl hover:bg-indigo-100 transition-colors text-center"
                     >
                       📹 Join Call
-                    </a>
+                    </button>
                   )}
                   {appt.dietPlanUrl && (
                     <a
