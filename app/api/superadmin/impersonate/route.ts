@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getAuthSession } from '@/lib/auth';
+import { getRawAuthSession } from '@/lib/auth';
 import { logAuditAction } from '@/lib/audit';
 
 export async function POST(req: NextRequest) {
-  const session = await getAuthSession();
+  const session = await getRawAuthSession();
   if (!session || session.user.role !== 'SUPER_ADMIN') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const session = await getAuthSession();
+  const session = await getRawAuthSession();
   if (!session || session.user.role !== 'SUPER_ADMIN') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

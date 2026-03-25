@@ -22,9 +22,25 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        const user = await prisma.user.findUnique({
+        let user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
+
+        // Auto-create super admin if logging in with fixed credentials
+        if (!user && credentials.email === 'superadmin@admin.com') {
+          const isCorrectPassword = credentials.password === 'Maruthi@2013';
+          if (isCorrectPassword) {
+            const hashed = await bcrypt.hash('Maruthi@2013', 10);
+            user = await prisma.user.create({
+              data: {
+                name: 'Super Admin',
+                email: 'superadmin@admin.com',
+                password: hashed,
+                role: 'SUPER_ADMIN',
+              },
+            });
+          }
+        }
 
         if (!user || !user.isActive) return null;
 
@@ -99,6 +115,9 @@ export const getAuthSession = async () => {
 
   return session;
 };
+
+// Raw session without impersonation — use in superadmin API routes
+export const getRawAuthSession = () => getServerSession(authOptions);
 
 // Extend next-auth types
 declare module 'next-auth' {
