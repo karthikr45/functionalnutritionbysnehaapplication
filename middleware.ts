@@ -38,11 +38,6 @@ export default withAuth(
       return NextResponse.redirect(new URL('/login?error=unauthorized', req.url));
     }
 
-    // Protect studio (admin / doctor only)
-    if (pathname.startsWith('/studio') && role !== 'DOCTOR' && role !== 'ADMIN') {
-      return NextResponse.redirect(new URL('/login?error=unauthorized', req.url));
-    }
-
     return NextResponse.next();
   },
   {
