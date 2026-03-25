@@ -51,7 +51,7 @@ const fallbackData: Record<string, any> = {
   'group-program': {
     title: 'Group Program',
     subtitle: '4-Week PCOS Empowerment Program',
-    image: 'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=1200&h=600&fit=crop',
+    image: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=600&fit=crop',
     description: 'Join our supportive community-based group programs led by Sneha. Our flagship 4-Week PCOS Empowerment Program brings together women dealing with PCOS for guided nutrition education, meal planning, accountability, and peer support. Transform your health alongside others on the same journey.',
     benefits: ['Community support and accountability', 'Weekly live sessions with Sneha', 'Group meal planning workshops', 'Exclusive recipe collections', 'Progress tracking together', 'Lifetime access to program materials'],
     conditions: ['PCOS Management', 'Hormonal Imbalance', 'Weight Management', 'Insulin Resistance', 'Irregular Periods', 'Hormonal Acne'],

@@ -60,7 +60,7 @@ const fallbackServices: Service[] = [
     slug: { current: 'group-program' },
     subtitle: '4-Week PCOS Empowerment Program',
     icon: '👥',
-    image: 'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=600&h=400&fit=crop',
+    image: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&h=400&fit=crop',
   },
 ];
 
