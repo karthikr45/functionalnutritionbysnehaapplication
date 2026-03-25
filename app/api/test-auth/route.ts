@@ -1,26 +1,25 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// Temporary endpoint to fix super admin role — remove after fixing
 export async function GET() {
   try {
-    // Step 1: Add SUPER_ADMIN to the PostgreSQL enum if it doesn't exist
-    await prisma.$executeRawUnsafe(`
-      DO $$
-      BEGIN
-        IF NOT EXISTS (SELECT 1 FROM pg_enum WHERE enumlabel = 'SUPER_ADMIN' AND enumtypid = (SELECT oid FROM pg_type WHERE typname = 'UserRole')) THEN
-          ALTER TYPE "UserRole" ADD VALUE 'SUPER_ADMIN';
-        END IF;
-      END
-      $$;
+    // Check if SUPER_ADMIN already exists in the enum
+    const enumCheck = await prisma.$queryRawUnsafe<any[]>(`
+      SELECT 1 FROM pg_enum WHERE enumlabel = 'SUPER_ADMIN'
+      AND enumtypid = (SELECT oid FROM pg_type WHERE typname = 'UserRole')
     `);
 
-    // Step 2: Update the super admin user's role using raw SQL
-    await prisma.$executeRawUnsafe(`
-      UPDATE "User" SET "role" = 'SUPER_ADMIN' WHERE "email" = 'superadmin@admin.com'
-    `);
+    if (enumCheck.length === 0) {
+      // Add SUPER_ADMIN to enum — must run outside transaction
+      await prisma.$executeRawUnsafe(`ALTER TYPE "UserRole" ADD VALUE 'SUPER_ADMIN'`);
+    }
 
-    // Step 3: Also create AuditLog table if it doesn't exist
+    // Update user role via raw SQL (bypasses Prisma enum validation)
+    const updated = await prisma.$executeRawUnsafe(
+      `UPDATE "User" SET "role" = 'SUPER_ADMIN' WHERE "email" = 'superadmin@admin.com'`
+    );
+
+    // Create AuditLog table if missing
     await prisma.$executeRawUnsafe(`
       CREATE TABLE IF NOT EXISTS "AuditLog" (
         "id" TEXT NOT NULL,
@@ -38,18 +37,21 @@ export async function GET() {
       )
     `);
 
-    // Step 4: Verify
-    const user = await prisma.user.findUnique({
-      where: { email: 'superadmin@admin.com' },
-      select: { id: true, email: true, role: true },
-    });
+    // Verify with raw SQL (avoids Prisma enum cache issue)
+    const user = await prisma.$queryRawUnsafe<any[]>(
+      `SELECT id, email, role FROM "User" WHERE email = 'superadmin@admin.com'`
+    );
 
-    const allRoles = await prisma.user.groupBy({ by: ['role'], _count: true });
+    const allRoles = await prisma.$queryRawUnsafe<any[]>(
+      `SELECT role, COUNT(*)::int as count FROM "User" GROUP BY role`
+    );
 
     return NextResponse.json({
       success: true,
-      message: 'Super admin role fixed! Please restart the dev server and login.',
-      user,
+      message: 'SUPER_ADMIN enum added and user role updated. Restart dev server (rm -rf .next && npm run dev), then login.',
+      enumExisted: enumCheck.length > 0,
+      rowsUpdated: updated,
+      user: user[0] || null,
       allRolesInDB: allRoles,
     });
   } catch (err: any) {
