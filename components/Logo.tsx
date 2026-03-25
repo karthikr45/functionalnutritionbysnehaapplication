@@ -11,7 +11,7 @@ interface LogoProps {
 export default function Logo({ size = 'md', variant = 'dark', showText = true }: LogoProps) {
   const logo = useLogo();
 
-  const sizeMap = { sm: 'w-8 h-8', md: 'w-9 h-9', lg: 'w-12 h-12' };
+  const sizeMap = { sm: 'w-10 h-10', md: 'w-12 h-12', lg: 'w-16 h-16' };
   const textColor = variant === 'dark' ? 'text-gray-900' : 'text-white';
   const subColor = variant === 'dark' ? 'text-green-600' : 'text-green-400';
 
