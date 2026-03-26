@@ -78,6 +78,12 @@ export default defineType({
       type: 'image',
       options: { hotspot: true },
     }),
+
+    // Social Links
+    defineField({ name: 'instagramUrl', title: 'Instagram URL', type: 'url' }),
+    defineField({ name: 'youtubeUrl', title: 'YouTube URL', type: 'url' }),
+    defineField({ name: 'linkedinUrl', title: 'LinkedIn URL', type: 'url' }),
+    defineField({ name: 'facebookUrl', title: 'Facebook URL', type: 'url' }),
   ],
   preview: {
     prepare() {

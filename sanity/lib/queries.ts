@@ -26,7 +26,11 @@ export const SITE_SETTINGS_QUERY = `
     aboutCredentials,
     aboutStats,
     aboutSpecializations,
-    "aboutImage": aboutImage.asset->url
+    "aboutImage": aboutImage.asset->url,
+    instagramUrl,
+    youtubeUrl,
+    linkedinUrl,
+    facebookUrl
   }
 `;
 
