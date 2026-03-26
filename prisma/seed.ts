@@ -172,6 +172,26 @@ Sneha has helped over 500 clients achieve their health goals through personalize
     ],
   });
 
+  // ── Create Product Categories ─────────────────────────────────────────────
+  const categoryData = [
+    { name: 'Vitamins & Minerals', slug: 'vitamins-minerals', description: 'Essential vitamins and mineral supplements for daily nutrition.', sortOrder: 1 },
+    { name: 'Probiotics & Gut Health', slug: 'probiotics-gut-health', description: 'Probiotic supplements and gut healing formulas for digestive wellness.', sortOrder: 2 },
+    { name: 'Protein & Amino Acids', slug: 'protein-amino-acids', description: 'Plant-based and whey protein powders, collagen, and amino acid supplements.', sortOrder: 3 },
+    { name: 'Herbal & Ayurvedic', slug: 'herbal-ayurvedic', description: 'Traditional herbal supplements — ashwagandha, turmeric, moringa, and more.', sortOrder: 4 },
+    { name: 'Omega & Healthy Fats', slug: 'omega-healthy-fats', description: 'Omega-3, fish oil, flaxseed oil, and essential fatty acid supplements.', sortOrder: 5 },
+    { name: 'Women\'s Health', slug: 'womens-health', description: 'Supplements for PCOS, hormonal balance, fertility, and pregnancy support.', sortOrder: 6 },
+    { name: 'Immunity & Antioxidants', slug: 'immunity-antioxidants', description: 'Immune boosters, antioxidant blends, and vitamin C supplements.', sortOrder: 7 },
+    { name: 'Superfoods & Powders', slug: 'superfoods-powders', description: 'Green powders, spirulina, chia seeds, and nutrient-dense superfood blends.', sortOrder: 8 },
+  ];
+
+  for (const cat of categoryData) {
+    await prisma.productCategory.upsert({
+      where: { slug: cat.slug },
+      update: {},
+      create: cat,
+    });
+  }
+
   console.log('✅ Seed completed successfully!');
   console.log('\n📋 Test Credentials:');
   console.log('  Doctor:  sneha@functionalnutrition.com    | Doctor@123');

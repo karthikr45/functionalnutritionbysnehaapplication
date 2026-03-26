@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { formatCurrency } from '@/lib/utils';
 
@@ -138,7 +139,9 @@ export default function DoctorProductsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 font-serif">Manage Products</h1>
-          <p className="text-sm text-gray-500 mt-1">Create and manage products displayed in your store.</p>
+          <p className="text-sm text-gray-500 mt-1">
+            Create and manage products. <Link href="/doctor/products/categories" className="text-primary-600 hover:underline">Manage Categories →</Link>
+          </p>
         </div>
         <button onClick={showForm ? resetForm : openCreate}
           className={`px-5 py-2.5 font-semibold rounded-xl text-sm transition-colors ${showForm ? 'bg-gray-100 text-gray-600 hover:bg-gray-200' : 'bg-primary-600 text-white hover:bg-primary-700'}`}>
