@@ -10,6 +10,8 @@ const navItems = [
   { href: '/doctor/appointments', label: 'Appointments', icon: '🗓' },
   { href: '/doctor/availability', label: 'Availability', icon: '⏰' },
   { href: '/doctor/packages', label: 'Packages', icon: '📦' },
+  { href: '/doctor/products', label: 'Products', icon: '🛍️' },
+  { href: '/doctor/orders', label: 'Orders', icon: '📋' },
   { href: '/doctor/documents', label: 'Documents', icon: '📄' },
   { href: '/studio', label: 'Blog CMS', icon: '✍️' },
 ];

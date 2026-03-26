@@ -44,6 +44,17 @@ enum PaymentStatus {
   REFUNDED
 }
 
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+  RETURNED
+}
+
 enum DocumentType {
   PRESCRIPTION
   DIET_PLAN
@@ -110,6 +121,10 @@ model User {
   patientProfile PatientProfile?
   documents      Document[]
   messages       Message[]
+  products       Product[]            @relation("ProductCreator")
+  productReviews ProductReview[]
+  orders         Order[]
+  orderStatusUpdates OrderStatusHistory[]
   auditLogsPerformed   AuditLog[] @relation("AuditBySuperAdmin")
   auditLogsTargeted    AuditLog[] @relation("AuditImpersonatedUser")
 }
@@ -256,6 +271,134 @@ model PackageBooking {
   payment      Payment?
 }
 
+// ─── Products & E-Commerce ──────────────────────────────────────────────────
+
+model ProductCategory {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String? @db.Text
+  image       String?
+  sortOrder   Int     @default(0)
+  isActive    Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  products Product[]
+}
+
+model Product {
+  id                String  @id @default(cuid())
+  name              String
+  slug              String  @unique
+  description       String  @db.Text
+  shortDescription  String?
+  price             Float
+  salePrice         Float?
+  sku               String? @unique
+  stock             Int     @default(0)
+  lowStockThreshold Int     @default(5)
+  categoryId        String
+  tags              Json    @default("[]") // ["POPULAR", "BEST_SELLER", "NEW_ARRIVAL"]
+  images            Json    @default("[]") // [{ url, publicId }]
+  benefits          Json    @default("[]") // string[]
+  ingredients       String? @db.Text
+  howToUse          String? @db.Text
+  weight            String?
+  isActive          Boolean @default(true)
+  isFeatured        Boolean @default(false)
+  sortOrder         Int     @default(0)
+  avgRating         Float   @default(0)
+  totalReviews      Int     @default(0)
+  totalSold         Int     @default(0)
+  createdById       String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  category   ProductCategory @relation(fields: [categoryId], references: [id])
+  createdBy  User            @relation("ProductCreator", fields: [createdById], references: [id])
+  reviews    ProductReview[]
+  orderItems OrderItem[]
+
+  @@index([categoryId])
+  @@index([isActive, isFeatured])
+}
+
+model ProductReview {
+  id         String  @id @default(cuid())
+  productId  String
+  userId     String
+  orderId    String
+  rating     Int     // 1-5
+  title      String?
+  comment    String? @db.Text
+  isApproved Boolean @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+  order   Order   @relation(fields: [orderId], references: [id])
+
+  @@unique([productId, userId, orderId])
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique
+  userId          String
+  status          OrderStatus @default(PENDING)
+  subtotal        Float
+  shippingFee     Float       @default(0)
+  discount        Float       @default(0)
+  totalAmount     Float
+  shippingName    String
+  shippingPhone   String
+  shippingAddress String      @db.Text
+  shippingCity    String
+  shippingState   String
+  shippingPincode String
+  trackingNumber  String?
+  trackingUrl     String?
+  notes           String?     @db.Text
+  adminNotes      String?     @db.Text
+  cancelReason    String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  user          User                @relation(fields: [userId], references: [id])
+  items         OrderItem[]
+  payment       Payment?
+  statusHistory OrderStatusHistory[]
+  reviews       ProductReview[]
+}
+
+model OrderItem {
+  id           String @id @default(cuid())
+  orderId      String
+  productId    String
+  productName  String
+  productImage String?
+  price        Float
+  quantity     Int
+  total        Float
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model OrderStatusHistory {
+  id          String      @id @default(cuid())
+  orderId     String
+  status      OrderStatus
+  note        String?
+  updatedById String
+  createdAt   DateTime    @default(now())
+
+  order     Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  updatedBy User  @relation(fields: [updatedById], references: [id])
+}
+
 // ─── Payments ─────────────────────────────────────────────────────────────────
 
 model Payment {
@@ -268,11 +411,13 @@ model Payment {
   status              PaymentStatus @default(PENDING)
   appointmentId       String?       @unique
   packageBookingId    String?       @unique
+  orderId             String?       @unique
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
 
   appointment    Appointment?    @relation(fields: [appointmentId], references: [id])
   packageBooking PackageBooking? @relation(fields: [packageBookingId], references: [id])
+  order          Order?          @relation(fields: [orderId], references: [id])
 }
 
 // ─── Audit Logs ──────────────────────────────────────────────────────────────

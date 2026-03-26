@@ -70,7 +70,23 @@ export const STATUS_COLORS: Record<string, string> = {
   FAILED: 'bg-red-100 text-red-800',
   ACTIVE: 'bg-green-100 text-green-800',
   EXPIRED: 'bg-gray-100 text-gray-800',
+  PROCESSING: 'bg-indigo-100 text-indigo-800',
+  SHIPPED: 'bg-purple-100 text-purple-800',
+  OUT_FOR_DELIVERY: 'bg-cyan-100 text-cyan-800',
+  DELIVERED: 'bg-green-100 text-green-800',
+  RETURNED: 'bg-orange-100 text-orange-800',
 };
+
+export function generateOrderNumber(): string {
+  const date = new Date();
+  const dateStr = `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}`;
+  const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
+  return `ORD-${dateStr}-${rand}`;
+}
+
+export function slugify(text: string): string {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
 
 export function cn(...classes: (string | undefined | null | false)[]): string {
   return classes.filter(Boolean).join(' ');

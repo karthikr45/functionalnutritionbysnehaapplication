@@ -58,6 +58,8 @@ export default withAuth(
           '/api/availability',
           '/api/doctor/profile',
           '/api/services',
+          '/api/products',
+          '/products',
           '/api/videos',
           '/api/site-settings',
           '/api/theme',
