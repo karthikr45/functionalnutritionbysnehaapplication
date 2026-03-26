@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 
 interface Product {
   id: string; slug: string; name: string; shortDescription?: string;
-  price: number; salePrice?: number | null; images: string[];
+  price: number; salePrice?: number | null; images: any[];
   avgRating: number; reviewCount: number; tags: string[];
   stock: number; isActive: boolean;
   category?: { name: string; slug: string };
@@ -75,7 +75,7 @@ export default function ProductsPage() {
     if (p.stock < 1) return toast.error('Out of stock');
     addToCart({
       productId: p.id, name: p.name, price: p.salePrice ?? p.price,
-      salePrice: p.salePrice, image: p.images?.[0], stock: p.stock, slug: p.slug,
+      salePrice: p.salePrice, image: typeof p.images?.[0] === 'string' ? p.images[0] : p.images?.[0]?.url, stock: p.stock, slug: p.slug,
     });
     toast.success(`${p.name} added to cart`);
   };
@@ -174,7 +174,7 @@ export default function ProductsPage() {
                 <div key={p.id} className="bg-white rounded-xl shadow-sm hover:shadow-md transition overflow-hidden flex flex-col">
                   <Link href={`/products/${p.slug}`} className="block relative">
                     {p.images?.[0] ? (
-                      <img src={p.images[0]} alt={p.name} className="w-full h-56 object-cover" />
+                      <img src={typeof p.images[0] === 'string' ? p.images[0] : p.images[0]?.url} alt={p.name} className="w-full h-56 object-cover" />
                     ) : (
                       <div className="w-full h-56 bg-primary-50 flex items-center justify-center text-primary-300">
                         <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">

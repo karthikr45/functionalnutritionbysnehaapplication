@@ -36,15 +36,17 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
   const product = await fetchProduct(params.slug);
   if (!product) notFound();
 
-  const images: { url: string; publicId?: string }[] =
-    typeof product.images === 'string' ? JSON.parse(product.images) : product.images || [];
+  const rawImages = typeof product.images === 'string' ? JSON.parse(product.images) : product.images || [];
+  const images: { url: string; publicId?: string }[] = rawImages.map((img: any) =>
+    typeof img === 'string' ? { url: img } : img
+  );
   const benefits: string[] =
     typeof product.benefits === 'string' ? JSON.parse(product.benefits) : product.benefits || [];
   const tags: string[] =
     typeof product.tags === 'string' ? JSON.parse(product.tags) : product.tags || [];
 
   const { reviews } = await fetchReviews(product.id);
-  const mainImage = images[0]?.url || '/placeholder-product.jpg';
+  const mainImage = images[0]?.url || '';
   const hasDiscount = product.salePrice && product.salePrice < product.price;
   const discountPct = hasDiscount
     ? Math.round(((product.price - product.salePrice!) / product.price) * 100)
