@@ -66,7 +66,7 @@ const fallbackServices: Service[] = [
 
 // SVG icons similar to the reference design
 function ServiceIcon({ slug }: { slug: string }) {
-  const iconClass = 'w-12 h-12 text-teal-200';
+  const iconClass = 'w-12 h-12 text-primary-800';
 
   switch (slug) {
     case 'gut-reset-program':
@@ -174,19 +174,19 @@ export default function Services() {
                 href={`/services/${slug}`}
                 className="group rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 hover:border-primary-200 transition-all duration-300"
               >
-                {/* Top section — teal background with icon and title */}
-                <div className="bg-teal-800 p-6 min-h-[160px] flex flex-col justify-between relative overflow-hidden">
+                {/* Top section — olive green background with icon and title */}
+                <div className="p-6 min-h-[160px] flex flex-col justify-between relative overflow-hidden" style={{ backgroundColor: '#D4DE95' }}>
                   {/* Subtle decorative circle */}
-                  <div className="absolute -top-6 -right-6 w-24 h-24 bg-teal-700/30 rounded-full" />
+                  <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full" style={{ backgroundColor: 'rgba(99,107,47,0.15)' }} />
                   <div className="relative z-10">
                     <ServiceIcon slug={slug} />
                   </div>
                   <div className="relative z-10 mt-4">
-                    <h3 className="text-xl font-bold text-white group-hover:text-teal-100 transition-colors leading-tight">
+                    <h3 className="text-xl font-bold text-primary-900 group-hover:text-primary-700 transition-colors leading-tight">
                       {service.title}
                     </h3>
                     {service.subtitle && (
-                      <p className="text-teal-200 text-sm mt-1.5 leading-relaxed line-clamp-2">{service.subtitle}</p>
+                      <p className="text-primary-800 text-sm mt-1.5 leading-relaxed line-clamp-2">{service.subtitle}</p>
                     )}
                   </div>
                 </div>
@@ -201,7 +201,7 @@ export default function Services() {
                       loading="lazy"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-teal-50 text-6xl">
+                    <div className="w-full h-full flex items-center justify-center bg-primary-50 text-6xl">
                       {service.icon || '🌿'}
                     </div>
                   )}
