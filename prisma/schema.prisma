@@ -109,6 +109,7 @@ model User {
   doctorProfile  DoctorProfile?
   patientProfile PatientProfile?
   documents      Document[]
+  messages       Message[]
   auditLogsPerformed   AuditLog[] @relation("AuditBySuperAdmin")
   auditLogsTargeted    AuditLog[] @relation("AuditImpersonatedUser")
 }
@@ -203,6 +204,21 @@ model Appointment {
   packageBooking PackageBooking? @relation(fields: [packageBookingId], references: [id])
   payment        Payment?
   documents      Document[]
+  messages       Message[]
+}
+
+// ─── Messages ────────────────────────────────────────────────────────────────
+
+model Message {
+  id            String   @id @default(cuid())
+  appointmentId String
+  senderId      String
+  content       String   @db.Text
+  isRead        Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  sender      User        @relation(fields: [senderId], references: [id])
 }
 
 // ─── Packages ─────────────────────────────────────────────────────────────────

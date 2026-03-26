@@ -112,6 +112,12 @@ export default function DoctorAppointmentsPage() {
                 </div>
 
                 <div className="flex flex-wrap gap-2 flex-shrink-0">
+                  <button
+                    onClick={() => router.push(`/appointment/${appt.id}`)}
+                    className="px-3 py-2 bg-gray-50 text-gray-700 text-xs font-medium rounded-xl hover:bg-gray-100"
+                  >
+                    View
+                  </button>
                   {appt.status === 'CONFIRMED' && (
                     <button
                       onClick={() => router.push(`/consultation/${appt.id}`)}
