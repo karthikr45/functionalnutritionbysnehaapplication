@@ -32,6 +32,7 @@ export default function DoctorProductsPage() {
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState('');
+  const [uploading, setUploading] = useState(false);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -219,15 +220,92 @@ export default function DoctorProductsPage() {
               <textarea value={form.howToUse} onChange={e => setForm({ ...form, howToUse: e.target.value })} rows={2} className={`${inputCls} resize-none`} /></div>
           </div>
           {/* Images */}
-          <div><label className={labelCls}>Images (URLs)</label>
-            <div className="space-y-2">
-              {form.images.map((img, i) => (
-                <div key={i} className="flex gap-2">
-                  <input type="text" value={img} onChange={e => handleListChange('images', i, e.target.value)} placeholder="https://..." className={`flex-1 ${inputCls}`} />
-                  {form.images.length > 1 && <button type="button" onClick={() => removeListItem('images', i)} className="px-3 py-2 text-red-500 hover:bg-red-50 rounded-xl text-sm">{'\u2715'}</button>}
-                </div>))}
-              <button type="button" onClick={() => addListItem('images')} className="text-xs text-primary-600 hover:underline font-medium">+ Add Image</button>
-            </div></div>
+          <div><label className={labelCls}>Product Images</label>
+            {/* Image previews */}
+            {form.images.filter(u => u.trim()).length > 0 && (
+              <div className="flex flex-wrap gap-3 mb-3">
+                {form.images.filter(u => u.trim()).map((img, i) => (
+                  <div key={i} className="relative group w-24 h-24 rounded-xl overflow-hidden border-2 border-gray-200 bg-gray-50">
+                    <img src={img} alt={`Product ${i + 1}`} className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const updated = form.images.filter((_, idx) => idx !== i);
+                        setForm({ ...form, images: updated.length ? updated : [''] });
+                      }}
+                      className="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    >{'\u2715'}</button>
+                    {i === 0 && <span className="absolute bottom-0 left-0 right-0 bg-primary-600 text-white text-xs text-center py-0.5">Main</span>}
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="flex flex-wrap gap-3">
+              {/* Upload button */}
+              <label className={`px-4 py-2.5 bg-primary-50 text-primary-700 text-sm font-medium rounded-xl cursor-pointer hover:bg-primary-100 transition-colors inline-flex items-center gap-2 ${uploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                {uploading ? 'Uploading...' : 'Upload Image'}
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  className="hidden"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    setUploading(true);
+                    const fd = new FormData();
+                    fd.append('file', file);
+                    try {
+                      const res = await fetch('/api/products/upload-image', { method: 'POST', body: fd });
+                      const data = await res.json();
+                      if (res.ok && data.url) {
+                        const cleaned = form.images.filter(u => u.trim());
+                        setForm({ ...form, images: [...cleaned, data.url] });
+                        toast.success('Image uploaded!');
+                      } else {
+                        toast.error(data.error || 'Upload failed');
+                      }
+                    } catch { toast.error('Upload failed'); }
+                    setUploading(false);
+                    e.target.value = '';
+                  }}
+                />
+              </label>
+              {/* Or paste URL */}
+              <div className="flex gap-2 flex-1 min-w-[200px]">
+                <input
+                  type="url"
+                  placeholder="Or paste image URL..."
+                  className={`flex-1 ${inputCls}`}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      const val = (e.target as HTMLInputElement).value.trim();
+                      if (val) {
+                        const cleaned = form.images.filter(u => u.trim());
+                        setForm({ ...form, images: [...cleaned, val] });
+                        (e.target as HTMLInputElement).value = '';
+                      }
+                    }
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const input = document.querySelector('input[placeholder="Or paste image URL..."]') as HTMLInputElement;
+                    const val = input?.value?.trim();
+                    if (val) {
+                      const cleaned = form.images.filter(u => u.trim());
+                      setForm({ ...form, images: [...cleaned, val] });
+                      input.value = '';
+                    }
+                  }}
+                  className="px-4 py-2.5 bg-gray-100 text-gray-600 text-sm font-medium rounded-xl hover:bg-gray-200"
+                >Add</button>
+              </div>
+            </div>
+            <p className="text-xs text-gray-400 mt-1.5">First image is the main product image. Upload or paste URL, max 5MB per image.</p>
+          </div>
           {/* Toggles */}
           <div className="flex flex-wrap gap-6">
             <label className="flex items-center gap-2 cursor-pointer">
