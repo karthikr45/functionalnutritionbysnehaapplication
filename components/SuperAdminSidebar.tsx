@@ -6,6 +6,7 @@ import { signOut, useSession } from 'next-auth/react';
 
 const navItems = [
   { href: '/superadmin/dashboard', label: 'Dashboard', icon: '🏠' },
+  { href: '/superadmin/theme', label: 'Theme', icon: '🎨' },
   { href: '/superadmin/logs', label: 'Audit Logs', icon: '📋' },
 ];
 

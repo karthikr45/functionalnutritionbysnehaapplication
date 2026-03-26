@@ -60,6 +60,7 @@ export default withAuth(
           '/api/services',
           '/api/videos',
           '/api/site-settings',
+          '/api/theme',
           '/services',
           '/studio',
         ];

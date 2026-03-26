@@ -292,6 +292,15 @@ model AuditLog {
   impersonatedUser  User @relation("AuditImpersonatedUser", fields: [impersonatedUserId], references: [id])
 }
 
+// ─── Theme Settings ──────────────────────────────────────────────────────────
+
+model ThemeSettings {
+  id           String @id @default("global")
+  primaryColor String @default("#16a34a") // green-600
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 // ─── Documents ────────────────────────────────────────────────────────────────
 
 model Document {
