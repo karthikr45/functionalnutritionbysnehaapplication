@@ -154,7 +154,7 @@ export default function Services() {
     <section id="services" className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <p className="text-green-600 font-semibold text-sm uppercase tracking-wide">Our Programs</p>
+          <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">Our Programs</p>
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-serif mt-2">
             Specialized Nutrition Programs
           </h2>
@@ -172,7 +172,7 @@ export default function Services() {
               <Link
                 key={service._id}
                 href={`/services/${slug}`}
-                className="group rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 hover:border-green-200 transition-all duration-300"
+                className="group rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 hover:border-primary-200 transition-all duration-300"
               >
                 {/* Top section — teal background with icon and title */}
                 <div className="bg-teal-800 p-6 min-h-[160px] flex flex-col justify-between relative overflow-hidden">

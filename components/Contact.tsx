@@ -21,7 +21,7 @@ export default function Contact() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
             <div>
-              <p className="text-green-600 font-semibold text-sm uppercase tracking-wide">Get In Touch</p>
+              <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">Get In Touch</p>
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-serif mt-2">
                 Start Your Health Journey Today
               </h2>
@@ -39,7 +39,7 @@ export default function Contact() {
                 { icon: '📍', label: 'Consultations', value: 'Online (Pan India & International)' },
               ].map((info) => (
                 <div key={info.label} className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+                  <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
                     {info.icon}
                   </div>
                   <div>
@@ -51,9 +51,9 @@ export default function Contact() {
             </div>
 
             {/* Free discovery call CTA */}
-            <div className="bg-green-50 border border-green-200 rounded-2xl p-6">
-              <h4 className="font-bold text-green-800 text-lg">Not sure where to start?</h4>
-              <p className="text-green-700 text-sm mt-2">
+            <div className="bg-primary-50 border border-primary-200 rounded-2xl p-6">
+              <h4 className="font-bold text-primary-800 text-lg">Not sure where to start?</h4>
+              <p className="text-primary-700 text-sm mt-2">
                 Book a free 10-minute discovery call where I&apos;ll understand your health concerns
                 and recommend the right plan for you. No commitment, no pressure.
               </p>
@@ -61,7 +61,7 @@ export default function Contact() {
                 href="https://wa.me/919876543210?text=Hi%20Sneha%2C%20I%27d%20like%20to%20book%20a%20free%20discovery%20call."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-green-600 text-white rounded-xl font-semibold text-sm hover:bg-green-700 transition-colors"
+                className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-primary-600 text-white rounded-xl font-semibold text-sm hover:bg-primary-700 transition-colors"
               >
                 <span>💬</span> Chat on WhatsApp
               </a>
@@ -78,7 +78,7 @@ export default function Contact() {
                 </p>
                 <button
                   onClick={() => setStatus('idle')}
-                  className="mt-6 text-green-600 font-medium hover:underline"
+                  className="mt-6 text-primary-600 font-medium hover:underline"
                 >
                   Send Another Message
                 </button>
@@ -99,7 +99,7 @@ export default function Contact() {
                       placeholder={field.placeholder}
                       value={form[field.name as keyof typeof form]}
                       onChange={(e) => setForm({ ...form, [field.name]: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-100 outline-none transition-all text-sm"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-all text-sm"
                     />
                   </div>
                 ))}
@@ -111,14 +111,14 @@ export default function Contact() {
                     placeholder="Tell me about your health goals and concerns — PCOS, thyroid, weight loss, gut health, etc."
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-100 outline-none transition-all text-sm resize-none"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-all text-sm resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={status === 'sending'}
-                  className="w-full py-4 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold rounded-xl transition-colors"
+                  className="w-full py-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-semibold rounded-xl transition-colors"
                 >
                   {status === 'sending' ? 'Sending...' : 'Send Message'}
                 </button>

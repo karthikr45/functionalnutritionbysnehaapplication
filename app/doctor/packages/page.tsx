@@ -404,7 +404,7 @@ export default function DoctorPackagesPage() {
                     className={`px-3 py-2 text-xs font-medium rounded-xl ${
                       pkg.isActive
                         ? 'bg-amber-50 text-amber-700 hover:bg-amber-100'
-                        : 'bg-green-50 text-green-700 hover:bg-green-100'
+                        : 'bg-primary-50 text-primary-700 hover:bg-primary-100'
                     }`}
                   >
                     {pkg.isActive ? 'Deactivate' : 'Activate'}

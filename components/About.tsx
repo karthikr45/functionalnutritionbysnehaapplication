@@ -47,7 +47,7 @@ export default function About({ settings }: AboutProps) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Image side */}
           <div className="relative">
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-3xl p-8">
+            <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-3xl p-8">
               {image ? (
                 <div className="relative rounded-2xl overflow-hidden aspect-[4/5] shadow-lg">
                   <img
@@ -58,7 +58,7 @@ export default function About({ settings }: AboutProps) {
                   {/* Name overlay */}
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
                     <h3 className="text-xl font-bold text-white font-serif">{name}</h3>
-                    <p className="text-green-300 text-sm font-medium">Functional Nutrition Consultant</p>
+                    <p className="text-primary-300 text-sm font-medium">Functional Nutrition Consultant</p>
                   </div>
                 </div>
               ) : (
@@ -71,7 +71,7 @@ export default function About({ settings }: AboutProps) {
               <div className="grid grid-cols-2 gap-4 mt-6">
                 {stats.map((stat) => (
                   <div key={stat.label} className="bg-white rounded-2xl p-4 shadow-sm">
-                    <p className="text-2xl font-bold text-green-600">{stat.number}</p>
+                    <p className="text-2xl font-bold text-primary-600">{stat.number}</p>
                     <p className="text-xs text-gray-500 mt-1">{stat.label}</p>
                   </div>
                 ))}
@@ -82,7 +82,7 @@ export default function About({ settings }: AboutProps) {
           {/* Content side */}
           <div className="space-y-6">
             <div>
-              <p className="text-green-600 font-semibold text-sm uppercase tracking-wide">About Me</p>
+              <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">About Me</p>
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-serif mt-2">{title}</h2>
             </div>
 
@@ -93,7 +93,7 @@ export default function About({ settings }: AboutProps) {
                 return (
                   <p key={i} className="text-gray-600 leading-relaxed">
                     {parts[0]}
-                    <strong className="text-green-700">food is medicine.</strong>
+                    <strong className="text-primary-700">food is medicine.</strong>
                     {parts[1]?.replace(/^\./, '')}
                   </p>
                 );

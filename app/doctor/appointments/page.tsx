@@ -137,7 +137,7 @@ export default function DoctorAppointmentsPage() {
                   {appt.status === 'CONFIRMED' && (
                     <button
                       onClick={() => handleUpdate(appt.id, 'COMPLETED')}
-                      className="px-3 py-2 bg-green-50 text-green-700 text-xs font-medium rounded-xl hover:bg-green-100"
+                      className="px-3 py-2 bg-primary-50 text-primary-700 text-xs font-medium rounded-xl hover:bg-primary-100"
                     >
                       ✅ Complete
                     </button>

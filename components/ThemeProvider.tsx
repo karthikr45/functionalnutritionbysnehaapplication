@@ -56,7 +56,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
     fetch('/api/theme')
       .then((r) => r.json())
       .then((d) => {
-        const color = d.theme?.primaryColor || '#16a34a';
+        const color = d.theme?.primaryColor || '#636B2F';
         const palette = generatePalette(color);
         const root = document.documentElement;
         Object.entries(palette).forEach(([key, value]) => {

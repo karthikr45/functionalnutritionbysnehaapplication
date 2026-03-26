@@ -91,7 +91,7 @@ export default function SuperAdminDashboard() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: 'Total Users', value: stats.total, icon: '👥', color: 'bg-blue-50 text-blue-700' },
-          { label: 'Doctors', value: stats.doctors, icon: '🩺', color: 'bg-green-50 text-green-700' },
+          { label: 'Doctors', value: stats.doctors, icon: '🩺', color: 'bg-primary-50 text-primary-700' },
           { label: 'Patients', value: stats.patients, icon: '🧑', color: 'bg-purple-50 text-purple-700' },
           { label: 'Admins', value: stats.admins, icon: '🔑', color: 'bg-amber-50 text-amber-700' },
         ].map((stat) => (
@@ -148,7 +148,7 @@ export default function SuperAdminDashboard() {
             <div key={user.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
               <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold flex-shrink-0 ${
-                  user.role === 'DOCTOR' ? 'bg-green-100 text-green-700' :
+                  user.role === 'DOCTOR' ? 'bg-primary-100 text-primary-700' :
                   user.role === 'PATIENT' ? 'bg-blue-100 text-blue-700' :
                   'bg-amber-100 text-amber-700'
                 }`}>
@@ -159,7 +159,7 @@ export default function SuperAdminDashboard() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <h3 className="font-semibold text-gray-800">{user.name}</h3>
                     <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      user.role === 'DOCTOR' ? 'bg-green-100 text-green-700' :
+                      user.role === 'DOCTOR' ? 'bg-primary-100 text-primary-700' :
                       user.role === 'PATIENT' ? 'bg-blue-100 text-blue-700' :
                       'bg-amber-100 text-amber-700'
                     }`}>

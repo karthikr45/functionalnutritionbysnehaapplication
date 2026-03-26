@@ -44,7 +44,7 @@ export default async function PatientDashboard() {
 
   const stats = [
     { label: 'Total Consultations', value: totalAppointments, icon: '🗓', color: 'bg-blue-50 text-blue-700' },
-    { label: 'Completed Sessions', value: completedAppointments, icon: '✅', color: 'bg-green-50 text-green-700' },
+    { label: 'Completed Sessions', value: completedAppointments, icon: '✅', color: 'bg-primary-50 text-primary-700' },
     { label: 'Active Packages', value: patientProfile?.packageBookings.length || 0, icon: '📦', color: 'bg-purple-50 text-purple-700' },
     { label: 'Documents Uploaded', value: recentDocs.length, icon: '📄', color: 'bg-amber-50 text-amber-700' },
   ];

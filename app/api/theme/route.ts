@@ -5,9 +5,9 @@ import { getRawAuthSession } from '@/lib/auth';
 export async function GET() {
   try {
     const theme = await prisma.themeSettings.findUnique({ where: { id: 'global' } });
-    return NextResponse.json({ theme: theme || { primaryColor: '#16a34a' } });
+    return NextResponse.json({ theme: theme || { primaryColor: '#636B2F' } });
   } catch {
-    return NextResponse.json({ theme: { primaryColor: '#16a34a' } });
+    return NextResponse.json({ theme: { primaryColor: '#636B2F' } });
   }
 }
 

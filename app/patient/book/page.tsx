@@ -165,7 +165,7 @@ export default function BookAppointmentPage() {
                     <p className="font-semibold text-gray-800">Use Package Session</p>
                     <p className="text-sm text-gray-500">Book a session from your active package (pre-paid)</p>
                   </div>
-                  <p className="font-bold text-green-600">Included</p>
+                  <p className="font-bold text-primary-600">Included</p>
                 </button>
 
                 {selectedType === 'package_session' && (

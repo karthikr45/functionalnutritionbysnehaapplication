@@ -39,23 +39,23 @@ export default function Hero({ settings }: HeroProps) {
   const hasHighlight = titleParts.length > 1;
 
   return (
-    <section className="relative bg-gradient-to-br from-green-50 via-white to-emerald-50 overflow-hidden">
+    <section className="relative bg-gradient-to-br from-primary-50 via-white to-primary-50 overflow-hidden">
       {/* Decorative blobs */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-green-100 rounded-full -translate-y-1/2 translate-x-1/4 opacity-60" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary-100 rounded-full -translate-y-1/2 translate-x-1/4 opacity-60" />
       <div className="absolute bottom-0 left-0 w-72 h-72 bg-amber-200/20 rounded-full translate-y-1/2 -translate-x-1/4 opacity-60" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div className="space-y-8">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-100 text-green-700 text-sm font-medium">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary-100 text-primary-700 text-sm font-medium">
               {badge}
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight font-serif">
               {hasHighlight ? (
                 <>
                   {titleParts[0]}
-                  <span className="text-green-600">Functional Nutrition</span>
+                  <span className="text-primary-600">Functional Nutrition</span>
                   {titleParts[1]}
                 </>
               ) : (
@@ -76,7 +76,7 @@ export default function Hero({ settings }: HeroProps) {
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 href="/#packages"
-                className="inline-flex items-center justify-center px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-lg"
+                className="inline-flex items-center justify-center px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-lg"
               >
                 Book a Consultation
                 <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -85,7 +85,7 @@ export default function Hero({ settings }: HeroProps) {
               </Link>
               <Link
                 href="#services"
-                className="inline-flex items-center justify-center px-8 py-4 border-2 border-green-600 text-green-600 hover:bg-green-50 font-semibold rounded-xl transition-all duration-200 text-lg"
+                className="inline-flex items-center justify-center px-8 py-4 border-2 border-primary-600 text-primary-600 hover:bg-primary-50 font-semibold rounded-xl transition-all duration-200 text-lg"
               >
                 Explore Services
               </Link>
@@ -95,7 +95,7 @@ export default function Hero({ settings }: HeroProps) {
             <div className="flex flex-wrap gap-4 pt-4">
               {stats.map((stat) => (
                 <div key={stat.label} className="text-center px-4 py-2 bg-white rounded-xl shadow-sm border border-gray-100">
-                  <p className="text-xl font-bold text-green-600">{stat.number}</p>
+                  <p className="text-xl font-bold text-primary-600">{stat.number}</p>
                   <p className="text-xs text-gray-500">{stat.label}</p>
                 </div>
               ))}
@@ -105,7 +105,7 @@ export default function Hero({ settings }: HeroProps) {
           {/* Right Image */}
           <div className="relative flex justify-center lg:justify-end">
             <div className="relative w-full max-w-md">
-              <div className="absolute inset-0 bg-gradient-to-br from-green-200 to-green-400 rounded-3xl rotate-3 opacity-30" />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary-200 to-primary-400 rounded-3xl rotate-3 opacity-30" />
               <div className="relative bg-white rounded-3xl shadow-2xl overflow-hidden aspect-[4/5]">
                 {doctorImage ? (
                   <img
@@ -114,13 +114,13 @@ export default function Hero({ settings }: HeroProps) {
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="absolute inset-0 bg-gradient-to-b from-green-50 to-white flex items-center justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-b from-primary-50 to-white flex items-center justify-center">
                     <div className="text-center p-8">
-                      <div className="w-40 h-40 bg-green-100 rounded-full mx-auto mb-6 flex items-center justify-center text-6xl">
+                      <div className="w-40 h-40 bg-primary-100 rounded-full mx-auto mb-6 flex items-center justify-center text-6xl">
                         🌿
                       </div>
                       <h3 className="text-2xl font-bold text-gray-800 font-serif">{name}</h3>
-                      <p className="text-green-600 font-medium mt-1">Functional Nutrition Consultant</p>
+                      <p className="text-primary-600 font-medium mt-1">Functional Nutrition Consultant</p>
                       <p className="text-gray-500 text-sm mt-2">Certified in Functional Medicine &amp; Clinical Nutrition</p>
                     </div>
                   </div>
@@ -129,7 +129,7 @@ export default function Hero({ settings }: HeroProps) {
                 {doctorImage && (
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-6">
                     <h3 className="text-2xl font-bold text-white font-serif">{name}</h3>
-                    <p className="text-green-300 font-medium text-sm mt-0.5">Functional Nutrition Consultant</p>
+                    <p className="text-primary-300 font-medium text-sm mt-0.5">Functional Nutrition Consultant</p>
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       {specializations.split('|').map((s) => (
                         <span key={s.trim()} className="px-2 py-0.5 bg-white/20 text-white text-xs rounded-full backdrop-blur-sm">
@@ -142,9 +142,9 @@ export default function Hero({ settings }: HeroProps) {
               </div>
 
               {/* Floating cards */}
-              <div className="absolute -top-4 -left-8 bg-white rounded-2xl shadow-lg p-4 border border-green-100 z-10">
+              <div className="absolute -top-4 -left-8 bg-white rounded-2xl shadow-lg p-4 border border-primary-100 z-10">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center text-xl">🥗</div>
+                  <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center text-xl">🥗</div>
                   <div>
                     <p className="text-xs text-gray-500">Next Available</p>
                     <p className="font-semibold text-gray-800 text-sm">Tomorrow, 10 AM</p>
@@ -152,7 +152,7 @@ export default function Hero({ settings }: HeroProps) {
                 </div>
               </div>
 
-              <div className="absolute -bottom-4 -right-8 bg-white rounded-2xl shadow-lg p-4 border border-green-100 z-10">
+              <div className="absolute -bottom-4 -right-8 bg-white rounded-2xl shadow-lg p-4 border border-primary-100 z-10">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center text-xl">🎯</div>
                   <div>

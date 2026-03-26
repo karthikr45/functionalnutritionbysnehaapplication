@@ -19,7 +19,7 @@ const ACTION_COLORS: Record<string, string> = {
   STOP_IMPERSONATION: 'bg-gray-100 text-gray-700',
   VIEW_DASHBOARD: 'bg-blue-100 text-blue-700',
   UPDATE_APPOINTMENT: 'bg-amber-100 text-amber-700',
-  CREATE_PACKAGE: 'bg-green-100 text-green-700',
+  CREATE_PACKAGE: 'bg-primary-100 text-primary-700',
   UPDATE_PACKAGE: 'bg-yellow-100 text-yellow-700',
   DELETE_PACKAGE: 'bg-red-100 text-red-700',
   NAVIGATE: 'bg-purple-100 text-purple-700',

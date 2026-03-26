@@ -214,7 +214,7 @@ export default function AppointmentDetailPage() {
                     <div className={`max-w-[70%] ${isMine ? 'order-2' : ''}`}>
                       <div className={`px-4 py-3 rounded-2xl ${
                         isMine
-                          ? 'bg-green-600 text-white rounded-br-md'
+                          ? 'bg-primary-600 text-white rounded-br-md'
                           : 'bg-gray-100 text-gray-800 rounded-bl-md'
                       }`}>
                         <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
@@ -222,7 +222,7 @@ export default function AppointmentDetailPage() {
                       <div className={`flex items-center gap-2 mt-1 text-xs text-gray-400 ${isMine ? 'justify-end' : ''}`}>
                         <span>{msg.sender.name}</span>
                         <span>{format(new Date(msg.createdAt), 'hh:mm a')}</span>
-                        {isMine && msg.isRead && <span className="text-green-500">read</span>}
+                        {isMine && msg.isRead && <span className="text-primary-500">read</span>}
                       </div>
                     </div>
                   </div>
@@ -239,12 +239,12 @@ export default function AppointmentDetailPage() {
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type a message..."
-              className="flex-1 px-4 py-3 border border-gray-200 rounded-xl text-sm focus:border-green-400 outline-none"
+              className="flex-1 px-4 py-3 border border-gray-200 rounded-xl text-sm focus:border-primary-400 outline-none"
             />
             <button
               type="submit"
               disabled={!newMessage.trim() || sending}
-              className="px-5 py-3 bg-green-600 text-white font-semibold rounded-xl text-sm hover:bg-green-700 disabled:bg-green-300 transition-colors"
+              className="px-5 py-3 bg-primary-600 text-white font-semibold rounded-xl text-sm hover:bg-primary-700 disabled:bg-primary-300 transition-colors"
             >
               {sending ? '...' : 'Send'}
             </button>
@@ -259,7 +259,7 @@ export default function AppointmentDetailPage() {
             <h2 className="font-bold text-gray-900">Shared Documents</h2>
             <button
               onClick={() => setShowUpload(!showUpload)}
-              className="px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-xl hover:bg-green-700 transition-colors"
+              className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 transition-colors"
             >
               {showUpload ? 'Close' : '+ Upload Document'}
             </button>
@@ -284,7 +284,7 @@ export default function AppointmentDetailPage() {
               <p className="text-gray-500 text-sm">No documents shared for this appointment yet.</p>
               <button
                 onClick={() => setShowUpload(true)}
-                className="text-green-600 text-sm font-medium hover:underline mt-2"
+                className="text-primary-600 text-sm font-medium hover:underline mt-2"
               >
                 Upload the first document
               </button>
@@ -295,7 +295,7 @@ export default function AppointmentDetailPage() {
                 <div key={doc.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
                   {/* Thumbnail */}
                   <div
-                    className="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0 cursor-pointer hover:bg-green-100 transition-colors"
+                    className="w-12 h-12 bg-primary-50 rounded-lg flex items-center justify-center flex-shrink-0 cursor-pointer hover:bg-primary-100 transition-colors"
                     onClick={() => openViewer(idx)}
                   >
                     {doc.fileType?.includes('image') ? (
@@ -389,7 +389,7 @@ export default function AppointmentDetailPage() {
               </div>
             )}
             {appt.doctorNotes && (
-              <div className="bg-green-50 rounded-2xl border border-green-100 p-6">
+              <div className="bg-primary-50 rounded-2xl border border-primary-100 p-6">
                 <h2 className="font-bold text-gray-900 mb-3">Doctor&apos;s Notes</h2>
                 <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">{appt.doctorNotes}</p>
               </div>
@@ -399,7 +399,7 @@ export default function AppointmentDetailPage() {
                 href={appt.dietPlanUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:border-green-200 transition-colors"
+                className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:border-primary-200 transition-colors"
               >
                 <span className="text-3xl">🥗</span>
                 <div>
@@ -485,7 +485,7 @@ export default function AppointmentDetailPage() {
                     href={documents[viewerIndex].fileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-6 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-colors"
+                    className="px-6 py-3 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-colors"
                   >
                     Open in New Tab
                   </a>
@@ -514,7 +514,7 @@ export default function AppointmentDetailPage() {
                   key={doc.id}
                   onClick={() => setViewerIndex(idx)}
                   className={`w-14 h-14 rounded-lg flex-shrink-0 overflow-hidden border-2 transition-all ${
-                    idx === viewerIndex ? 'border-green-500 scale-110' : 'border-transparent opacity-60 hover:opacity-100'
+                    idx === viewerIndex ? 'border-primary-500 scale-110' : 'border-transparent opacity-60 hover:opacity-100'
                   }`}
                 >
                   {doc.fileType?.includes('image') ? (

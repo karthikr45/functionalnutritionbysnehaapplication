@@ -58,7 +58,7 @@ export default async function DoctorDashboard() {
   const stats = [
     { label: "Today's Appointments", value: todayAppts.length, icon: '📅', color: 'bg-blue-50 text-blue-700' },
     { label: 'Total Patients', value: totalPatients.length, icon: '👥', color: 'bg-purple-50 text-purple-700' },
-    { label: 'Completed Sessions', value: completedTotal, icon: '✅', color: 'bg-green-50 text-green-700' },
+    { label: 'Completed Sessions', value: completedTotal, icon: '✅', color: 'bg-primary-50 text-primary-700' },
     { label: 'Total Revenue', value: `₹${((pendingPayments._sum.amount || 0) / 100).toLocaleString('en-IN')}`, icon: '💰', color: 'bg-amber-50 text-amber-700' },
   ];
 
@@ -190,7 +190,7 @@ export default async function DoctorDashboard() {
             {blogPosts.slice(0, 5).map((post: any) => (
               <div key={post._id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
                 {/* Thumbnail */}
-                <div className="w-16 h-16 rounded-lg overflow-hidden bg-green-50 flex-shrink-0">
+                <div className="w-16 h-16 rounded-lg overflow-hidden bg-primary-50 flex-shrink-0">
                   {post.mainImage ? (
                     <img src={post.mainImage} alt={post.title} className="w-full h-full object-cover" />
                   ) : (
@@ -208,7 +208,7 @@ export default async function DoctorDashboard() {
                     {post.publishedAt && <span>{format(new Date(post.publishedAt), 'dd MMM yyyy')}</span>}
                     {post.readTime && <span>{post.readTime} min read</span>}
                     {post.categories?.[0] && (
-                      <span className="px-2 py-0.5 bg-green-50 text-green-600 rounded-full text-xs">
+                      <span className="px-2 py-0.5 bg-primary-50 text-primary-600 rounded-full text-xs">
                         {post.categories[0].title}
                       </span>
                     )}

@@ -62,7 +62,7 @@ export default function FAQ() {
     <section id="faq" className="py-20 bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <p className="text-green-600 font-semibold text-sm uppercase tracking-wide">FAQ</p>
+          <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">FAQ</p>
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-serif mt-2">
             Frequently Asked Questions
           </h2>
@@ -83,7 +83,7 @@ export default function FAQ() {
               >
                 <span className="font-semibold text-gray-900 pr-4">{faq.question}</span>
                 <svg
-                  className={`w-5 h-5 text-green-600 flex-shrink-0 transition-transform duration-200 ${
+                  className={`w-5 h-5 text-primary-600 flex-shrink-0 transition-transform duration-200 ${
                     openIndex === index ? 'rotate-180' : ''
                   }`}
                   fill="none"

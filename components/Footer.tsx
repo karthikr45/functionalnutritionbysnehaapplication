@@ -77,7 +77,7 @@ export default function Footer() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={s.name}
-                      className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-green-600 transition-colors"
+                      className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-primary-600 transition-colors"
                     >
                       {s.icon}
                     </a>
@@ -110,7 +110,7 @@ export default function Footer() {
                 { href: '/#contact', label: 'Contact' },
               ].map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="hover:text-green-400 transition-colors">
+                  <Link href={link.href} className="hover:text-primary-400 transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -129,7 +129,7 @@ export default function Footer() {
               <li className="mt-4">
                 <Link
                   href="/#packages"
-                  className="inline-block px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-xl text-sm font-semibold transition-colors"
+                  className="inline-block px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-colors"
                 >
                   Book Consultation →
                 </Link>

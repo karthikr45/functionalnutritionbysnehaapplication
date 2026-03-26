@@ -54,7 +54,7 @@ export default function Testimonials() {
     <section id="testimonials" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <p className="text-green-600 font-semibold text-sm uppercase tracking-wide">Success Stories</p>
+          <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">Success Stories</p>
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-serif mt-2">
             Real People, Real Results
           </h2>
@@ -67,11 +67,11 @@ export default function Testimonials() {
           {testimonials.map((t) => (
             <div
               key={t.name}
-              className="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:border-green-200 hover:shadow-md transition-all duration-200"
+              className="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:border-primary-200 hover:shadow-md transition-all duration-200"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-bold text-lg">
+                  <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center text-primary-700 font-bold text-lg">
                     {t.name[0]}
                   </div>
                   <div>
@@ -79,12 +79,12 @@ export default function Testimonials() {
                     <p className="text-xs text-gray-500">{t.city}</p>
                   </div>
                 </div>
-                <span className="px-3 py-1 bg-green-50 text-green-700 text-xs font-medium rounded-full">
+                <span className="px-3 py-1 bg-primary-50 text-primary-700 text-xs font-medium rounded-full">
                   {t.condition}
                 </span>
               </div>
 
-              <div className="bg-green-600 text-white rounded-xl px-4 py-2 text-center font-bold mb-4">
+              <div className="bg-primary-600 text-white rounded-xl px-4 py-2 text-center font-bold mb-4">
                 {t.loss}
               </div>
 

@@ -125,7 +125,7 @@ export default function PatientAppointmentsPage() {
                       href={appt.dietPlanUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-4 py-2 bg-green-50 text-green-700 text-sm font-medium rounded-xl hover:bg-green-100 transition-colors text-center"
+                      className="px-4 py-2 bg-primary-50 text-primary-700 text-sm font-medium rounded-xl hover:bg-primary-100 transition-colors text-center"
                     >
                       🥗 Diet Plan
                     </a>

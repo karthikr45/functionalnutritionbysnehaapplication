@@ -47,10 +47,10 @@ export default function Packages() {
   };
 
   return (
-    <section id="packages" className="py-20 bg-gradient-to-br from-green-50 to-white">
+    <section id="packages" className="py-20 bg-gradient-to-br from-primary-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <p className="text-green-600 font-semibold text-sm uppercase tracking-wide">Pricing</p>
+          <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">Pricing</p>
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-serif mt-2">
             Consultation Packages
           </h2>
@@ -96,7 +96,7 @@ export default function Packages() {
                 key={idx}
                 className={`relative rounded-3xl p-8 flex flex-col ${
                   pkg.isPopular
-                    ? 'bg-green-600 text-white shadow-2xl scale-105'
+                    ? 'bg-primary-600 text-white shadow-2xl scale-105'
                     : 'bg-white text-gray-800 shadow-md border border-gray-100'
                 }`}
               >
@@ -109,15 +109,15 @@ export default function Packages() {
                   <h3 className={`text-xl font-bold font-serif ${pkg.isPopular ? 'text-white' : 'text-gray-900'}`}>
                     {pkg.name}
                   </h3>
-                  <p className={`mt-2 text-sm leading-relaxed ${pkg.isPopular ? 'text-green-100' : 'text-gray-500'}`}>
+                  <p className={`mt-2 text-sm leading-relaxed ${pkg.isPopular ? 'text-primary-100' : 'text-gray-500'}`}>
                     {pkg.description}
                   </p>
                   <div className="mt-6 mb-4">
-                    <span className={`text-4xl font-bold ${pkg.isPopular ? 'text-white' : 'text-green-600'}`}>
+                    <span className={`text-4xl font-bold ${pkg.isPopular ? 'text-white' : 'text-primary-600'}`}>
                       {formatCurrency(pkg.price)}
                     </span>
                   </div>
-                  <div className={`flex gap-4 text-sm mb-6 ${pkg.isPopular ? 'text-green-100' : 'text-gray-500'}`}>
+                  <div className={`flex gap-4 text-sm mb-6 ${pkg.isPopular ? 'text-primary-100' : 'text-gray-500'}`}>
                     <span>🗓 {pkg.sessions} Sessions</span>
                     <span>⏳ {pkg.validity} days validity</span>
                   </div>
@@ -125,10 +125,10 @@ export default function Packages() {
                 <ul className="space-y-3 flex-1 mb-8">
                   {pkg.features.map((feature: string) => (
                     <li key={feature} className="flex items-start gap-3 text-sm">
-                      <svg className={`w-5 h-5 flex-shrink-0 mt-0.5 ${pkg.isPopular ? 'text-green-300' : 'text-green-500'}`} fill="currentColor" viewBox="0 0 20 20">
+                      <svg className={`w-5 h-5 flex-shrink-0 mt-0.5 ${pkg.isPopular ? 'text-primary-300' : 'text-primary-500'}`} fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
-                      <span className={pkg.isPopular ? 'text-green-50' : 'text-gray-600'}>{feature}</span>
+                      <span className={pkg.isPopular ? 'text-primary-50' : 'text-gray-600'}>{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -136,8 +136,8 @@ export default function Packages() {
                   href="/signup"
                   className={`w-full text-center py-4 px-6 rounded-xl font-semibold text-base transition-all duration-200 block ${
                     pkg.isPopular
-                      ? 'bg-white text-green-600 hover:bg-green-50'
-                      : 'bg-green-600 text-white hover:bg-green-700'
+                      ? 'bg-white text-primary-600 hover:bg-primary-50'
+                      : 'bg-primary-600 text-white hover:bg-primary-700'
                   }`}
                 >
                   Get Started
@@ -152,7 +152,7 @@ export default function Packages() {
                 key={pkg.id}
                 className={`relative rounded-3xl p-8 flex flex-col ${
                   pkg.isPopular
-                    ? 'bg-green-600 text-white shadow-2xl scale-105'
+                    ? 'bg-primary-600 text-white shadow-2xl scale-105'
                     : 'bg-white text-gray-800 shadow-md border border-gray-100'
                 }`}
               >
@@ -172,7 +172,7 @@ export default function Packages() {
                   </h3>
                   <p
                     className={`mt-2 text-sm leading-relaxed ${
-                      pkg.isPopular ? 'text-green-100' : 'text-gray-500'
+                      pkg.isPopular ? 'text-primary-100' : 'text-gray-500'
                     }`}
                   >
                     {pkg.description}
@@ -180,7 +180,7 @@ export default function Packages() {
 
                   <div className="mt-6 mb-4">
                     <span
-                      className={`text-4xl font-bold ${pkg.isPopular ? 'text-white' : 'text-green-600'}`}
+                      className={`text-4xl font-bold ${pkg.isPopular ? 'text-white' : 'text-primary-600'}`}
                     >
                       {formatCurrency(pkg.price)}
                     </span>
@@ -188,7 +188,7 @@ export default function Packages() {
 
                   <div
                     className={`flex gap-4 text-sm mb-6 ${
-                      pkg.isPopular ? 'text-green-100' : 'text-gray-500'
+                      pkg.isPopular ? 'text-primary-100' : 'text-gray-500'
                     }`}
                   >
                     <span>🗓 {pkg.sessions} Sessions</span>
@@ -201,7 +201,7 @@ export default function Packages() {
                     <li key={feature} className="flex items-start gap-3 text-sm">
                       <svg
                         className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
-                          pkg.isPopular ? 'text-green-300' : 'text-green-500'
+                          pkg.isPopular ? 'text-primary-300' : 'text-primary-500'
                         }`}
                         fill="currentColor"
                         viewBox="0 0 20 20"
@@ -212,7 +212,7 @@ export default function Packages() {
                           clipRule="evenodd"
                         />
                       </svg>
-                      <span className={pkg.isPopular ? 'text-green-50' : 'text-gray-600'}>{feature}</span>
+                      <span className={pkg.isPopular ? 'text-primary-50' : 'text-gray-600'}>{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -221,8 +221,8 @@ export default function Packages() {
                   onClick={() => handleGetStarted(pkg.id)}
                   className={`w-full text-center py-4 px-6 rounded-xl font-semibold text-base transition-all duration-200 cursor-pointer ${
                     pkg.isPopular
-                      ? 'bg-white text-green-600 hover:bg-green-50'
-                      : 'bg-green-600 text-white hover:bg-green-700'
+                      ? 'bg-white text-primary-600 hover:bg-primary-50'
+                      : 'bg-primary-600 text-white hover:bg-primary-700'
                   }`}
                 >
                   {session ? 'Buy Now' : 'Get Started'}
@@ -234,7 +234,7 @@ export default function Packages() {
 
         <p className="text-center text-gray-500 text-sm mt-8">
           Not sure which plan is right for you?{' '}
-          <Link href="/#contact" className="text-green-600 font-medium hover:underline">
+          <Link href="/#contact" className="text-primary-600 font-medium hover:underline">
             Contact me for a free 10-minute discovery call.
           </Link>
         </p>
