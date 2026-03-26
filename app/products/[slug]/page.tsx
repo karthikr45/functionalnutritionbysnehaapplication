@@ -4,6 +4,7 @@ import { formatCurrency } from '@/lib/utils';
 import { notFound } from 'next/navigation';
 import AddToCartClientWrapper from './AddToCartClient';
 import ReviewFormClientWrapper from './ReviewFormClient';
+import ImageGallery from './ImageGallery';
 
 async function fetchProduct(slug: string) {
   const base = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000';
@@ -70,25 +71,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
         {/* Product Top */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16">
           {/* Image Gallery */}
-          <div>
-            <div className="relative aspect-square bg-white rounded-2xl overflow-hidden border border-gray-200">
-              <img src={mainImage} alt={product.name} className="w-full h-full object-contain p-4" />
-              {hasDiscount && (
-                <span className="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                  -{discountPct}%
-                </span>
-              )}
-            </div>
-            {images.length > 1 && (
-              <div className="flex gap-3 mt-4 overflow-x-auto pb-2">
-                {images.map((img, i) => (
-                  <div key={i} className="flex-shrink-0 w-20 h-20 rounded-lg border-2 border-gray-200 overflow-hidden bg-white hover:border-primary-500 transition-colors">
-                    <img src={img.url} alt={`${product.name} ${i + 1}`} className="w-full h-full object-contain p-1" />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <ImageGallery images={images} productName={product.name} discountPct={discountPct} />
 
           {/* Product Info */}
           <div>
