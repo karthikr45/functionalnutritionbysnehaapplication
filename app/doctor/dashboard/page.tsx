@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { STATUS_COLORS, formatTime } from '@/lib/utils';
+import { client } from '@/sanity/lib/client';
+import { ALL_POSTS_QUERY } from '@/sanity/lib/queries';
 
 export default async function DoctorDashboard() {
   const session = await getAuthSession();
@@ -46,6 +48,12 @@ export default async function DoctorDashboard() {
       _sum: { amount: true },
     }),
   ]);
+
+  // Fetch blog posts from Sanity
+  let blogPosts: any[] = [];
+  try {
+    blogPosts = await client.fetch(ALL_POSTS_QUERY) || [];
+  } catch {}
 
   const stats = [
     { label: "Today's Appointments", value: todayAppts.length, icon: '📅', color: 'bg-blue-50 text-blue-700' },
@@ -147,6 +155,97 @@ export default async function DoctorDashboard() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* Blog Posts */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <h2 className="font-bold text-gray-900">Blog Posts</h2>
+            <p className="text-xs text-gray-400 mt-0.5">Manage your content from Sanity Studio</p>
+          </div>
+          <div className="flex gap-2">
+            <Link
+              href="/studio/structure/post"
+              className="px-4 py-2 bg-primary-600 text-white text-xs font-semibold rounded-xl hover:bg-primary-700 transition-colors"
+            >
+              + New Post
+            </Link>
+          </div>
+        </div>
+
+        {blogPosts.length === 0 ? (
+          <div className="text-center py-10">
+            <p className="text-4xl mb-3">✍️</p>
+            <p className="text-gray-500 text-sm mb-3">No blog posts yet.</p>
+            <Link
+              href="/studio/structure/post"
+              className="text-primary-600 text-sm font-medium hover:underline"
+            >
+              Create your first post in Sanity Studio →
+            </Link>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {blogPosts.slice(0, 5).map((post: any) => (
+              <div key={post._id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                {/* Thumbnail */}
+                <div className="w-16 h-16 rounded-lg overflow-hidden bg-green-50 flex-shrink-0">
+                  {post.mainImage ? (
+                    <img src={post.mainImage} alt={post.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-2xl">📝</div>
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-gray-800 text-sm truncate">{post.title}</h3>
+                  {post.excerpt && (
+                    <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">{post.excerpt}</p>
+                  )}
+                  <div className="flex items-center gap-3 mt-1.5 text-xs text-gray-400">
+                    {post.publishedAt && <span>{format(new Date(post.publishedAt), 'dd MMM yyyy')}</span>}
+                    {post.readTime && <span>{post.readTime} min read</span>}
+                    {post.categories?.[0] && (
+                      <span className="px-2 py-0.5 bg-green-50 text-green-600 rounded-full text-xs">
+                        {post.categories[0].title}
+                      </span>
+                    )}
+                    {post.isFeatured && (
+                      <span className="px-2 py-0.5 bg-amber-50 text-amber-600 rounded-full text-xs">Featured</span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-2 flex-shrink-0">
+                  <Link
+                    href={`/blog/${post.slug?.current}`}
+                    target="_blank"
+                    className="px-3 py-1.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-lg hover:bg-blue-100 transition-colors"
+                  >
+                    Preview
+                  </Link>
+                  <Link
+                    href={`/studio/structure/post;${post._id}`}
+                    className="px-3 py-1.5 bg-primary-50 text-primary-700 text-xs font-medium rounded-lg hover:bg-primary-100 transition-colors"
+                  >
+                    Edit
+                  </Link>
+                </div>
+              </div>
+            ))}
+
+            {blogPosts.length > 5 && (
+              <div className="text-center pt-2">
+                <Link href="/studio/structure/post" className="text-primary-600 text-sm font-medium hover:underline">
+                  View all {blogPosts.length} posts in Studio →
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
