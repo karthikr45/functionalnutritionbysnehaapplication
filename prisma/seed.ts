@@ -12,7 +12,7 @@ async function main() {
     where: { email: 'sneha@functionalnutrition.com' },
     update: {},
     create: {
-      name: 'Sneha',
+      name: 'Sneha Agarwal',
       email: 'sneha@functionalnutrition.com',
       password: doctorPassword,
       phone: '+91-9876543210',

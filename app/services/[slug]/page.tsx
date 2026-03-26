@@ -170,7 +170,7 @@ export default async function ServicePage({ params }: { params: { slug: string }
               Ready to Start Your {service.title} Journey?
             </h2>
             <p className="text-teal-100 mb-8 max-w-xl mx-auto">
-              Book a consultation with Sneha to get a personalized plan designed specifically for your needs.
+              Book a consultation with Sneha Agarwal to get a personalized plan designed specifically for your needs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
