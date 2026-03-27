@@ -27,7 +27,18 @@ const CartContext = createContext<CartContextType | null>(null);
 
 export function useCart() {
   const context = useContext(CartContext);
-  if (!context) throw new Error('useCart must be used within CartProvider');
+  if (!context) {
+    // Return safe defaults when outside CartProvider
+    return {
+      items: [] as CartItem[],
+      addToCart: () => {},
+      removeFromCart: () => {},
+      updateQuantity: () => {},
+      clearCart: () => {},
+      getCartTotal: () => 0,
+      getCartCount: () => 0,
+    } as CartContextType;
+  }
   return context;
 }
 
