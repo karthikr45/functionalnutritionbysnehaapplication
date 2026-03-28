@@ -3,139 +3,98 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import DailyIframe from '@daily-co/daily-js';
 
 export default function ConsultationPage() {
   const { id } = useParams();
   const router = useRouter();
   const { data: session, status } = useSession();
-  const jitsiContainerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const callFrameRef = useRef<any>(null);
   const [loading, setLoading] = useState(true);
-  const [appointment, setAppointment] = useState<any>(null);
   const [error, setError] = useState('');
-  const apiRef = useRef<any>(null);
+  const [inCall, setInCall] = useState(false);
 
-  // Fetch appointment to validate access
   useEffect(() => {
     if (status === 'loading') return;
-    if (!session) {
-      router.push('/login');
-      return;
-    }
+    if (!session) { router.push('/login'); return; }
 
-    const fetchAppointment = async () => {
+    const setup = async () => {
       try {
-        const res = await fetch(`/api/appointments/${id}`);
-        if (!res.ok) {
-          setError('Appointment not found or access denied.');
-          setLoading(false);
-          return;
-        }
-        const data = await res.json();
-        if (data.appointment.status !== 'CONFIRMED') {
+        // Validate appointment
+        const apptRes = await fetch(`/api/appointments/${id}`);
+        if (!apptRes.ok) { setError('Appointment not found or access denied.'); setLoading(false); return; }
+        const apptData = await apptRes.json();
+        if (apptData.appointment.status !== 'CONFIRMED') {
           setError('Video call is only available for confirmed appointments.');
           setLoading(false);
           return;
         }
-        setAppointment(data.appointment);
+
+        // Get Daily.co room and token
+        const dailyRes = await fetch('/api/daily', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            appointmentId: id,
+            userName: session.user.name,
+          }),
+        });
+
+        if (!dailyRes.ok) {
+          const errData = await dailyRes.json();
+          setError(errData.error || 'Failed to setup video call.');
+          setLoading(false);
+          return;
+        }
+
+        const { roomUrl, token } = await dailyRes.json();
+
+        if (!containerRef.current) return;
+
+        // Create Daily call frame
+        const callFrame = DailyIframe.createFrame(containerRef.current, {
+          iframeStyle: {
+            width: '100%',
+            height: '100%',
+            border: '0',
+          },
+          showLeaveButton: true,
+          showFullscreenButton: true,
+        });
+
+        callFrameRef.current = callFrame;
+
+        callFrame.on('joined-meeting', () => setInCall(true));
+        callFrame.on('left-meeting', () => {
+          callFrame.destroy();
+          callFrameRef.current = null;
+          const role = session?.user?.role;
+          router.push(role === 'DOCTOR' ? '/doctor/dashboard' : '/patient/dashboard');
+        });
+        callFrame.on('error', (evt) => {
+          console.error('[daily] Error:', evt);
+          setError('Video call error. Please try again.');
+        });
+
+        await callFrame.join({ url: roomUrl, token });
         setLoading(false);
-      } catch {
-        setError('Failed to load appointment details.');
+      } catch (err) {
+        console.error('[consultation] Error:', err);
+        setError('Failed to setup video call.');
         setLoading(false);
       }
     };
 
-    fetchAppointment();
-  }, [id, session, status, router]);
-
-  // Initialize Jitsi Meet
-  useEffect(() => {
-    if (!appointment || !jitsiContainerRef.current) return;
-
-    const domain = 'meet.jit.si';
-    const roomName = `FNbySneha-${id}`;
-
-    const loadJitsi = () => {
-      if (apiRef.current) return;
-
-      const options = {
-        roomName,
-        parentNode: jitsiContainerRef.current,
-        width: '100%',
-        height: '100%',
-        configOverwrite: {
-          startWithAudioMuted: false,
-          startWithVideoMuted: false,
-          prejoinPageEnabled: false,
-          disableDeepLinking: true,
-          requireDisplayName: false,
-          enableInsecureRoomNameWarning: false,
-          disableModeratorIndicator: true,
-          enableNoAudioDetection: false,
-          enableNoisyMicDetection: false,
-          // Disable all lobby/auth features
-          hideLobbyButton: true,
-          enableLobbyChat: false,
-          disableProfile: true,
-          // Skip authentication
-          tokenAuthUrl: undefined,
-        },
-        interfaceConfigOverwrite: {
-          SHOW_JITSI_WATERMARK: false,
-          SHOW_WATERMARK_FOR_GUESTS: false,
-          DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
-          MOBILE_APP_PROMO: false,
-          HIDE_INVITE_MORE_HEADER: true,
-        },
-        userInfo: {
-          displayName: session?.user?.name || 'User',
-          email: session?.user?.email || '',
-        },
-      };
-
-      const api = new (window as any).JitsiMeetExternalAPI(domain, options);
-      apiRef.current = api;
-
-      let hasJoined = false;
-
-      api.addEventListener('videoConferenceJoined', () => {
-        hasJoined = true;
-      });
-
-      const redirectToDashboard = () => {
-        if (!hasJoined) return; // Don't redirect if user never joined (e.g. login/lobby)
-        if (apiRef.current) {
-          apiRef.current.dispose();
-          apiRef.current = null;
-        }
-        const role = session?.user?.role;
-        if (role === 'DOCTOR') {
-          router.push('/doctor/dashboard');
-        } else {
-          router.push('/patient/dashboard');
-        }
-      };
-
-      api.addEventListener('readyToClose', redirectToDashboard);
-    };
-
-    // Load Jitsi external API script
-    if (!(window as any).JitsiMeetExternalAPI) {
-      const script = document.createElement('script');
-      script.src = 'https://meet.jit.si/external_api.js';
-      script.async = true;
-      script.onload = loadJitsi;
-      document.body.appendChild(script);
-    } else {
-      loadJitsi();
-    }
+    setup();
 
     return () => {
-      if (apiRef.current) {
-        apiRef.current.dispose();
-        apiRef.current = null;
+      if (callFrameRef.current) {
+        callFrameRef.current.destroy();
+        callFrameRef.current = null;
       }
     };
-  }, [appointment, id, session, router]);
+  }, [id, session, status, router]);
 
   if (status === 'loading' || loading) {
     return (
@@ -143,6 +102,7 @@ export default function ConsultationPage() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4" />
           <p className="text-gray-500">Setting up your consultation...</p>
+          <p className="text-xs text-gray-400 mt-2">Connecting to video service...</p>
         </div>
       </div>
     );
@@ -179,14 +139,20 @@ export default function ConsultationPage() {
           <span className="text-xs text-gray-400 hidden sm:inline">
             Appointment #{(id as string)?.slice(0, 8)}
           </span>
+          {inCall && (
+            <span className="flex items-center gap-1.5 text-xs text-green-600 font-medium">
+              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              Connected
+            </span>
+          )}
           <button
             onClick={() => {
-              if (apiRef.current) {
-                apiRef.current.dispose();
-                apiRef.current = null;
+              if (callFrameRef.current) {
+                callFrameRef.current.leave();
+              } else {
+                const role = session?.user?.role;
+                router.push(role === 'DOCTOR' ? '/doctor/dashboard' : '/patient/dashboard');
               }
-              const role = session?.user?.role;
-              router.push(role === 'DOCTOR' ? '/doctor/dashboard' : '/patient/dashboard');
             }}
             className="px-4 py-2 bg-red-50 text-red-600 text-sm font-medium rounded-xl hover:bg-red-100 transition-colors"
           >
@@ -195,8 +161,8 @@ export default function ConsultationPage() {
         </div>
       </div>
 
-      {/* Jitsi container */}
-      <div ref={jitsiContainerRef} className="flex-1" />
+      {/* Daily.co container */}
+      <div ref={containerRef} className="flex-1" />
     </div>
   );
 }
