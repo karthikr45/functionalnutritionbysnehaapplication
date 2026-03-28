@@ -48,7 +48,14 @@ export default function ConsultationPage() {
           return;
         }
 
-        const { roomUrl, token } = await dailyRes.json();
+        const dailyData = await dailyRes.json();
+        const { roomUrl, token } = dailyData;
+
+        if (!roomUrl) {
+          setError('Failed to get video room URL. Check Daily.co configuration.');
+          setLoading(false);
+          return;
+        }
 
         if (!containerRef.current) return;
 

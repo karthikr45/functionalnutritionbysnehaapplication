@@ -9,18 +9,20 @@ export async function POST(req: NextRequest) {
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   if (!DAILY_API_KEY) {
-    return NextResponse.json({ error: 'Daily.co API key not configured' }, { status: 500 });
+    console.error('[daily] DAILY_API_KEY not found in environment variables');
+    return NextResponse.json({ error: 'Daily.co API key not configured. Add DAILY_API_KEY to .env' }, { status: 500 });
   }
 
   const { appointmentId, userName } = await req.json();
   if (!appointmentId) return NextResponse.json({ error: 'appointmentId required' }, { status: 400 });
 
-  const roomName = `fns-${appointmentId}`;
+  const roomName = `fns-${appointmentId}`.substring(0, 41); // Daily.co room names max 41 chars
   const isDoctor = session.user.role === 'DOCTOR';
 
   try {
     // Try to get existing room first
     let roomUrl: string;
+    console.log(`[daily] Looking for room: ${roomName}`);
     const getRes = await fetch(`${DAILY_API_URL}/rooms/${roomName}`, {
       headers: { Authorization: `Bearer ${DAILY_API_KEY}` },
     });
@@ -28,6 +30,7 @@ export async function POST(req: NextRequest) {
     if (getRes.ok) {
       const room = await getRes.json();
       roomUrl = room.url;
+      console.log(`[daily] Found existing room: ${roomUrl}`);
     } else {
       // Create new room
       const exp = Math.round(Date.now() / 1000) + 2 * 60 * 60; // 2 hours
@@ -54,11 +57,13 @@ export async function POST(req: NextRequest) {
 
       if (!createRes.ok) {
         const err = await createRes.json();
-        return NextResponse.json({ error: err.info || 'Failed to create room' }, { status: 500 });
+        console.error('[daily] Room creation failed:', err);
+        return NextResponse.json({ error: err.info || err.error || 'Failed to create room' }, { status: 500 });
       }
 
       const room = await createRes.json();
       roomUrl = room.url;
+      console.log(`[daily] Created room: ${roomUrl}`);
     }
 
     // Create a meeting token for the user
