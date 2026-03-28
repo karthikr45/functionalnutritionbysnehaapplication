@@ -11,6 +11,7 @@ export default function ConsultationPage() {
   const { data: session, status } = useSession();
   const containerRef = useRef<HTMLDivElement>(null);
   const callFrameRef = useRef<any>(null);
+  const setupRef = useRef(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [inCall, setInCall] = useState(false);
@@ -18,6 +19,8 @@ export default function ConsultationPage() {
   useEffect(() => {
     if (status === 'loading') return;
     if (!session) { router.push('/login'); return; }
+    if (setupRef.current) return; // Prevent double call in StrictMode
+    setupRef.current = true;
 
     const setup = async () => {
       try {
@@ -84,11 +87,13 @@ export default function ConsultationPage() {
           setError('Video call error. Please try again.');
         });
 
+        console.log('[consultation] Joining room:', roomUrl);
         await callFrame.join({ url: roomUrl, token });
+        console.log('[consultation] Joined successfully');
         setLoading(false);
-      } catch (err) {
+      } catch (err: any) {
         console.error('[consultation] Error:', err);
-        setError('Failed to setup video call.');
+        setError(err?.message || 'Failed to setup video call.');
         setLoading(false);
       }
     };
