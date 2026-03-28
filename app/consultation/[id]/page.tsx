@@ -94,7 +94,14 @@ export default function ConsultationPage() {
       const api = new (window as any).JitsiMeetExternalAPI(domain, options);
       apiRef.current = api;
 
+      let hasJoined = false;
+
+      api.addEventListener('videoConferenceJoined', () => {
+        hasJoined = true;
+      });
+
       const redirectToDashboard = () => {
+        if (!hasJoined) return; // Don't redirect if user never joined (e.g. login/lobby)
         if (apiRef.current) {
           apiRef.current.dispose();
           apiRef.current = null;
@@ -108,7 +115,6 @@ export default function ConsultationPage() {
       };
 
       api.addEventListener('readyToClose', redirectToDashboard);
-      api.addEventListener('videoConferenceLeft', redirectToDashboard);
     };
 
     // Load Jitsi external API script
