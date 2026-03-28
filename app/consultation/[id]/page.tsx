@@ -51,7 +51,7 @@ export default function ConsultationPage() {
   useEffect(() => {
     if (!appointment || !jitsiContainerRef.current) return;
 
-    const domain = '8x8.vc';
+    const domain = 'meet.jit.si';
     const roomName = `FNbySneha-${id}`;
 
     const loadJitsi = () => {
@@ -65,18 +65,19 @@ export default function ConsultationPage() {
         configOverwrite: {
           startWithAudioMuted: false,
           startWithVideoMuted: false,
-          prejoinPageEnabled: true,
+          prejoinPageEnabled: false,
           disableDeepLinking: true,
-          enableLobbyChat: false,
-          hideLobbyButton: true,
           requireDisplayName: false,
           enableInsecureRoomNameWarning: false,
-          // Disable lobby/moderator requirement so anyone with the link can join
-          'lobby.autoKnock': true,
-          'lobby.enableChat': false,
           disableModeratorIndicator: true,
           enableNoAudioDetection: false,
           enableNoisyMicDetection: false,
+          // Disable all lobby/auth features
+          hideLobbyButton: true,
+          enableLobbyChat: false,
+          disableProfile: true,
+          // Skip authentication
+          tokenAuthUrl: undefined,
         },
         interfaceConfigOverwrite: {
           SHOW_JITSI_WATERMARK: false,
@@ -120,7 +121,7 @@ export default function ConsultationPage() {
     // Load Jitsi external API script
     if (!(window as any).JitsiMeetExternalAPI) {
       const script = document.createElement('script');
-      script.src = 'https://8x8.vc/external_api.js';
+      script.src = 'https://meet.jit.si/external_api.js';
       script.async = true;
       script.onload = loadJitsi;
       document.body.appendChild(script);
