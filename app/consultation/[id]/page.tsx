@@ -51,7 +51,7 @@ export default function ConsultationPage() {
   useEffect(() => {
     if (!appointment || !jitsiContainerRef.current) return;
 
-    const domain = 'meet.jit.si';
+    const domain = '8x8.vc';
     const roomName = `FNbySneha-${id}`;
 
     const loadJitsi = () => {
@@ -114,7 +114,7 @@ export default function ConsultationPage() {
     // Load Jitsi external API script
     if (!(window as any).JitsiMeetExternalAPI) {
       const script = document.createElement('script');
-      script.src = 'https://meet.jit.si/external_api.js';
+      script.src = 'https://8x8.vc/external_api.js';
       script.async = true;
       script.onload = loadJitsi;
       document.body.appendChild(script);
