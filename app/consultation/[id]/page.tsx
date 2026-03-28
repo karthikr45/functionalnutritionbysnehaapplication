@@ -108,36 +108,6 @@ export default function ConsultationPage() {
     };
   }, [id, session, status, router]);
 
-  if (status === 'loading' || loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4" />
-          <p className="text-gray-500">Setting up your consultation...</p>
-          <p className="text-xs text-gray-400 mt-2">Connecting to video service...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 max-w-md text-center">
-          <p className="text-5xl mb-4">⚠️</p>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Cannot Join Call</h2>
-          <p className="text-gray-500 mb-6">{error}</p>
-          <button
-            onClick={() => router.back()}
-            className="px-6 py-2.5 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-colors"
-          >
-            Go Back
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="h-screen flex flex-col bg-gray-900">
       {/* Header bar */}
@@ -173,8 +143,36 @@ export default function ConsultationPage() {
         </div>
       </div>
 
-      {/* Daily.co container */}
-      <div ref={containerRef} className="flex-1" />
+      {/* Loading overlay */}
+      {(status === 'loading' || loading) && !error && (
+        <div className="flex-1 flex items-center justify-center bg-gray-50">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4" />
+            <p className="text-gray-500">Setting up your consultation...</p>
+            <p className="text-xs text-gray-400 mt-2">Connecting to video service...</p>
+          </div>
+        </div>
+      )}
+
+      {/* Error overlay */}
+      {error && (
+        <div className="flex-1 flex items-center justify-center bg-gray-50">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 max-w-md text-center">
+            <p className="text-5xl mb-4">⚠️</p>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">Cannot Join Call</h2>
+            <p className="text-gray-500 mb-6">{error}</p>
+            <button
+              onClick={() => router.back()}
+              className="px-6 py-2.5 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-colors"
+            >
+              Go Back
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Daily.co container - always rendered so ref is available */}
+      <div ref={containerRef} className={`flex-1 ${loading || error ? 'hidden' : ''}`} />
     </div>
   );
 }
