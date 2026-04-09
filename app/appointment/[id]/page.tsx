@@ -43,10 +43,33 @@ export default function AppointmentDetailPage() {
   const [showUpload, setShowUpload] = useState(false);
   const [viewerIndex, setViewerIndex] = useState<number | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [aiAnalysis, setAiAnalysis] = useState<{ docTitle: string; text: string } | null>(null);
+  const [aiLoading, setAiLoading] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const pollRef = useRef<NodeJS.Timeout | null>(null);
 
   const isDoctor = session?.user?.role === 'DOCTOR';
+
+  const handleAiAnalyze = async (doc: DocumentItem) => {
+    setAiLoading(doc.id);
+    setAiAnalysis(null);
+    try {
+      const res = await fetch('/api/ai/analyze-document', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ documentId: doc.id }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setAiAnalysis({ docTitle: doc.title, text: data.analysis });
+      } else {
+        toast.error(data.error || 'Failed to analyze document');
+      }
+    } catch {
+      toast.error('Failed to analyze document');
+    }
+    setAiLoading(null);
+  };
 
   const openViewer = (index: number) => setViewerIndex(index);
   const closeViewer = () => setViewerIndex(null);
@@ -332,6 +355,30 @@ export default function AppointmentDetailPage() {
                     >
                       Download
                     </a>
+                    {isDoctor && (
+                      <button
+                        onClick={() => handleAiAnalyze(doc)}
+                        disabled={aiLoading === doc.id}
+                        className="px-4 py-2 bg-gradient-to-r from-purple-50 to-indigo-50 text-purple-700 text-xs font-medium rounded-lg hover:from-purple-100 hover:to-indigo-100 transition-colors flex items-center gap-1.5 disabled:opacity-60"
+                      >
+                        {aiLoading === doc.id ? (
+                          <>
+                            <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                            </svg>
+                            Analyzing...
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                            AI Insights
+                          </>
+                        )}
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -408,6 +455,90 @@ export default function AppointmentDetailPage() {
                 </div>
               </a>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* AI Insights Modal */}
+      {aiAnalysis && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-4 flex items-center justify-between flex-shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-bold text-white">AI Insights</h3>
+                  <p className="text-xs text-purple-100 truncate max-w-md">{aiAnalysis.docTitle}</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setAiAnalysis(null)}
+                className="w-9 h-9 bg-white/20 hover:bg-white/30 rounded-lg flex items-center justify-center text-white transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="prose prose-sm max-w-none">
+                {aiAnalysis.text.split('\n').map((line, i) => {
+                  const trimmed = line.trim();
+                  if (!trimmed) return <div key={i} className="h-2" />;
+
+                  // Section headers (numbered)
+                  const sectionMatch = trimmed.match(/^(\d+)\.\s*([A-Z][A-Z\s&]+):?\s*(.*)$/);
+                  if (sectionMatch) {
+                    return (
+                      <div key={i} className="mt-5 mb-2">
+                        <h4 className="text-sm font-bold text-purple-700 uppercase tracking-wide flex items-center gap-2">
+                          <span className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center text-xs">{sectionMatch[1]}</span>
+                          {sectionMatch[2]}
+                        </h4>
+                        {sectionMatch[3] && <p className="text-sm text-gray-700 mt-2">{sectionMatch[3]}</p>}
+                      </div>
+                    );
+                  }
+
+                  // Bullet points
+                  if (trimmed.startsWith('-') || trimmed.startsWith('•')) {
+                    return (
+                      <div key={i} className="flex gap-2 text-sm text-gray-700 ml-2 my-1">
+                        <span className="text-purple-600">•</span>
+                        <span>{trimmed.replace(/^[-•]\s*/, '')}</span>
+                      </div>
+                    );
+                  }
+
+                  return <p key={i} className="text-sm text-gray-700 my-1 leading-relaxed">{trimmed}</p>;
+                })}
+              </div>
+
+              {/* Disclaimer */}
+              <div className="mt-6 p-3 bg-amber-50 border border-amber-200 rounded-xl">
+                <p className="text-xs text-amber-800">
+                  <strong>⚠️ AI Analysis Disclaimer:</strong> This analysis is AI-generated and should be used as a supplementary tool only. Always validate findings with your professional clinical judgment.
+                </p>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 py-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between flex-shrink-0">
+              <p className="text-xs text-gray-500">Powered by Google Gemini AI</p>
+              <button
+                onClick={() => setAiAnalysis(null)}
+                className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
