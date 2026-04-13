@@ -64,31 +64,35 @@ export async function POST(req: NextRequest) {
     let result;
 
     if (isPdf) {
-      // Step 1: Extract text from PDF
+      // Step 1: Try to extract text from PDF
       let pdfText = '';
       try {
         pdfText = await extractPdfText(buffer);
       } catch (err: any) {
         console.error('[ai-analyze] PDF extraction failed:', err);
-        return NextResponse.json({
-          error: 'Could not extract text from this PDF. It may be a scanned image. Try uploading it as an image instead.',
-        }, { status: 400 });
       }
 
-      if (!pdfText || pdfText.trim().length < 20) {
-        return NextResponse.json({
-          error: 'PDF contains no readable text. It may be a scanned image — upload as JPG/PNG instead for analysis.',
-        }, { status: 400 });
+      if (pdfText && pdfText.trim().length >= 20) {
+        // Text-based PDF: send extracted text (no size limit)
+        const truncatedText = pdfText.substring(0, 30000);
+        result = await model.generateContent([
+          NUTRITION_PROMPT,
+          `\n\n--- DOCUMENT CONTENT ---\n${truncatedText}\n--- END OF DOCUMENT ---`,
+        ]);
+      } else {
+        // Scanned/image-based PDF: fall back to vision API (4MB limit)
+        const fileSizeMB = buffer.byteLength / (1024 * 1024);
+        if (fileSizeMB > 4) {
+          return NextResponse.json({
+            error: `This PDF appears to be a scanned image (${fileSizeMB.toFixed(1)}MB) and exceeds the 4MB vision limit. Please compress it or split it into smaller files.`,
+          }, { status: 413 });
+        }
+        const base64 = buffer.toString('base64');
+        result = await model.generateContent([
+          NUTRITION_PROMPT,
+          { inlineData: { mimeType: 'application/pdf', data: base64 } },
+        ]);
       }
-
-      // Limit text to ~30k chars to stay within Gemini token limits comfortably
-      const truncatedText = pdfText.substring(0, 30000);
-
-      // Step 2: Send text to Gemini
-      result = await model.generateContent([
-        NUTRITION_PROMPT,
-        `\n\n--- DOCUMENT CONTENT ---\n${truncatedText}\n--- END OF DOCUMENT ---`,
-      ]);
     } else {
       // For images, use inline data (images are usually small)
       const base64 = buffer.toString('base64');
