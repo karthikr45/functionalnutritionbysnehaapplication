@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
 
     // Call Gemini
     const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
     const result = await model.generateContent([
       NUTRITION_PROMPT,
@@ -74,8 +74,19 @@ export async function POST(req: NextRequest) {
     });
   } catch (err: any) {
     console.error('[ai-analyze] Error:', err);
+    const msg = err?.message || '';
+    if (msg.includes('quota') || msg.includes('429') || msg.includes('Too Many')) {
+      return NextResponse.json({
+        error: 'AI rate limit reached. Please wait a minute and try again. (Free tier: 15 requests/minute)',
+      }, { status: 429 });
+    }
+    if (msg.includes('API_KEY') || msg.includes('API key')) {
+      return NextResponse.json({
+        error: 'AI API key is invalid. Please check GEMINI_API_KEY in .env',
+      }, { status: 500 });
+    }
     return NextResponse.json({
-      error: err?.message || 'Failed to analyze document',
+      error: 'Failed to analyze document. Please try again.',
     }, { status: 500 });
   }
 }
