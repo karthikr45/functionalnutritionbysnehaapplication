@@ -7,7 +7,7 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 const NUTRITION_PROMPT = `You are an expert clinical nutritionist analyzing a patient's medical document for a functional nutrition consultation.
 
-Analyze the provided document and return a structured analysis with the following sections (use plain text, no markdown):
+Analyze the content provided and return a structured analysis with the following sections (use plain text, no markdown):
 
 1. DOCUMENT TYPE: Identify what kind of document this is (lab report, prescription, medical history, etc.)
 
@@ -24,6 +24,14 @@ Analyze the provided document and return a structured analysis with the followin
 7. FOLLOW-UP RECOMMENDATIONS: What additional tests or monitoring should be considered?
 
 Be concise, actionable, and professional. This is for the doctor's reference only — do not include disclaimers about consulting a doctor since the doctor IS the user.`;
+
+async function extractPdfText(buffer: Buffer): Promise<string> {
+  // Dynamic import to avoid build-time issues with pdf-parse
+  const pdfParseModule: any = await import('pdf-parse');
+  const pdfParse = pdfParseModule.default || pdfParseModule;
+  const data = await pdfParse(buffer);
+  return data.text;
+}
 
 export async function POST(req: NextRequest) {
   const session = await getAuthSession();
@@ -45,34 +53,50 @@ export async function POST(req: NextRequest) {
     // Fetch the file from Cloudinary
     const fileRes = await fetch(document.fileUrl);
     if (!fileRes.ok) return NextResponse.json({ error: 'Failed to fetch document file' }, { status: 500 });
-    const buffer = await fileRes.arrayBuffer();
-    const fileSizeMB = buffer.byteLength / (1024 * 1024);
+    const buffer = Buffer.from(await fileRes.arrayBuffer());
 
-    // Gemini inline data limit is ~4MB. For larger files, return error.
-    if (fileSizeMB > 4) {
-      return NextResponse.json({
-        error: `File too large for AI analysis (${fileSizeMB.toFixed(1)}MB). Maximum is 4MB. Please upload a smaller PDF or compress the existing one.`,
-      }, { status: 413 });
-    }
-
-    const base64 = Buffer.from(buffer).toString('base64');
-
-    // Determine MIME type
     const mimeType = document.fileType || (document.fileUrl.endsWith('.pdf') ? 'application/pdf' : 'image/jpeg');
+    const isPdf = mimeType.includes('pdf') || document.fileUrl.endsWith('.pdf');
 
-    // Call Gemini
     const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
-    const result = await model.generateContent([
-      NUTRITION_PROMPT,
-      {
-        inlineData: {
-          mimeType,
-          data: base64,
-        },
-      },
-    ]);
+    let result;
+
+    if (isPdf) {
+      // Step 1: Extract text from PDF
+      let pdfText = '';
+      try {
+        pdfText = await extractPdfText(buffer);
+      } catch (err: any) {
+        console.error('[ai-analyze] PDF extraction failed:', err);
+        return NextResponse.json({
+          error: 'Could not extract text from this PDF. It may be a scanned image. Try uploading it as an image instead.',
+        }, { status: 400 });
+      }
+
+      if (!pdfText || pdfText.trim().length < 20) {
+        return NextResponse.json({
+          error: 'PDF contains no readable text. It may be a scanned image — upload as JPG/PNG instead for analysis.',
+        }, { status: 400 });
+      }
+
+      // Limit text to ~30k chars to stay within Gemini token limits comfortably
+      const truncatedText = pdfText.substring(0, 30000);
+
+      // Step 2: Send text to Gemini
+      result = await model.generateContent([
+        NUTRITION_PROMPT,
+        `\n\n--- DOCUMENT CONTENT ---\n${truncatedText}\n--- END OF DOCUMENT ---`,
+      ]);
+    } else {
+      // For images, use inline data (images are usually small)
+      const base64 = buffer.toString('base64');
+      result = await model.generateContent([
+        NUTRITION_PROMPT,
+        { inlineData: { mimeType, data: base64 } },
+      ]);
+    }
 
     const analysis = result.response.text();
 
