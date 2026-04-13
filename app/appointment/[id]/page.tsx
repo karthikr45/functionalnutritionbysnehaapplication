@@ -603,7 +603,7 @@ export default function AppointmentDetailPage() {
                 />
               ) : documents[viewerIndex].fileType?.includes('pdf') ? (
                 <iframe
-                  src={documents[viewerIndex].fileUrl}
+                  src={`https://docs.google.com/gview?url=${encodeURIComponent(documents[viewerIndex].fileUrl)}&embedded=true`}
                   className="w-full max-w-4xl h-full rounded-lg bg-white"
                   title={documents[viewerIndex].title}
                 />
