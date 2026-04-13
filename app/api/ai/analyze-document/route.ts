@@ -46,6 +46,15 @@ export async function POST(req: NextRequest) {
     const fileRes = await fetch(document.fileUrl);
     if (!fileRes.ok) return NextResponse.json({ error: 'Failed to fetch document file' }, { status: 500 });
     const buffer = await fileRes.arrayBuffer();
+    const fileSizeMB = buffer.byteLength / (1024 * 1024);
+
+    // Gemini inline data limit is ~4MB. For larger files, return error.
+    if (fileSizeMB > 4) {
+      return NextResponse.json({
+        error: `File too large for AI analysis (${fileSizeMB.toFixed(1)}MB). Maximum is 4MB. Please upload a smaller PDF or compress the existing one.`,
+      }, { status: 413 });
+    }
+
     const base64 = Buffer.from(buffer).toString('base64');
 
     // Determine MIME type
