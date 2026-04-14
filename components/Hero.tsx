@@ -44,7 +44,7 @@ export default function Hero({ settings }: HeroProps) {
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary-100 rounded-full -translate-y-1/2 translate-x-1/4 opacity-60" />
       <div className="absolute bottom-0 left-0 w-72 h-72 bg-amber-200/20 rounded-full translate-y-1/2 -translate-x-1/4 opacity-60" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-32">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div className="space-y-8">
@@ -142,7 +142,7 @@ export default function Hero({ settings }: HeroProps) {
               </div>
 
               {/* Floating cards */}
-              <div className="absolute -top-4 -left-8 bg-white rounded-2xl shadow-lg p-4 border border-primary-100 z-10">
+              <div className="absolute -top-4 -left-2 sm:-left-8 bg-white rounded-2xl shadow-lg p-3 sm:p-4 border border-primary-100 z-10">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center text-xl">🥗</div>
                   <div>
@@ -152,7 +152,7 @@ export default function Hero({ settings }: HeroProps) {
                 </div>
               </div>
 
-              <div className="absolute -bottom-4 -right-8 bg-white rounded-2xl shadow-lg p-4 border border-primary-100 z-10">
+              <div className="absolute -bottom-4 -right-2 sm:-right-8 bg-white rounded-2xl shadow-lg p-3 sm:p-4 border border-primary-100 z-10">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center text-xl">🎯</div>
                   <div>

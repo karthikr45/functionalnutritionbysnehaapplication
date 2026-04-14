@@ -64,12 +64,12 @@ export default async function DoctorDashboard() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 font-serif">Good day, Dr. {session.user.name?.split(' ').slice(1).join(' ')}! 👋</h1>
-          <p className="text-gray-500 mt-1">{format(new Date(), 'EEEE, dd MMMM yyyy')}</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 font-serif">Good day, Dr. {session.user.name?.split(' ').slice(1).join(' ')}! 👋</h1>
+          <p className="text-gray-500 mt-1 text-sm sm:text-base">{format(new Date(), 'EEEE, dd MMMM yyyy')}</p>
         </div>
-        <Link href="/doctor/availability" className="px-4 py-2.5 bg-primary-600 text-white font-semibold rounded-xl text-sm hover:bg-primary-700 transition-colors">
+        <Link href="/doctor/availability" className="px-4 py-2.5 bg-primary-600 text-white font-semibold rounded-xl text-sm hover:bg-primary-700 transition-colors whitespace-nowrap self-start">
           Manage Availability
         </Link>
       </div>

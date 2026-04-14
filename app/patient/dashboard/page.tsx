@@ -53,18 +53,18 @@ export default async function PatientDashboard() {
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 font-serif">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 font-serif">
             Good day, {session.user.name?.split(' ')[0]}! 👋
           </h1>
-          <p className="text-gray-500 mt-1">Here&apos;s your health journey overview.</p>
+          <p className="text-gray-500 mt-1 text-sm sm:text-base">Here&apos;s your health journey overview.</p>
         </div>
         <div className="flex items-center gap-3">
           <CartButton />
           <Link
             href="/patient/book"
-            className="flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-colors shadow-sm text-sm"
+            className="flex items-center gap-2 px-4 sm:px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-colors shadow-sm text-sm whitespace-nowrap"
           >
             + Book Appointment
           </Link>

@@ -173,17 +173,17 @@ export default function AppointmentDetailPage() {
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
         <div>
           <button onClick={() => router.back()} className="text-sm text-gray-500 hover:text-gray-700 mb-2 flex items-center gap-1">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
             Back
           </button>
-          <h1 className="text-2xl font-bold text-gray-900 font-serif">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 font-serif">
             Appointment with {otherPerson}
           </h1>
-          <div className="flex items-center gap-3 mt-1 text-sm text-gray-500">
-            <span>{format(new Date(appt.date), 'EEEE, dd MMMM yyyy')}</span>
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-1 text-xs sm:text-sm text-gray-500">
+            <span>{format(new Date(appt.date), 'EEE, dd MMM yyyy')}</span>
             <span>{formatTime(appt.startTime)} – {formatTime(appt.endTime)}</span>
             <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[appt.status]}`}>
               {appt.status}
@@ -193,9 +193,9 @@ export default function AppointmentDetailPage() {
         {appt.status === 'CONFIRMED' && (
           <button
             onClick={() => router.push(`/consultation/${id}`)}
-            className="px-5 py-2.5 bg-indigo-600 text-white font-semibold rounded-xl text-sm hover:bg-indigo-700 transition-colors"
+            className="px-5 py-2.5 bg-indigo-600 text-white font-semibold rounded-xl text-sm hover:bg-indigo-700 transition-colors whitespace-nowrap self-start"
           >
-            {isDoctor ? 'Start Call' : 'Join Call'}
+            {isDoctor ? '📹 Start Call' : '📹 Join Call'}
           </button>
         )}
       </div>
