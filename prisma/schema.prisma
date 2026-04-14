@@ -246,6 +246,7 @@ model Package {
   sessions    Int
   validity    Int     // days
   features    Json    // string[]
+  serviceSlug String? // link to service/program slug (e.g. 'gut-reset-program')
   isActive    Boolean @default(true)
   isPopular   Boolean @default(false)
   sortOrder   Int     @default(0)

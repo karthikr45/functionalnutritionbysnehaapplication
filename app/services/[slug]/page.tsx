@@ -4,6 +4,7 @@ import { PortableText } from '@portabletext/react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import ServicePackages from './ServicePackages';
 import { notFound } from 'next/navigation';
 
 // Fallback service data when Sanity isn't configured
@@ -163,6 +164,9 @@ export default async function ServicePage({ params }: { params: { slug: string }
               </div>
             )}
           </div>
+
+          {/* Packages for this service */}
+          <ServicePackages serviceSlug={params.slug} serviceTitle={service.title} />
 
           {/* CTA */}
           <div className="mt-16 text-center bg-gradient-to-r from-teal-700 to-primary-600 rounded-2xl p-10 text-white">

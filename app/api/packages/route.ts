@@ -4,10 +4,17 @@ import { getAuthSession } from '@/lib/auth';
 
 export async function GET(req: NextRequest) {
   const session = await getAuthSession();
+  const serviceSlug = req.nextUrl.searchParams.get('service');
   // Doctors see all packages (including inactive) for management
-  const showAll = session?.user?.role === 'DOCTOR';
+  const showAll = session?.user?.role === 'DOCTOR' || session?.user?.role === 'SUPER_ADMIN';
+
+  const where: any = showAll ? {} : { isActive: true };
+  if (serviceSlug) {
+    where.serviceSlug = serviceSlug;
+  }
+
   const packages = await prisma.package.findMany({
-    where: showAll ? {} : { isActive: true },
+    where,
     orderBy: { sortOrder: 'asc' },
   });
   return NextResponse.json({ packages });

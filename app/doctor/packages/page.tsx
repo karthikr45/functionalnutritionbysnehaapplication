@@ -15,7 +15,18 @@ interface Package {
   isActive: boolean;
   isPopular: boolean;
   sortOrder: number;
+  serviceSlug?: string | null;
 }
+
+const SERVICE_OPTIONS = [
+  { value: '', label: '— General (not tied to a program) —' },
+  { value: 'gut-reset-program', label: 'Gut Reset Program' },
+  { value: 'weight-management', label: 'Weight Management' },
+  { value: 'metabolic-health-program', label: 'Metabolic Health Program' },
+  { value: 'pregnancy-nutrition', label: 'Pregnancy Nutrition' },
+  { value: 'personalized-nutrition-plan', label: 'One-Time Personalized Nutrition Plan' },
+  { value: 'group-program', label: 'Group Program' },
+];
 
 const emptyForm = {
   name: '',
@@ -24,6 +35,7 @@ const emptyForm = {
   sessions: 1,
   validity: 30,
   features: [''],
+  serviceSlug: '',
   isActive: true,
   isPopular: false,
   sortOrder: 0,
@@ -71,6 +83,7 @@ export default function DoctorPackagesPage() {
       sessions: pkg.sessions,
       validity: pkg.validity,
       features: pkg.features.length > 0 ? pkg.features : [''],
+      serviceSlug: pkg.serviceSlug || '',
       isActive: pkg.isActive,
       isPopular: pkg.isPopular,
       sortOrder: pkg.sortOrder,
@@ -102,6 +115,7 @@ export default function DoctorPackagesPage() {
     setSaving(true);
     const payload = {
       ...form,
+      serviceSlug: form.serviceSlug || null,
       features: form.features.filter((f) => f.trim() !== ''),
     };
 
@@ -260,6 +274,21 @@ export default function DoctorPackagesPage() {
             </div>
           </div>
 
+          {/* Service/Program selector */}
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1.5">Link to Program (Service)</label>
+            <select
+              value={form.serviceSlug}
+              onChange={(e) => setForm({ ...form, serviceSlug: e.target.value })}
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:border-primary-400 outline-none bg-white"
+            >
+              {SERVICE_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+            <p className="text-xs text-gray-400 mt-1">This package will be displayed on the selected program&apos;s page on the website.</p>
+          </div>
+
           {/* Features */}
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-2">Features / Highlights</label>
@@ -380,6 +409,11 @@ export default function DoctorPackagesPage() {
                     <span className="text-gray-500">{pkg.sessions} sessions</span>
                     <span className="text-gray-500">{pkg.validity} days validity</span>
                     <span className="text-gray-400">Order: {pkg.sortOrder}</span>
+                    {pkg.serviceSlug && (
+                      <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 text-xs font-medium rounded-full">
+                        📎 {SERVICE_OPTIONS.find(s => s.value === pkg.serviceSlug)?.label || pkg.serviceSlug}
+                      </span>
+                    )}
                   </div>
                   {pkg.features.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-3">

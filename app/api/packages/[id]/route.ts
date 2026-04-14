@@ -27,6 +27,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       ...(body.sessions !== undefined && { sessions: body.sessions }),
       ...(body.validity !== undefined && { validity: body.validity }),
       ...(body.features !== undefined && { features: body.features }),
+      ...(body.serviceSlug !== undefined && { serviceSlug: body.serviceSlug || null }),
       ...(body.isActive !== undefined && { isActive: body.isActive }),
       ...(body.isPopular !== undefined && { isPopular: body.isPopular }),
       ...(body.sortOrder !== undefined && { sortOrder: body.sortOrder }),
