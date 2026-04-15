@@ -30,7 +30,34 @@ export function hslToHex(h: number, s: number, l: number): string {
   return `#${f(0)}${f(8)}${f(4)}`;
 }
 
+// Preset palettes with exact brand colors (overrides HSL generation)
+const PRESET_PALETTES: Record<string, Record<string, string>> = {
+  // Mossy Hollow — the signature Functional Nutrition by Sneha palette
+  '#636B2F': {
+    '--primary-50':  '#F5F7EC',
+    '--primary-100': '#E8ECD4',
+    '--primary-200': '#D4DE95', // Light olive (major accent)
+    '--primary-300': '#BAC095', // Muted sage
+    '--primary-400': '#9AAB6A',
+    '--primary-500': '#7D9040',
+    '--primary-600': '#636B2F', // Dark olive (primary)
+    '--primary-700': '#4D5424',
+    '--primary-800': '#3D4127', // Very dark olive
+    '--primary-900': '#2A2E1A',
+  },
+};
+
 export function generatePalette(baseHex: string): Record<string, string> {
+  // Normalize hex (support both uppercase and lowercase)
+  const normalized = baseHex.toUpperCase();
+
+  // Use preset palette if available (e.g., Mossy Hollow)
+  const lookup = Object.keys(PRESET_PALETTES).find(k => k.toUpperCase() === normalized);
+  if (lookup) {
+    return PRESET_PALETTES[lookup];
+  }
+
+  // Otherwise, generate from HSL
   const [h, s] = hexToHsl(baseHex);
   return {
     '--primary-50':  hslToHex(h, Math.min(s, 40), 97),
