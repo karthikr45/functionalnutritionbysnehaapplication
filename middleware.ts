@@ -55,6 +55,7 @@ export default withAuth(
           '/refund',
           '/api/auth',
           '/api/packages',
+          '/api/payment/webhook',
           '/api/availability',
           '/api/doctor/profile',
           '/api/services',

@@ -9,49 +9,64 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const { type, appointmentId, packageId } = await req.json();
+  try {
+    const { type, appointmentId, packageId, orderId } = await req.json();
 
-  let amount = 0;
-  let receipt = '';
+    let amount = 0;
+    let receipt = '';
 
-  if (type === 'appointment' && appointmentId) {
-    const appointment = await prisma.appointment.findUnique({
-      where: { id: appointmentId },
-      include: { doctor: true },
+    if (type === 'appointment' && appointmentId) {
+      const appointment = await prisma.appointment.findUnique({
+        where: { id: appointmentId },
+        include: { doctor: true },
+      });
+      if (!appointment) return NextResponse.json({ error: 'Appointment not found' }, { status: 404 });
+
+      amount = appointment.type === 'FOLLOW_UP'
+        ? appointment.doctor.followUpFee
+        : appointment.doctor.consultationFee;
+      receipt = `appt-${appointmentId.slice(-8)}`;
+    } else if (type === 'package' && packageId) {
+      const pkg = await prisma.package.findUnique({ where: { id: packageId } });
+      if (!pkg) return NextResponse.json({ error: 'Package not found' }, { status: 404 });
+
+      amount = pkg.price;
+      receipt = `pkg-${packageId.slice(-8)}`;
+    } else if (type === 'order' && orderId) {
+      const order = await prisma.order.findUnique({ where: { id: orderId } });
+      if (!order) return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+      if (order.userId !== session.user.id) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+
+      amount = order.totalAmount;
+      receipt = `ord-${orderId.slice(-8)}`;
+    } else {
+      return NextResponse.json({ error: 'Invalid request. Provide type + appointmentId/packageId/orderId' }, { status: 400 });
+    }
+
+    if (amount <= 0) return NextResponse.json({ error: 'Invalid amount' }, { status: 400 });
+
+    const razorpayOrder = await createRazorpayOrder(amount, receipt);
+
+    // Store pending payment
+    await prisma.payment.create({
+      data: {
+        razorpayOrderId: razorpayOrder.id,
+        amount,
+        currency: 'INR',
+        status: 'PENDING',
+        ...(type === 'appointment' && appointmentId && { appointmentId }),
+        ...(type === 'order' && orderId && { orderId }),
+      },
     });
-    if (!appointment) return NextResponse.json({ error: 'Appointment not found' }, { status: 404 });
 
-    amount = appointment.type === 'FOLLOW_UP'
-      ? appointment.doctor.followUpFee
-      : appointment.doctor.consultationFee;
-    receipt = `appt-${appointmentId.slice(-8)}`;
-  } else if (type === 'package' && packageId) {
-    const pkg = await prisma.package.findUnique({ where: { id: packageId } });
-    if (!pkg) return NextResponse.json({ error: 'Package not found' }, { status: 404 });
-
-    amount = pkg.price;
-    receipt = `pkg-${packageId.slice(-8)}`;
-  } else {
-    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
+    return NextResponse.json({
+      orderId: razorpayOrder.id,
+      amount: razorpayOrder.amount,
+      currency: razorpayOrder.currency,
+      keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+    });
+  } catch (err: any) {
+    console.error('[create-order] Error:', err);
+    return NextResponse.json({ error: 'Failed to create payment order' }, { status: 500 });
   }
-
-  const order = await createRazorpayOrder(amount, receipt);
-
-  // Store pending payment
-  await prisma.payment.create({
-    data: {
-      razorpayOrderId: order.id,
-      amount,
-      currency: 'INR',
-      status: 'PENDING',
-      ...(type === 'appointment' && { appointmentId }),
-    },
-  });
-
-  return NextResponse.json({
-    orderId: order.id,
-    amount: order.amount,
-    currency: order.currency,
-    keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-  });
 }

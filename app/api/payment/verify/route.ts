@@ -10,61 +10,94 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, packageId } = await req.json();
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, packageId } = await req.json();
 
-  // Verify signature
-  const isValid = verifyRazorpaySignature(razorpay_order_id, razorpay_payment_id, razorpay_signature);
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+      return NextResponse.json({ error: 'Missing payment details' }, { status: 400 });
+    }
 
-  if (!isValid) {
-    await prisma.payment.update({
+    // Find existing payment record
+    const existingPayment = await prisma.payment.findUnique({
       where: { razorpayOrderId: razorpay_order_id },
-      data: { status: 'FAILED' },
     });
-    return NextResponse.json({ error: 'Payment verification failed' }, { status: 400 });
-  }
+    if (!existingPayment) {
+      return NextResponse.json({ error: 'Payment record not found' }, { status: 404 });
+    }
 
-  // Update payment record
-  const payment = await prisma.payment.update({
-    where: { razorpayOrderId: razorpay_order_id },
-    data: {
-      razorpayPaymentId: razorpay_payment_id,
-      razorpaySignature: razorpay_signature,
-      status: 'SUCCESS',
-    },
-  });
+    // Verify Razorpay signature
+    const isValid = verifyRazorpaySignature(razorpay_order_id, razorpay_payment_id, razorpay_signature);
 
-  // Confirm the appointment if linked
-  if (payment.appointmentId) {
-    await prisma.appointment.update({
-      where: { id: payment.appointmentId },
-      data: { status: 'CONFIRMED' },
-    });
-  }
-
-  // Create package booking if packageId provided
-  if (packageId) {
-    const pkg = await prisma.package.findUnique({ where: { id: packageId } });
-    if (pkg) {
-      const patientProfile = await prisma.patientProfile.findUnique({
-        where: { userId: session.user.id },
+    if (!isValid) {
+      await prisma.payment.update({
+        where: { id: existingPayment.id },
+        data: { status: 'FAILED' },
       });
-      if (patientProfile) {
-        const booking = await prisma.packageBooking.create({
-          data: {
-            patientId: patientProfile.id,
-            packageId,
-            totalSessions: pkg.sessions,
-            expiryDate: addDays(new Date(), pkg.validity),
-            status: 'ACTIVE',
-          },
+      return NextResponse.json({ error: 'Payment verification failed' }, { status: 400 });
+    }
+
+    // Update payment record to SUCCESS
+    const payment = await prisma.payment.update({
+      where: { id: existingPayment.id },
+      data: {
+        razorpayPaymentId: razorpay_payment_id,
+        razorpaySignature: razorpay_signature,
+        status: 'SUCCESS',
+      },
+    });
+
+    // Handle appointment confirmation
+    if (payment.appointmentId) {
+      await prisma.appointment.update({
+        where: { id: payment.appointmentId },
+        data: { status: 'CONFIRMED' },
+      });
+    }
+
+    // Handle package booking creation
+    if (packageId) {
+      const pkg = await prisma.package.findUnique({ where: { id: packageId } });
+      if (pkg) {
+        const patientProfile = await prisma.patientProfile.findUnique({
+          where: { userId: session.user.id },
         });
-        await prisma.payment.update({
-          where: { id: payment.id },
-          data: { packageBookingId: booking.id },
-        });
+        if (patientProfile) {
+          const booking = await prisma.packageBooking.create({
+            data: {
+              patientId: patientProfile.id,
+              packageId,
+              totalSessions: pkg.sessions,
+              expiryDate: addDays(new Date(), pkg.validity),
+              status: 'ACTIVE',
+            },
+          });
+          await prisma.payment.update({
+            where: { id: payment.id },
+            data: { packageBookingId: booking.id },
+          });
+        }
       }
     }
-  }
 
-  return NextResponse.json({ success: true, paymentId: payment.id });
+    // Handle product order confirmation
+    if (payment.orderId) {
+      await prisma.order.update({
+        where: { id: payment.orderId },
+        data: { status: 'CONFIRMED' },
+      });
+      await prisma.orderStatusHistory.create({
+        data: {
+          orderId: payment.orderId,
+          status: 'CONFIRMED',
+          note: 'Payment received',
+          updatedById: session.user.id,
+        },
+      });
+    }
+
+    return NextResponse.json({ success: true, paymentId: payment.id });
+  } catch (err: any) {
+    console.error('[verify] Error:', err);
+    return NextResponse.json({ error: 'Payment verification error' }, { status: 500 });
+  }
 }
