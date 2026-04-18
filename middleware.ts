@@ -65,6 +65,9 @@ export default withAuth(
           '/api/theme',
           '/services',
           '/studio',
+          '/forgot-password',
+          '/reset-password',
+          '/api/contact',
         ];
         const isPublic = publicPaths.some((p) => pathname === p || pathname.startsWith(p + '/') || pathname.startsWith(p));
         if (isPublic) return true;

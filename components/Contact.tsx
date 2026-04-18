@@ -9,10 +9,24 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('sending');
-    // In production, send to an email API or store in DB
-    await new Promise((r) => setTimeout(r, 1000));
-    setStatus('sent');
-    setForm({ name: '', email: '', phone: '', message: '' });
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      if (res.ok) {
+        setStatus('sent');
+        setForm({ name: '', email: '', phone: '', message: '' });
+      } else {
+        setStatus('idle');
+        const data = await res.json();
+        alert(data.error || 'Failed to send message');
+      }
+    } catch {
+      setStatus('idle');
+      alert('Network error. Please try again or WhatsApp us directly.');
+    }
   };
 
   return (

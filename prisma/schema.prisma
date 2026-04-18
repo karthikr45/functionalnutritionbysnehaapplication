@@ -101,6 +101,19 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+}
+
 // ─── Core User Model ──────────────────────────────────────────────────────────
 
 model User {
@@ -117,6 +130,7 @@ model User {
 
   accounts       Account[]
   sessions       Session[]
+  passwordResetTokens PasswordResetToken[]
   doctorProfile  DoctorProfile?
   patientProfile PatientProfile?
   documents      Document[]
