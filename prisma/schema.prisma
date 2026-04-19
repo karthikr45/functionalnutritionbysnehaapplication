@@ -114,6 +114,19 @@ model PasswordResetToken {
   @@index([token])
 }
 
+model OtpVerification {
+  id        String   @id @default(cuid())
+  email     String
+  otp       String
+  purpose   String   // 'SIGNUP' | 'RESET_PASSWORD'
+  attempts  Int      @default(0)
+  verified  Boolean  @default(false)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email, purpose])
+}
+
 // ─── Core User Model ──────────────────────────────────────────────────────────
 
 model User {
@@ -125,6 +138,7 @@ model User {
   role      UserRole @default(PATIENT)
   image     String?
   isActive  Boolean  @default(true)
+  isEmailVerified Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

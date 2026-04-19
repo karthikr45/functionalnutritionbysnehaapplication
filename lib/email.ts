@@ -75,6 +75,76 @@ export function passwordResetEmail(resetUrl: string, name: string) {
   `;
 }
 
+export function otpEmail(otp: string, purpose: 'SIGNUP' | 'RESET_PASSWORD', name?: string) {
+  const title = purpose === 'SIGNUP' ? 'Verify Your Email' : 'Reset Your Password';
+  const intro = purpose === 'SIGNUP'
+    ? 'Thanks for signing up! Use this verification code to complete your registration:'
+    : 'We received a request to reset your password. Use this code to proceed:';
+
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="utf-8" /><title>${title}</title></head>
+    <body style="margin:0;padding:0;font-family:Arial,sans-serif;background-color:#f5f7ec;">
+      <div style="max-width:600px;margin:40px auto;background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+        <div style="background:#636B2F;padding:30px;text-align:center;">
+          <h1 style="color:white;margin:0;font-size:24px;">Functional Nutrition by Sneha</h1>
+        </div>
+        <div style="padding:40px 30px;">
+          <h2 style="color:#3D4127;margin:0 0 20px;">${title}</h2>
+          <p style="color:#555;line-height:1.6;font-size:15px;">Hi ${name || 'there'},</p>
+          <p style="color:#555;line-height:1.6;font-size:15px;">${intro}</p>
+          <div style="background:#F5F7EC;border:2px dashed #636B2F;border-radius:12px;padding:24px;text-align:center;margin:24px 0;">
+            <div style="color:#636B2F;font-size:11px;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;">Your Code</div>
+            <div style="color:#3D4127;font-size:36px;font-weight:bold;letter-spacing:8px;font-family:monospace;">${otp}</div>
+          </div>
+          <p style="color:#555;line-height:1.6;font-size:14px;">This code expires in <strong>10 minutes</strong>. Do not share this code with anyone.</p>
+          <p style="color:#888;line-height:1.6;font-size:13px;margin-top:30px;">If you didn't request this, please ignore this email.</p>
+        </div>
+        <div style="background:#F5F7EC;padding:20px;text-align:center;color:#888;font-size:12px;">
+          &copy; ${new Date().getFullYear()} Functional Nutrition by Sneha. All rights reserved.
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+}
+
+export function doctorWelcomeEmail(name: string, email: string, tempPassword: string, loginUrl: string) {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="utf-8" /></head>
+    <body style="margin:0;padding:0;font-family:Arial,sans-serif;background-color:#f5f7ec;">
+      <div style="max-width:600px;margin:40px auto;background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+        <div style="background:#636B2F;padding:30px;text-align:center;">
+          <h1 style="color:white;margin:0;font-size:24px;">Welcome to Functional Nutrition</h1>
+        </div>
+        <div style="padding:40px 30px;">
+          <p style="color:#555;line-height:1.6;font-size:15px;">Hi ${name},</p>
+          <p style="color:#555;line-height:1.6;font-size:15px;">Your doctor account has been created. Here are your login credentials:</p>
+          <div style="background:#F5F7EC;border-radius:12px;padding:20px;margin:20px 0;">
+            <p style="margin:0 0 8px;"><strong>Email:</strong> ${email}</p>
+            <p style="margin:0;"><strong>Temporary Password:</strong> <code style="background:white;padding:4px 8px;border-radius:4px;font-family:monospace;">${tempPassword}</code></p>
+          </div>
+          <div style="text-align:center;margin:30px 0;">
+            <a href="${loginUrl}" style="display:inline-block;background:#636B2F;color:white;text-decoration:none;padding:14px 32px;border-radius:12px;font-weight:bold;">Log In Now</a>
+          </div>
+          <p style="color:#888;line-height:1.6;font-size:13px;">Please change your password after your first login for security.</p>
+        </div>
+        <div style="background:#F5F7EC;padding:20px;text-align:center;color:#888;font-size:12px;">
+          &copy; ${new Date().getFullYear()} Functional Nutrition by Sneha
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+}
+
+export function generateOtp(): string {
+  return String(Math.floor(100000 + Math.random() * 900000));
+}
+
 export function contactFormEmail(data: { name: string; email: string; phone?: string; message: string }) {
   return `
     <!DOCTYPE html>
