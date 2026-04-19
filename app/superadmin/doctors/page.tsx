@@ -19,6 +19,7 @@ interface Doctor {
     experience: number | null;
     consultationFee: number;
     followUpFee: number;
+    profileImage: string | null;
     isAcceptingPatients: boolean;
   } | null;
 }
@@ -35,6 +36,7 @@ const emptyForm = {
   experience: 0,
   consultationFee: 500,
   followUpFee: 300,
+  profileImage: '',
   isAcceptingPatients: true,
   isActive: true,
 };
@@ -46,6 +48,26 @@ export default function SuperAdminDoctorsPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingImage(true);
+    const fd = new FormData();
+    fd.append('file', file);
+    const res = await fetch('/api/superadmin/doctors/upload-image', { method: 'POST', body: fd });
+    setUploadingImage(false);
+    if (res.ok) {
+      const { url } = await res.json();
+      setForm((f) => ({ ...f, profileImage: url }));
+      toast.success('Photo uploaded');
+    } else {
+      const err = await res.json();
+      toast.error(err.error || 'Upload failed');
+    }
+    e.target.value = '';
+  };
 
   const fetchDoctors = async () => {
     setLoading(true);
@@ -78,6 +100,7 @@ export default function SuperAdminDoctorsPage() {
       experience: doc.doctorProfile?.experience || 0,
       consultationFee: doc.doctorProfile?.consultationFee || 500,
       followUpFee: doc.doctorProfile?.followUpFee || 300,
+      profileImage: doc.doctorProfile?.profileImage || '',
       isAcceptingPatients: doc.doctorProfile?.isAcceptingPatients ?? true,
       isActive: doc.isActive,
     });
@@ -150,6 +173,32 @@ export default function SuperAdminDoctorsPage() {
       {showForm && (
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
           <h2 className="font-bold text-gray-900">{editingId ? 'Edit Doctor' : 'New Doctor'}</h2>
+
+          <div>
+            <label className={labelCls}>Profile Photo</label>
+            <div className="flex items-center gap-4">
+              <div className="w-20 h-20 rounded-2xl bg-primary-50 border border-gray-200 flex items-center justify-center overflow-hidden flex-shrink-0">
+                {form.profileImage ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={form.profileImage} alt="Doctor" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-3xl">🩺</span>
+                )}
+              </div>
+              <div className="flex-1">
+                <label className="inline-block px-4 py-2 bg-primary-50 text-primary-700 text-sm font-medium rounded-xl cursor-pointer hover:bg-primary-100">
+                  {uploadingImage ? 'Uploading...' : form.profileImage ? 'Change photo' : 'Upload photo'}
+                  <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleImageUpload} disabled={uploadingImage} className="hidden" />
+                </label>
+                {form.profileImage && (
+                  <button type="button" onClick={() => setForm({ ...form, profileImage: '' })} className="ml-2 text-xs text-gray-500 hover:underline">
+                    Remove
+                  </button>
+                )}
+                <p className="text-xs text-gray-400 mt-1">JPG, PNG or WebP · max 5MB</p>
+              </div>
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -246,8 +295,13 @@ export default function SuperAdminDoctorsPage() {
           {doctors.map((doc) => (
             <div key={doc.id} className={`bg-white rounded-2xl border p-5 ${doc.isActive ? 'border-gray-100' : 'border-dashed border-gray-300 opacity-60'}`}>
               <div className="flex flex-col sm:flex-row sm:items-start gap-4">
-                <div className="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center text-primary-700 font-bold text-xl flex-shrink-0">
-                  {doc.name[0]}
+                <div className="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center text-primary-700 font-bold text-xl flex-shrink-0 overflow-hidden">
+                  {doc.doctorProfile?.profileImage ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={doc.doctorProfile.profileImage} alt={doc.name} className="w-full h-full object-cover" />
+                  ) : (
+                    doc.name[0]
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">

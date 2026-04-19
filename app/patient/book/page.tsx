@@ -4,11 +4,24 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import BookingCalendar from '@/components/BookingCalendar';
 import RazorpayPayment from '@/components/RazorpayPayment';
+import DoctorProfileCard from '@/components/DoctorProfileCard';
 import { formatCurrency, formatDate, formatTime } from '@/lib/utils';
 import toast from 'react-hot-toast';
 
 interface TimeSlot { startTime: string; endTime: string; isAvailable: boolean; }
-interface Doctor { id: string; consultationFee: number; followUpFee: number; user: { name: string }; }
+interface Doctor {
+  id: string;
+  consultationFee: number;
+  followUpFee: number;
+  bio: string | null;
+  shortBio: string | null;
+  specialization: string | null;
+  qualifications: string | null;
+  experience: number | null;
+  profileImage: string | null;
+  isAcceptingPatients: boolean;
+  user: { name: string };
+}
 interface PackageBooking { id: string; totalSessions: number; usedSessions: number; package: { name: string }; }
 
 type BookingType = 'consultation' | 'follow_up' | 'package_session';
@@ -106,9 +119,13 @@ export default function BookAppointmentPage() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <div className="mb-8">
+      <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900 font-serif">Book an Appointment</h1>
-        <p className="text-gray-500 mt-1">with Dr. {doctor.user.name}</p>
+        <p className="text-gray-500 mt-1 text-sm">Review your doctor&apos;s profile below and pick a time that works.</p>
+      </div>
+
+      <div className="mb-6">
+        <DoctorProfileCard doctor={doctor} />
       </div>
 
       {/* Progress */}

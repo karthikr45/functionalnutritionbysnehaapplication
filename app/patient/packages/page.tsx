@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import RazorpayPayment from '@/components/RazorpayPayment';
+import DoctorProfileCard, { DoctorProfileCardData } from '@/components/DoctorProfileCard';
 import { formatCurrency, formatDate, STATUS_COLORS } from '@/lib/utils';
 
 interface Package { id: string; name: string; description: string; price: number; sessions: number; validity: number; features: string[]; isPopular: boolean; }
@@ -14,6 +15,7 @@ export default function PackagesPage() {
 
   const [packages, setPackages] = useState<Package[]>([]);
   const [bookings, setBookings] = useState<PackageBooking[]>([]);
+  const [doctor, setDoctor] = useState<DoctorProfileCardData | null>(null);
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(highlight);
   const [tab, setTab] = useState<'buy' | 'my'>('buy');
 
@@ -22,6 +24,7 @@ export default function PackagesPage() {
       setPackages(d.packages.map((p: any) => ({ ...p, features: Array.isArray(p.features) ? p.features : JSON.parse(p.features || '[]') })))
     );
     fetch('/api/patient/packages').then((r) => r.json()).then((d) => setBookings(d.bookings || []));
+    fetch('/api/doctor/profile').then((r) => r.json()).then((d) => setDoctor(d.doctor));
   }, []);
 
   const handlePaymentSuccess = () => {
@@ -35,6 +38,10 @@ export default function PackagesPage() {
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <h1 className="text-2xl font-bold text-gray-900 font-serif">Consultation Packages</h1>
+
+      {doctor && tab === 'buy' && (
+        <DoctorProfileCard doctor={doctor} showFees={false} />
+      )}
 
       {/* Tabs */}
       <div className="flex gap-2 border-b border-gray-200">
