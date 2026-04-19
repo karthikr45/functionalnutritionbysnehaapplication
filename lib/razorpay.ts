@@ -37,3 +37,11 @@ export function verifyRazorpaySignature(
     .digest('hex');
   return expectedSignature === signature;
 }
+
+export async function refundRazorpayPayment(paymentId: string, amount?: number) {
+  // amount in rupees; Razorpay expects paise. Omit to refund full amount.
+  const payload: any = { speed: 'normal' };
+  if (amount !== undefined) payload.amount = Math.round(amount * 100);
+  const refund = await (getRazorpay() as any).payments.refund(paymentId, payload);
+  return refund;
+}

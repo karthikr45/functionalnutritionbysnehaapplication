@@ -58,6 +58,12 @@ export default function Packages() {
             Flexible packages designed for every stage of your wellness journey.
             All plans include personalized diet plans and WhatsApp support.
           </p>
+          <p className="text-sm text-gray-500 mt-3">
+            Delivered by your dedicated functional nutritionist —{' '}
+            <Link href="/about-doctor" className="text-primary-600 font-medium hover:underline">
+              meet your doctor →
+            </Link>
+          </p>
         </div>
 
         {packages.length === 0 ? (

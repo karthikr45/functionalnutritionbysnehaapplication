@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getAuthSession } from '@/lib/auth';
+import { refundRazorpayPayment } from '@/lib/razorpay';
+import {
+  sendEmail,
+  appointmentCancelledEmail,
+  appointmentRescheduledEmail,
+  appointmentConfirmationEmail,
+  doctorAppointmentNotifyEmail,
+} from '@/lib/email';
+import { formatDate, formatTime } from '@/lib/utils';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getAuthSession();
@@ -28,27 +37,75 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
   const body = await req.json();
 
-  const appointment = await prisma.appointment.findUnique({ where: { id: params.id } });
+  const appointment = await prisma.appointment.findUnique({
+    where: { id: params.id },
+    include: {
+      patient: { include: { user: { select: { name: true, email: true } } } },
+      doctor: { include: { user: { select: { name: true, email: true } } } },
+      payment: true,
+    },
+  });
   if (!appointment) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
-  // Patients can only cancel
+  const isReschedule = body.date || body.startTime || body.endTime;
+  const isCancel = body.status === 'CANCELLED';
+
+  // Permission rules for patients: may only cancel or reschedule their own appointments
   if (session.user.role === 'PATIENT') {
-    if (body.status && body.status !== 'CANCELLED') {
-      return NextResponse.json({ error: 'Patients can only cancel appointments' }, { status: 403 });
+    if (appointment.patient.user.email !== session.user.email) {
+      return NextResponse.json({ error: 'Not your appointment' }, { status: 403 });
     }
+    if (body.status && body.status !== 'CANCELLED') {
+      return NextResponse.json({ error: 'Patients can only cancel or reschedule' }, { status: 403 });
+    }
+    if (body.doctorNotes || body.dietPlanUrl || body.videoCallLink) {
+      return NextResponse.json({ error: 'Patients cannot set doctor fields' }, { status: 403 });
+    }
+  }
+
+  // Block changes on already-cancelled or completed appointments
+  if (appointment.status === 'CANCELLED' || appointment.status === 'COMPLETED') {
+    return NextResponse.json({ error: `Appointment is ${appointment.status.toLowerCase()} and cannot be modified` }, { status: 400 });
+  }
+
+  // Handle reschedule — ensure new slot is free
+  if (isReschedule) {
+    const newDate = body.date ? new Date(body.date) : appointment.date;
+    const newStart = body.startTime || appointment.startTime;
+    const newEnd = body.endTime || appointment.endTime;
+
+    const conflict = await prisma.appointment.findFirst({
+      where: {
+        doctorId: appointment.doctorId,
+        date: newDate,
+        startTime: newStart,
+        id: { not: appointment.id },
+        status: { notIn: ['CANCELLED'] },
+      },
+    });
+    if (conflict) return NextResponse.json({ error: 'Slot already booked' }, { status: 409 });
+
+    body._newDate = newDate;
+    body._newStart = newStart;
+    body._newEnd = newEnd;
   }
 
   const updated = await prisma.appointment.update({
     where: { id: params.id },
     data: {
       ...(body.status && { status: body.status }),
-      ...(body.doctorNotes && { doctorNotes: body.doctorNotes }),
-      ...(body.dietPlanUrl && { dietPlanUrl: body.dietPlanUrl }),
-      ...(body.videoCallLink && { videoCallLink: body.videoCallLink }),
+      ...(isReschedule && {
+        date: body._newDate,
+        startTime: body._newStart,
+        endTime: body._newEnd,
+      }),
+      ...(body.doctorNotes !== undefined && { doctorNotes: body.doctorNotes }),
+      ...(body.dietPlanUrl !== undefined && { dietPlanUrl: body.dietPlanUrl }),
+      ...(body.videoCallLink !== undefined && { videoCallLink: body.videoCallLink }),
     },
   });
 
-  // If completing a package session, increment usedSessions
+  // Increment package session usage on completion
   if (body.status === 'COMPLETED' && appointment.packageBookingId) {
     await prisma.packageBooking.update({
       where: { id: appointment.packageBookingId },
@@ -56,5 +113,94 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     });
   }
 
-  return NextResponse.json({ appointment: updated });
+  // Refund on cancellation if paid (not package sessions — those restock the package instead)
+  let refundAmount = 0;
+  if (isCancel) {
+    if (appointment.packageBookingId) {
+      // Package session: do NOT charge a session — nothing to do, session stays available
+    } else if (appointment.payment?.status === 'SUCCESS' && appointment.payment.razorpayPaymentId) {
+      try {
+        await refundRazorpayPayment(appointment.payment.razorpayPaymentId, appointment.payment.amount);
+        await prisma.payment.update({
+          where: { id: appointment.payment.id },
+          data: { status: 'REFUNDED' },
+        });
+        refundAmount = appointment.payment.amount;
+      } catch (err) {
+        console.error('[appointments/cancel] Refund failed:', err);
+        // Still mark appointment cancelled — operator can refund manually
+      }
+    }
+  }
+
+  // Fire-and-forget emails
+  const patientEmail = appointment.patient.user.email;
+  const patientName = appointment.patient.user.name;
+  const doctorName = appointment.doctor.user.name;
+  const appointmentUrl = `${process.env.NEXTAUTH_URL || ''}/patient/appointments`;
+
+  if (isCancel && patientEmail) {
+    sendEmail({
+      to: patientEmail,
+      subject: 'Appointment Cancelled',
+      html: appointmentCancelledEmail({
+        patientName,
+        doctorName,
+        date: formatDate(appointment.date),
+        time: formatTime(appointment.startTime),
+        type: appointment.type.replace('_', ' '),
+        refundAmount,
+      }),
+    }).catch((e) => console.error('[email/cancel] failed:', e));
+  }
+
+  // Confirmation email when patient confirms a package-session booking (no payment step)
+  const isNewConfirmation = body.status === 'CONFIRMED' && appointment.status === 'PENDING' && appointment.packageBookingId;
+  if (isNewConfirmation && patientEmail) {
+    const commonData = {
+      patientName,
+      doctorName,
+      date: formatDate(appointment.date),
+      time: formatTime(appointment.startTime),
+      type: appointment.type.replace('_', ' '),
+      amount: 0,
+      appointmentUrl,
+    };
+    sendEmail({
+      to: patientEmail,
+      subject: 'Appointment Confirmed',
+      html: appointmentConfirmationEmail(commonData),
+    }).catch((e) => console.error('[email/confirm-package] failed:', e));
+
+    const docEmail = appointment.doctor.user.email;
+    if (docEmail) {
+      sendEmail({
+        to: docEmail,
+        subject: `New appointment — ${patientName}`,
+        html: doctorAppointmentNotifyEmail({
+          ...commonData,
+          appointmentUrl: `${process.env.NEXTAUTH_URL || ''}/doctor/appointments`,
+        }),
+      }).catch((e) => console.error('[email/doctor-notify-package] failed:', e));
+    }
+  }
+
+  if (isReschedule && patientEmail) {
+    sendEmail({
+      to: patientEmail,
+      subject: 'Appointment Rescheduled',
+      html: appointmentRescheduledEmail({
+        patientName,
+        doctorName,
+        date: formatDate(body._newDate),
+        time: formatTime(body._newStart),
+        oldDate: formatDate(appointment.date),
+        oldTime: formatTime(appointment.startTime),
+        type: appointment.type.replace('_', ' '),
+        appointmentUrl,
+      }),
+    }).catch((e) => console.error('[email/reschedule] failed:', e));
+  }
+
+  return NextResponse.json({ appointment: updated, refundAmount });
 }

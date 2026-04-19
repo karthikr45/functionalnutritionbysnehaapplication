@@ -64,6 +64,19 @@ export async function POST(req: NextRequest) {
   });
   if (!patientProfile) return NextResponse.json({ error: 'Patient profile not found' }, { status: 404 });
 
+  // Block new bookings if doctor is not accepting patients (except package sessions,
+  // which are pre-paid and honored regardless)
+  if (type !== 'PACKAGE_SESSION') {
+    const doctor = await prisma.doctorProfile.findUnique({ where: { id: doctorId } });
+    if (!doctor) return NextResponse.json({ error: 'Doctor not found' }, { status: 404 });
+    if (!doctor.isAcceptingPatients) {
+      return NextResponse.json(
+        { error: 'Doctor is not currently accepting new appointments. Please try again later.' },
+        { status: 403 }
+      );
+    }
+  }
+
   // Check slot not already booked
   const conflict = await prisma.appointment.findFirst({
     where: {

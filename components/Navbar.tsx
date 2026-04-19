@@ -15,7 +15,7 @@ export default function Navbar() {
   const cartCount = getCartCount();
 
   const navLinks = [
-    { href: '/#about', label: 'About' },
+    { href: '/about-doctor', label: 'About' },
     { href: '/#services', label: 'Services' },
     { href: '/#packages', label: 'Packages' },
     { href: '/products', label: 'Products' },
