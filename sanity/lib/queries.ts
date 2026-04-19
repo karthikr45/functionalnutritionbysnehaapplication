@@ -1,3 +1,14 @@
+export const LEGAL_PAGE_QUERY = `
+  *[_type == "legalPage" && pageType == $pageType][0] {
+    _id,
+    pageType,
+    title,
+    subtitle,
+    lastUpdated,
+    content
+  }
+`;
+
 export const ALL_VIDEOS_QUERY = `
   *[_type == "video" && isActive == true] | order(sortOrder asc) {
     _id,

@@ -4,5 +4,6 @@ import category from './category';
 import service from './service';
 import siteSettings from './siteSettings';
 import video from './video';
+import legalPage from './legalPage';
 
-export const schemaTypes = [post, author, category, service, siteSettings, video];
+export const schemaTypes = [post, author, category, service, siteSettings, video, legalPage];
