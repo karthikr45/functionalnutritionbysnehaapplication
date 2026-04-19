@@ -17,10 +17,7 @@ interface HeroProps {
 
 const defaultHighlights = ['Functional Medicine Approach', 'Root Cause Analysis', 'Personalized Diet Plans'];
 const defaultStats = [
-  { number: '500+', label: 'Happy Clients' },
   { number: '8+', label: 'Years Experience' },
-  { number: '95%', label: 'Success Rate' },
-  { number: '4.9', label: 'Google Rating' },
 ];
 const defaultIcons = ['🌿', '🔬', '🥗'];
 

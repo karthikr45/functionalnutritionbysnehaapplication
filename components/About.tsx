@@ -26,9 +26,6 @@ const defaultCredentials = [
 
 const defaultStats = [
   { number: '8+', label: 'Years Experience' },
-  { number: '500+', label: 'Clients Transformed' },
-  { number: '95%', label: 'Success Rate' },
-  { number: '4.9★', label: 'Client Rating' },
 ];
 
 const credentialIcons = ['🎓', '🏅', '💊', '🧬', '🏃', '📋', '🔬', '🌿'];

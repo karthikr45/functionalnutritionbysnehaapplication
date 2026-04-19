@@ -60,6 +60,7 @@ export default withAuth(
           '/api/doctor/profile',
           '/api/services',
           '/api/products',
+          '/api/reviews',
           '/products',
           '/api/videos',
           '/api/site-settings',
