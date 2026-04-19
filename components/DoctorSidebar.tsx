@@ -13,6 +13,7 @@ const navItems = [
   { href: '/doctor/products', label: 'Products', icon: '🛍️' },
   { href: '/doctor/orders', label: 'Orders', icon: '📋' },
   { href: '/doctor/documents', label: 'Documents', icon: '📄' },
+  { href: '/doctor/profile', label: 'My Profile', icon: '👤' },
   { href: '/studio', label: 'Blog CMS', icon: '✍️' },
 ];
 
