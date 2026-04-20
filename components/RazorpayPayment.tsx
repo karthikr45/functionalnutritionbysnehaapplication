@@ -57,7 +57,7 @@ export default function RazorpayPayment({
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '',
         amount: Math.round(amount * 100),
         currency: currency || 'INR',
-        name: 'Functional Nutrition by Sneha',
+        name: 'Gut Shell',
         description: type === 'appointment' ? 'Consultation Booking' : 'Package Booking',
         order_id: orderId,
         prefill: {

@@ -77,7 +77,7 @@ export default function ServicePackages({ serviceSlug, serviceTitle }: { service
           {serviceTitle} Packages
         </h2>
         <p className="text-gray-600 mt-3 max-w-xl mx-auto">
-          Choose the package that best fits your needs. All packages include personalized support from Sneha.
+          Choose the package that best fits your needs. All packages include personalized support from your doctor.
         </p>
       </div>
 

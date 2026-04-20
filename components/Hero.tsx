@@ -22,17 +22,17 @@ const defaultStats = [
 const defaultIcons = ['🌿', '🔬', '🥗'];
 
 export default function Hero({ settings }: HeroProps) {
-  const badge = settings?.heroBadge || 'Certified Functional Nutrition Consultant';
-  const title = settings?.heroTitle || 'Heal Your Body with Functional Nutrition';
+  const badge = settings?.heroBadge || 'Certified Gut Shell Consultant';
+  const title = settings?.heroTitle || 'Heal Your Body with Gut Shell';
   const subtitle = settings?.heroSubtitle || 'Discover the root cause of your health issues through personalized, science-backed nutrition plans. No fad diets, no quick fixes — just sustainable healing through the power of real food.';
   const highlights = settings?.heroHighlights?.length ? settings.heroHighlights : defaultHighlights;
   const stats = settings?.heroStats?.length ? settings.heroStats : defaultStats;
   const doctorImage = settings?.doctorImage;
-  const name = settings?.aboutName || 'Sneha Agarwal';
+  const name = settings?.aboutName || 'Your Doctor';
   const specializations = settings?.aboutSpecializations || 'PCOS | Thyroid | Gut Health | Weight Management | Diabetes';
 
   // Split title to highlight last part in green
-  const titleParts = title.split('Functional Nutrition');
+  const titleParts = title.split('Gut Shell');
   const hasHighlight = titleParts.length > 1;
 
   return (
@@ -52,7 +52,7 @@ export default function Hero({ settings }: HeroProps) {
               {hasHighlight ? (
                 <>
                   {titleParts[0]}
-                  <span className="text-primary-600">Functional Nutrition</span>
+                  <span className="text-primary-600">Gut Shell</span>
                   {titleParts[1]}
                 </>
               ) : (
@@ -117,7 +117,7 @@ export default function Hero({ settings }: HeroProps) {
                         🌿
                       </div>
                       <h3 className="text-2xl font-bold text-gray-800 font-serif">{name}</h3>
-                      <p className="text-primary-600 font-medium mt-1">Functional Nutrition Consultant</p>
+                      <p className="text-primary-600 font-medium mt-1">Gut Shell Consultant</p>
                       <p className="text-gray-500 text-sm mt-2">Certified in Functional Medicine &amp; Clinical Nutrition</p>
                     </div>
                   </div>
@@ -126,7 +126,7 @@ export default function Hero({ settings }: HeroProps) {
                 {doctorImage && (
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-6">
                     <h3 className="text-2xl font-bold text-white font-serif">{name}</h3>
-                    <p className="text-primary-300 font-medium text-sm mt-0.5">Functional Nutrition Consultant</p>
+                    <p className="text-primary-300 font-medium text-sm mt-0.5">Gut Shell Consultant</p>
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       {specializations.split('|').map((s) => (
                         <span key={s.trim()} className="px-2 py-0.5 bg-white/20 text-white text-xs rounded-full backdrop-blur-sm">

@@ -53,8 +53,8 @@ const fallbackData: Record<string, any> = {
     title: 'Group Program',
     subtitle: '4-Week PCOS Empowerment Program',
     image: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=600&fit=crop',
-    description: 'Join our supportive community-based group programs led by Sneha. Our flagship 4-Week PCOS Empowerment Program brings together women dealing with PCOS for guided nutrition education, meal planning, accountability, and peer support. Transform your health alongside others on the same journey.',
-    benefits: ['Community support and accountability', 'Weekly live sessions with Sneha', 'Group meal planning workshops', 'Exclusive recipe collections', 'Progress tracking together', 'Lifetime access to program materials'],
+    description: 'Join our supportive community-based group programs led by our experts. Our flagship 4-Week PCOS Empowerment Program brings together women dealing with PCOS for guided nutrition education, meal planning, accountability, and peer support. Transform your health alongside others on the same journey.',
+    benefits: ['Community support and accountability', 'Weekly live sessions', 'Group meal planning workshops', 'Exclusive recipe collections', 'Progress tracking together', 'Lifetime access to program materials'],
     conditions: ['PCOS Management', 'Hormonal Imbalance', 'Weight Management', 'Insulin Resistance', 'Irregular Periods', 'Hormonal Acne'],
   },
 };
@@ -104,7 +104,7 @@ export default async function ServicePage({ params }: { params: { slug: string }
               Book a Consultation
             </Link>
             <a
-              href="https://wa.me/919876543210?text=Hi%20Sneha%2C%20I%27m%20interested%20in%20the%20${encodeURIComponent(service.title)}%20program."
+              href="https://wa.me/919876543210?text=Hi%2C%20I%27m%20interested%20in%20the%20${encodeURIComponent(service.title)}%20program."
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-8 py-4 border-2 border-white/40 text-white font-semibold rounded-xl hover:bg-teal-700 transition-colors"
@@ -174,7 +174,7 @@ export default async function ServicePage({ params }: { params: { slug: string }
               Ready to Start Your {service.title} Journey?
             </h2>
             <p className="text-teal-100 mb-8 max-w-xl mx-auto">
-              Book a consultation with Sneha Agarwal to get a personalized plan designed specifically for your needs.
+              Book a consultation with Dr. Nutritionist to get a personalized plan designed specifically for your needs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link

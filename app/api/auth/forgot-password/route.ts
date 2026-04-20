@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
     await sendEmail({
       to: user.email,
-      subject: 'Reset your password — Functional Nutrition by Sneha',
+      subject: 'Reset your password — Gut Shell',
       html: passwordResetEmail(resetUrl, user.name),
     });
 

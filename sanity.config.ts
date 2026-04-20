@@ -10,7 +10,7 @@ export default defineConfig({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   name: 'nutrition-studio',
-  title: 'Functional Nutrition by Sneha — CMS',
+  title: 'Gut Shell — CMS',
   plugins: [
     structureTool(),
     visionTool(),

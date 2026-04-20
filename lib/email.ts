@@ -32,8 +32,8 @@ interface SendEmailOptions {
 }
 
 export async function sendEmail({ to, subject, html, text }: SendEmailOptions) {
-  const from = process.env.SMTP_FROM || process.env.SMTP_USER || 'noreply@functionalnutritionbysneha.com';
-  const fromName = process.env.SMTP_FROM_NAME || 'Functional Nutrition by Sneha';
+  const from = process.env.SMTP_FROM || process.env.SMTP_USER || 'noreply@gutshell.com';
+  const fromName = process.env.SMTP_FROM_NAME || 'Gut Shell';
 
   const t = getTransporter();
   return t.sendMail({
@@ -53,7 +53,7 @@ export function passwordResetEmail(resetUrl: string, name: string) {
     <body style="margin:0;padding:0;font-family:Arial,sans-serif;background-color:#f5f7ec;">
       <div style="max-width:600px;margin:40px auto;background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.08);">
         <div style="background:#636B2F;padding:30px;text-align:center;">
-          <h1 style="color:white;margin:0;font-size:24px;">Functional Nutrition by Sneha</h1>
+          <h1 style="color:white;margin:0;font-size:24px;">Gut Shell</h1>
         </div>
         <div style="padding:40px 30px;">
           <h2 style="color:#3D4127;margin:0 0 20px;">Reset Your Password</h2>
@@ -67,7 +67,7 @@ export function passwordResetEmail(resetUrl: string, name: string) {
           <p style="color:#888;line-height:1.6;font-size:13px;margin-top:30px;">This link will expire in <strong>1 hour</strong>. If you didn't request a password reset, you can safely ignore this email.</p>
         </div>
         <div style="background:#F5F7EC;padding:20px;text-align:center;color:#888;font-size:12px;">
-          &copy; ${new Date().getFullYear()} Functional Nutrition by Sneha. All rights reserved.
+          &copy; ${new Date().getFullYear()} Gut Shell. All rights reserved.
         </div>
       </div>
     </body>
@@ -88,7 +88,7 @@ export function otpEmail(otp: string, purpose: 'SIGNUP' | 'RESET_PASSWORD', name
     <body style="margin:0;padding:0;font-family:Arial,sans-serif;background-color:#f5f7ec;">
       <div style="max-width:600px;margin:40px auto;background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.08);">
         <div style="background:#636B2F;padding:30px;text-align:center;">
-          <h1 style="color:white;margin:0;font-size:24px;">Functional Nutrition by Sneha</h1>
+          <h1 style="color:white;margin:0;font-size:24px;">Gut Shell</h1>
         </div>
         <div style="padding:40px 30px;">
           <h2 style="color:#3D4127;margin:0 0 20px;">${title}</h2>
@@ -102,7 +102,7 @@ export function otpEmail(otp: string, purpose: 'SIGNUP' | 'RESET_PASSWORD', name
           <p style="color:#888;line-height:1.6;font-size:13px;margin-top:30px;">If you didn't request this, please ignore this email.</p>
         </div>
         <div style="background:#F5F7EC;padding:20px;text-align:center;color:#888;font-size:12px;">
-          &copy; ${new Date().getFullYear()} Functional Nutrition by Sneha. All rights reserved.
+          &copy; ${new Date().getFullYear()} Gut Shell. All rights reserved.
         </div>
       </div>
     </body>
@@ -118,7 +118,7 @@ export function doctorWelcomeEmail(name: string, email: string, tempPassword: st
     <body style="margin:0;padding:0;font-family:Arial,sans-serif;background-color:#f5f7ec;">
       <div style="max-width:600px;margin:40px auto;background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.08);">
         <div style="background:#636B2F;padding:30px;text-align:center;">
-          <h1 style="color:white;margin:0;font-size:24px;">Welcome to Functional Nutrition</h1>
+          <h1 style="color:white;margin:0;font-size:24px;">Welcome to Gut Shell</h1>
         </div>
         <div style="padding:40px 30px;">
           <p style="color:#555;line-height:1.6;font-size:15px;">Hi ${name},</p>
@@ -133,7 +133,7 @@ export function doctorWelcomeEmail(name: string, email: string, tempPassword: st
           <p style="color:#888;line-height:1.6;font-size:13px;">Please change your password after your first login for security.</p>
         </div>
         <div style="background:#F5F7EC;padding:20px;text-align:center;color:#888;font-size:12px;">
-          &copy; ${new Date().getFullYear()} Functional Nutrition by Sneha
+          &copy; ${new Date().getFullYear()} Gut Shell
         </div>
       </div>
     </body>
@@ -181,7 +181,7 @@ export function appointmentConfirmationEmail(data: AppointmentEmailData) {
           <p style="color:#888;line-height:1.6;font-size:13px;margin-top:20px;">If you need to reschedule or cancel, please do so at least 24 hours before your appointment.</p>
         </div>
         <div style="background:#F5F7EC;padding:20px;text-align:center;color:#888;font-size:12px;">
-          &copy; ${new Date().getFullYear()} Functional Nutrition by Sneha
+          &copy; ${new Date().getFullYear()} Gut Shell
         </div>
       </div>
     </body>

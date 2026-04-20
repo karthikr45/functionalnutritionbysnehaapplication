@@ -186,8 +186,7 @@ export default function ThemePage() {
               FN
             </div>
             <div>
-              <p className="font-bold text-gray-900 text-sm">Functional Nutrition</p>
-              <p className="text-xs" style={{ color: palette['--primary-600'] }}>by Sneha</p>
+              <p className="font-bold text-gray-900 text-sm">Gut Shell</p>
             </div>
           </div>
         </div>

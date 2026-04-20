@@ -7,12 +7,12 @@ import { prisma } from '@/lib/prisma';
 import { generatePalette, paletteToCss } from '@/lib/theme';
 
 export const metadata: Metadata = {
-  title: 'Functional Nutrition by Sneha — Heal from the Root Cause',
+  title: 'Gut Shell — Heal from the Root Cause',
   description:
-    'Personalized functional nutrition consultations by Sneha. Science-backed diet plans for PCOS, thyroid, gut health, diabetes, weight management, and more. Book online consultations today.',
-  keywords: 'functional nutrition, nutritionist, PCOS diet, thyroid nutrition, gut health, weight loss, diabetes diet, online consultation, India, Sneha',
+    'Personalized functional nutrition consultations. Science-backed diet plans for PCOS, thyroid, gut health, diabetes, weight management, and more. Book online consultations today.',
+  keywords: 'functional nutrition, nutritionist, PCOS diet, thyroid nutrition, gut health, weight loss, diabetes diet, online consultation, India, Gut Shell',
   openGraph: {
-    title: 'Functional Nutrition by Sneha',
+    title: 'Gut Shell',
     description: 'Heal from the root cause with personalized, science-backed functional nutrition. Book your consultation today.',
     type: 'website',
   },

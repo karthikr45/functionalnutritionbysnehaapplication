@@ -20,7 +20,7 @@ export async function createRazorpayOrder(amount: number, receipt: string) {
     amount: Math.round(amount * 100), // paise
     currency: 'INR',
     receipt,
-    notes: { app: 'Functional Nutrition by Sneha' },
+    notes: { app: 'Gut Shell' },
   });
   return order;
 }

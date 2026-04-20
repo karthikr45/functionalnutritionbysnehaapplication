@@ -92,7 +92,7 @@ export default function CheckoutPage() {
           key: payData.keyId,
           amount: payData.amount,
           currency: payData.currency || 'INR',
-          name: 'Functional Nutrition by Sneha',
+          name: 'Gut Shell',
           description: `Order #${order.orderNumber}`,
           order_id: payData.orderId,
           prefill: {

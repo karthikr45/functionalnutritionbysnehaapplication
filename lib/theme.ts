@@ -32,7 +32,7 @@ export function hslToHex(h: number, s: number, l: number): string {
 
 // Preset palettes with exact brand colors (overrides HSL generation)
 const PRESET_PALETTES: Record<string, Record<string, string>> = {
-  // Mossy Hollow — the signature Functional Nutrition by Sneha palette
+  // Mossy Hollow — the signature Gut Shell palette
   '#636B2F': {
     '--primary-50':  '#F5F7EC',
     '--primary-100': '#E8ECD4',

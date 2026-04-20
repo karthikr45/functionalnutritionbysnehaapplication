@@ -203,7 +203,7 @@ export default function SuperAdminDoctorsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className={labelCls}>Full Name *</label>
-              <input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Dr. Sneha Agarwal" className={inputCls} required />
+              <input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Dr. Full Name" className={inputCls} required />
             </div>
             <div>
               <label className={labelCls}>Email *</label>
@@ -231,7 +231,7 @@ export default function SuperAdminDoctorsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className={labelCls}>Specialization</label>
-              <input type="text" value={form.specialization} onChange={e => setForm({ ...form, specialization: e.target.value })} placeholder="Functional Nutrition, PCOS..." className={inputCls} />
+              <input type="text" value={form.specialization} onChange={e => setForm({ ...form, specialization: e.target.value })} placeholder="Gut Shell, PCOS..." className={inputCls} />
             </div>
             <div>
               <label className={labelCls}>Qualifications</label>

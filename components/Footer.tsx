@@ -101,7 +101,7 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2.5 text-sm">
               {[
-                { href: '/#about', label: 'About Sneha' },
+                { href: '/#about', label: 'About Us' },
                 { href: '/#services', label: 'Services' },
                 { href: '/#packages', label: 'Packages & Pricing' },
                 { href: '/#testimonials', label: 'Success Stories' },
@@ -122,7 +122,7 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">Contact</h4>
             <ul className="space-y-2.5 text-sm">
-              <li>📧 sneha@functionalnutritionbysneha.com</li>
+              <li>📧 hello@gutshell.com</li>
               <li>📱 +91 98765 43210</li>
               <li>🕐 Mon–Sat, 9 AM – 7 PM</li>
               <li>📍 Online Consultations (Pan India)</li>
@@ -139,7 +139,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
-          <p>&copy; {new Date().getFullYear()} Functional Nutrition by Sneha. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Gut Shell. All rights reserved.</p>
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>

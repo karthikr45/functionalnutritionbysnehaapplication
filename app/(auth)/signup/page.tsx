@@ -100,7 +100,7 @@ export default function SignupPage() {
         return;
       }
 
-      toast.success('Welcome to Functional Nutrition!');
+      toast.success('Welcome to Gut Shell!');
       router.push(packageId ? `/patient/packages?highlight=${packageId}` : '/patient/dashboard');
     } catch {
       toast.error('Something went wrong. Try again.');

@@ -35,7 +35,7 @@ const fallbackVideos: Video[] = [
   },
   {
     _id: '2',
-    title: 'Understanding PCOS: A Functional Nutrition Approach',
+    title: 'Understanding PCOS: A Gut Shell Approach',
     description: 'Learn how functional nutrition can help manage PCOS symptoms and restore hormonal balance naturally.',
     youtubeUrl: '',
     thumbnail: 'https://images.unsplash.com/photo-1505576399279-0d00abde0e9a?w=900&h=600&fit=crop',

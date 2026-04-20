@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const post = await client.fetch(POST_BY_SLUG_QUERY, { slug: params.slug });
     if (!post) return {};
     return {
-      title: `${post.title} | Functional Nutrition by Sneha`,
+      title: `${post.title} | Gut Shell`,
       description: post.excerpt,
     };
   } catch {
@@ -134,7 +134,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               Ready to transform your health?
             </h3>
             <p className="text-gray-600 text-sm mb-5">
-              Get a personalized functional nutrition plan from Sneha and start your healing journey today.
+              Get a personalized functional nutrition plan and start your healing journey today.
             </p>
             <Link
               href="/#packages"

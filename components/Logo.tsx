@@ -21,18 +21,17 @@ export default function Logo({ size = 'md', variant = 'dark', showText = true }:
       {logo ? (
         <img
           src={logo}
-          alt="Functional Nutrition by Sneha"
+          alt="Gut Shell"
           className={`${imgSizeMap[size]} w-auto object-contain flex-shrink-0`}
         />
       ) : (
         <div className={`${fallbackSizeMap[size]} bg-primary-600 rounded-lg flex items-center justify-center text-white font-bold ${size === 'sm' ? 'text-xs' : 'text-lg'} flex-shrink-0`}>
-          FN
+          GS
         </div>
       )}
       {showText && (
         <div>
-          <span className={`font-bold ${textColor} ${size === 'sm' ? 'text-sm' : 'text-lg'} leading-tight`}>Functional Nutrition</span>
-          <p className={`${subColor} text-xs leading-tight`}>by Sneha</p>
+          <span className={`font-bold ${textColor} ${size === 'sm' ? 'text-sm' : 'text-lg'} leading-tight`}>Gut Shell</span>
         </div>
       )}
     </div>

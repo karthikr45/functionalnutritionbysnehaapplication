@@ -28,7 +28,7 @@ export default async function BlogPage() {
             </h1>
             <p className="text-gray-600 text-lg mt-4">
               Evidence-based articles on nutrition, health, wellness, and lifestyle transformation.
-              Written by Sneha, Functional Nutrition Consultant.
+              Written by the Gut Shell team.
             </p>
           </div>
         </div>

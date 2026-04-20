@@ -7,7 +7,7 @@ import { prisma } from '@/lib/prisma';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Meet Your Doctor — Functional Nutrition by Sneha',
+  title: 'Meet Your Doctor — Gut Shell',
   description: 'Learn about the functional nutritionist behind your consultation — credentials, specialization, experience, and approach.',
 };
 
@@ -24,7 +24,7 @@ export default async function AboutDoctorPage() {
           <div className="text-center mb-10">
             <p className="text-primary-600 text-sm font-medium uppercase tracking-wider mb-2">Meet Your Doctor</p>
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 font-serif">
-              {profile ? `Dr. ${profile.user.name}` : 'Your Functional Nutritionist'}
+              {profile ? `Dr. ${profile.user.name}` : 'Your Nutritionist'}
             </h1>
             {profile?.specialization && (
               <p className="text-gray-600 mt-2">{profile.specialization}</p>

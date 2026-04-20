@@ -15,8 +15,8 @@ export default defineType({
     }),
 
     // Hero Section
-    defineField({ name: 'heroBadge', title: 'Hero Badge Text', type: 'string', initialValue: 'Certified Functional Nutrition Consultant' }),
-    defineField({ name: 'heroTitle', title: 'Hero Title', type: 'string', initialValue: 'Heal Your Body with Functional Nutrition' }),
+    defineField({ name: 'heroBadge', title: 'Hero Badge Text', type: 'string', initialValue: 'Certified Gut Shell Consultant' }),
+    defineField({ name: 'heroTitle', title: 'Hero Title', type: 'string', initialValue: 'Heal Your Body with Gut Shell' }),
     defineField({ name: 'heroSubtitle', title: 'Hero Subtitle', type: 'text', rows: 3 }),
     defineField({
       name: 'heroHighlights',
@@ -45,8 +45,8 @@ export default defineType({
     }),
 
     // About Section
-    defineField({ name: 'aboutName', title: 'About — Name', type: 'string', initialValue: 'Sneha' }),
-    defineField({ name: 'aboutTitle', title: 'About — Section Title', type: 'string', initialValue: "Hi, I'm Sneha" }),
+    defineField({ name: 'aboutName', title: 'About — Name', type: 'string', initialValue: '' }),
+    defineField({ name: 'aboutTitle', title: 'About — Section Title', type: 'string', initialValue: 'Meet Your Doctor' }),
     defineField({
       name: 'aboutDescription',
       title: 'About — Description Paragraphs',

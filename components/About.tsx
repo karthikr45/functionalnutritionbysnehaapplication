@@ -11,13 +11,13 @@ interface AboutProps {
 }
 
 const defaultDescription = [
-  "I'm Sneha Agarwal, a certified Functional Nutrition Consultant passionate about helping people heal from the root cause — not just manage symptoms. With over 8 years of experience, I combine the principles of functional medicine with personalized nutrition to create lasting health transformations.",
+  "I'm Your Doctor, a certified Gut Shell Consultant passionate about helping people heal from the root cause — not just manage symptoms. With over 8 years of experience, I combine the principles of functional medicine with personalized nutrition to create lasting health transformations.",
   'I specialize in hormonal imbalances (PCOS, thyroid), gut health issues (IBS, bloating, acid reflux), diabetes management, weight loss, and autoimmune conditions. My approach goes beyond calorie counting — I look at your complete health picture including lab work, lifestyle, stress, sleep, and gut health.',
   'My philosophy is simple: food is medicine. When you give your body the right nutrition, it has an incredible ability to heal itself. Every plan I create is rooted in science, customized to Indian food habits, and designed for real life — not just theory.',
 ];
 
 const defaultCredentials = [
-  'Certified Functional Nutrition Consultant',
+  'Certified Gut Shell Consultant',
   'Advanced Clinical Nutrition & Dietetics',
   'Certified in Functional Medicine Approach',
   'Gut Microbiome & Hormonal Health Specialist',
@@ -32,8 +32,8 @@ const credentialIcons = ['🎓', '🏅', '💊', '🧬', '🏃', '📋', '🔬',
 
 export default function About({ settings }: AboutProps) {
   const image = settings?.aboutImage || settings?.doctorImage;
-  const name = settings?.aboutName || 'Sneha Agarwal';
-  const title = settings?.aboutTitle || `Hi, I'm Sneha Agarwal`;
+  const name = settings?.aboutName || 'Your Doctor';
+  const title = settings?.aboutTitle || `Hi, I'm Your Doctor`;
   const description = settings?.aboutDescription?.length ? settings.aboutDescription : defaultDescription;
   const credentials = settings?.aboutCredentials?.length ? settings.aboutCredentials : defaultCredentials;
   const stats = settings?.aboutStats?.length ? settings.aboutStats : defaultStats;
@@ -55,7 +55,7 @@ export default function About({ settings }: AboutProps) {
                   {/* Name overlay */}
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
                     <h3 className="text-xl font-bold text-white font-serif">{name}</h3>
-                    <p className="text-primary-300 text-sm font-medium">Functional Nutrition Consultant</p>
+                    <p className="text-primary-300 text-sm font-medium">Gut Shell Consultant</p>
                   </div>
                 </div>
               ) : (

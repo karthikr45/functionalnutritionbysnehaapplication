@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Please enter a valid email' }, { status: 400 });
     }
 
-    const recipient = process.env.CONTACT_EMAIL || process.env.SMTP_USER || 'sneha@functionalnutritionbysneha.com';
+    const recipient = process.env.CONTACT_EMAIL || process.env.SMTP_USER || 'hello@gutshell.com';
 
     await sendEmail({
       to: recipient,

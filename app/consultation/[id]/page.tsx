@@ -36,7 +36,7 @@ export default function ConsultationPage() {
         const loadJitsi = () => {
           if (apiRef.current || !containerRef.current) return;
 
-          const roomName = `FNbySneha-${id}`;
+          const roomName = `GutShell-${id}`;
           const api = new (window as any).JitsiMeetExternalAPI('meet.jit.si', {
             roomName,
             parentNode: containerRef.current,
@@ -117,7 +117,7 @@ export default function ConsultationPage() {
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between flex-shrink-0">
         <div className="flex items-center gap-3">
-          <span className="text-lg font-bold text-primary-700 font-serif">Functional Nutrition by Sneha</span>
+          <span className="text-lg font-bold text-primary-700 font-serif">Gut Shell</span>
           <span className="hidden sm:inline text-sm text-gray-400">|</span>
           <span className="hidden sm:inline text-sm text-gray-500">Video Consultation</span>
         </div>

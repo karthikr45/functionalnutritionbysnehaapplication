@@ -4,9 +4,9 @@ import { useState } from 'react';
 
 const faqs = [
   {
-    question: 'What is Functional Nutrition and how is it different from regular dieting?',
+    question: 'What is Gut Shell and how is it different from regular dieting?',
     answer:
-      'Functional Nutrition focuses on identifying and addressing the root cause of your health issues — not just the symptoms. Unlike regular dieting that focuses on calorie counting, I analyze your lab reports, gut health, hormonal balance, lifestyle, and food sensitivities to create a holistic, personalized plan that heals your body from within.',
+      'Gut Shell focuses on identifying and addressing the root cause of your health issues — not just the symptoms. Unlike regular dieting that focuses on calorie counting, I analyze your lab reports, gut health, hormonal balance, lifestyle, and food sensitivities to create a holistic, personalized plan that heals your body from within.',
   },
   {
     question: 'Do I need to eat special or expensive foods?',

@@ -54,8 +54,8 @@ SMTP_PORT=587
 SMTP_USER=your.email@gmail.com
 SMTP_PASSWORD=xxxxxxxxxxxxxxxx   # 16-char Gmail App Password
 SMTP_FROM=your.email@gmail.com
-SMTP_FROM_NAME=Functional Nutrition by Sneha
-CONTACT_EMAIL=sneha@functionalnutritionbysneha.com
+SMTP_FROM_NAME=Gut Shell
+CONTACT_EMAIL=hello@gutshell.com
 
 # AI
 GEMINI_API_KEY=xxx

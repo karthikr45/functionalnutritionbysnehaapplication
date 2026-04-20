@@ -12,21 +12,21 @@ async function main() {
     where: { email: 'sneha@functionalnutrition.com' },
     update: {},
     create: {
-      name: 'Sneha Agarwal',
+      name: 'Doctor',
       email: 'sneha@functionalnutrition.com',
       password: doctorPassword,
       phone: '+91-9876543210',
       role: UserRole.DOCTOR,
       doctorProfile: {
         create: {
-          bio: `Sneha is a certified Functional Nutrition Consultant with over 8 years of experience in personalized nutrition therapy. She combines the principles of functional medicine with evidence-based nutrition to create lasting health transformations.
+          bio: `A certified Gut Shell Consultant with over 8 years of experience in personalized nutrition therapy. She combines the principles of functional medicine with evidence-based nutrition to create lasting health transformations.
 
 She specializes in hormonal imbalances (PCOS, thyroid), gut health issues (IBS, bloating, acid reflux), diabetes management, weight management, and autoimmune conditions. Her approach goes beyond calorie counting — she looks at the complete health picture including lab work, lifestyle, stress, sleep, and gut health.
 
-Sneha has helped over 500 clients achieve their health goals through personalized nutrition plans that are practical, rooted in Indian food habits, and scientifically sound.`,
-          shortBio: 'Certified Functional Nutrition Consultant | 8+ Years Experience | 500+ Clients Transformed',
-          specialization: 'Functional Nutrition, PCOS, Thyroid, Gut Health, Weight Management, Diabetes',
-          qualifications: 'Certified Functional Nutrition Consultant, Advanced Clinical Nutrition & Dietetics, Functional Medicine Approach, Gut Microbiome & Hormonal Health Specialist',
+Has helped over 500 clients achieve their health goals through personalized nutrition plans that are practical, rooted in Indian food habits, and scientifically sound.`,
+          shortBio: 'Certified Gut Shell Consultant | 8+ Years Experience | 500+ Clients Transformed',
+          specialization: 'Gut Shell, PCOS, Thyroid, Gut Health, Weight Management, Diabetes',
+          qualifications: 'Certified Gut Shell Consultant, Advanced Clinical Nutrition & Dietetics, Functional Medicine Approach, Gut Microbiome & Hormonal Health Specialist',
           experience: 8,
           consultationFee: 1499,
           followUpFee: 799,
