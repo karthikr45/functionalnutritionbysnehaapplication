@@ -11,7 +11,7 @@ interface AboutProps {
 }
 
 const defaultDescription = [
-  "I'm Your Doctor, a certified Gut Shell Consultant passionate about helping people heal from the root cause — not just manage symptoms. With over 8 years of experience, I combine the principles of functional medicine with personalized nutrition to create lasting health transformations.",
+  "I'm Sneha, a certified Gut Shell Consultant passionate about helping people heal from the root cause — not just manage symptoms. With over 8 years of experience, I combine the principles of functional medicine with personalized nutrition to create lasting health transformations.",
   'I specialize in hormonal imbalances (PCOS, thyroid), gut health issues (IBS, bloating, acid reflux), diabetes management, weight loss, and autoimmune conditions. My approach goes beyond calorie counting — I look at your complete health picture including lab work, lifestyle, stress, sleep, and gut health.',
   'My philosophy is simple: food is medicine. When you give your body the right nutrition, it has an incredible ability to heal itself. Every plan I create is rooted in science, customized to Indian food habits, and designed for real life — not just theory.',
 ];
@@ -32,8 +32,8 @@ const credentialIcons = ['🎓', '🏅', '💊', '🧬', '🏃', '📋', '🔬',
 
 export default function About({ settings }: AboutProps) {
   const image = settings?.aboutImage || settings?.doctorImage;
-  const name = settings?.aboutName || 'Your Doctor';
-  const title = settings?.aboutTitle || `Hi, I'm Your Doctor`;
+  const name = settings?.aboutName || 'Sneha';
+  const title = settings?.aboutTitle || `Hi, I'm Sneha`;
   const description = settings?.aboutDescription?.length ? settings.aboutDescription : defaultDescription;
   const credentials = settings?.aboutCredentials?.length ? settings.aboutCredentials : defaultCredentials;
   const stats = settings?.aboutStats?.length ? settings.aboutStats : defaultStats;

@@ -32,6 +32,7 @@ export default function Logo({ size = 'md', variant = 'dark', showText = true }:
       {showText && (
         <div>
           <span className={`font-bold ${textColor} ${size === 'sm' ? 'text-sm' : 'text-lg'} leading-tight`}>Gut Shell</span>
+          <p className={`${subColor} text-xs leading-tight`}>by Sneha</p>
         </div>
       )}
     </div>

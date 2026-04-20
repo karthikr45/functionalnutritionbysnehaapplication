@@ -28,7 +28,7 @@ export default function Hero({ settings }: HeroProps) {
   const highlights = settings?.heroHighlights?.length ? settings.heroHighlights : defaultHighlights;
   const stats = settings?.heroStats?.length ? settings.heroStats : defaultStats;
   const doctorImage = settings?.doctorImage;
-  const name = settings?.aboutName || 'Your Doctor';
+  const name = settings?.aboutName || 'Sneha';
   const specializations = settings?.aboutSpecializations || 'PCOS | Thyroid | Gut Health | Weight Management | Diabetes';
 
   // Split title to highlight last part in green

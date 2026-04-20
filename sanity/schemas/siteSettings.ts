@@ -45,8 +45,8 @@ export default defineType({
     }),
 
     // About Section
-    defineField({ name: 'aboutName', title: 'About — Name', type: 'string', initialValue: '' }),
-    defineField({ name: 'aboutTitle', title: 'About — Section Title', type: 'string', initialValue: 'Meet Your Doctor' }),
+    defineField({ name: 'aboutName', title: 'About — Name', type: 'string', initialValue: 'Sneha' }),
+    defineField({ name: 'aboutTitle', title: 'About — Section Title', type: 'string', initialValue: "Hi, I'm Sneha" }),
     defineField({
       name: 'aboutDescription',
       title: 'About — Description Paragraphs',
