@@ -13,6 +13,7 @@ const navItems = [
   { href: '/patient/cart', label: 'Cart', icon: '🛒' },
   { href: '/patient/orders', label: 'My Orders', icon: '📋' },
   { href: '/patient/documents', label: 'Documents', icon: '📄' },
+  { href: '/patient/profile', label: 'My Profile', icon: '👤' },
 ];
 
 export default function PatientSidebar() {
