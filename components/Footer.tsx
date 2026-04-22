@@ -123,7 +123,7 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Contact</h4>
             <ul className="space-y-2.5 text-sm">
               <li>📧 hello@gutshell.com</li>
-              <li>📱 +91 98765 43210</li>
+              <li>📱 +91 93916 75213</li>
               <li>🕐 Mon–Sat, 9 AM – 7 PM</li>
               <li>📍 Online Consultations (Pan India)</li>
               <li className="mt-4">

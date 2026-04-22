@@ -48,7 +48,7 @@ export default function Contact() {
             <div className="space-y-5">
               {[
                 { icon: '📧', label: 'Email', value: 'hello@gutshell.com' },
-                { icon: '📱', label: 'WhatsApp', value: '+91 98765 43210' },
+                { icon: '📱', label: 'WhatsApp', value: '+91 93916 75213' },
                 { icon: '🕐', label: 'Consultation Hours', value: 'Mon–Sat, 9 AM – 7 PM' },
                 { icon: '📍', label: 'Consultations', value: 'Online (Pan India & International)' },
               ].map((info) => (
@@ -72,7 +72,7 @@ export default function Contact() {
                 and recommend the right plan for you. No commitment, no pressure.
               </p>
               <a
-                href="https://wa.me/919876543210?text=Hi%2C%20I%27d%20like%20to%20book%20a%20free%20discovery%20call."
+                href="https://wa.me/919391675213?text=Hi%2C%20I%27d%20like%20to%20book%20a%20free%20discovery%20call."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-primary-600 text-white rounded-xl font-semibold text-sm hover:bg-primary-700 transition-colors"
@@ -104,7 +104,7 @@ export default function Contact() {
                 {[
                   { name: 'name', label: 'Full Name', type: 'text', placeholder: 'Your name' },
                   { name: 'email', label: 'Email Address', type: 'email', placeholder: 'your@email.com' },
-                  { name: 'phone', label: 'Phone / WhatsApp Number', type: 'tel', placeholder: '+91 98765 43210' },
+                  { name: 'phone', label: 'Phone / WhatsApp Number', type: 'tel', placeholder: '+91 93916 75213' },
                 ].map((field) => (
                   <div key={field.name}>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">{field.label}</label>

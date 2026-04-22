@@ -117,7 +117,7 @@ export default async function HomePage() {
                 View Packages & Book
               </Link>
               <a
-                href="https://wa.me/919876543210?text=Hi%2C%20I%27d%20like%20to%20book%20a%20consultation."
+                href="https://wa.me/919391675213?text=Hi%2C%20I%27d%20like%20to%20book%20a%20consultation."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-8 py-4 border-2 border-white/50 text-white font-semibold rounded-xl hover:bg-primary-700 transition-colors"

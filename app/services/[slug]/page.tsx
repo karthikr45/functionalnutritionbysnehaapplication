@@ -104,7 +104,7 @@ export default async function ServicePage({ params }: { params: { slug: string }
               Book a Consultation
             </Link>
             <a
-              href="https://wa.me/919876543210?text=Hi%2C%20I%27m%20interested%20in%20the%20${encodeURIComponent(service.title)}%20program."
+              href="https://wa.me/919391675213?text=Hi%2C%20I%27m%20interested%20in%20the%20${encodeURIComponent(service.title)}%20program."
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-8 py-4 border-2 border-white/40 text-white font-semibold rounded-xl hover:bg-teal-700 transition-colors"
