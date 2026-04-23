@@ -50,7 +50,15 @@ export default function AppointmentDetailPage() {
 
   const isDoctor = session?.user?.role === 'DOCTOR';
 
-  const handleAiAnalyze = async (doc: DocumentItem) => {
+  const handleAiAnalyze = async (doc: DocumentItem, forceRegenerate = false) => {
+    const cacheKey = `ai-insight-${doc.id}`;
+    if (!forceRegenerate) {
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) {
+        setAiAnalysis({ docTitle: doc.title, text: cached });
+        return;
+      }
+    }
     setAiLoading(doc.id);
     setAiAnalysis(null);
     try {
@@ -61,6 +69,7 @@ export default function AppointmentDetailPage() {
       });
       const data = await res.json();
       if (res.ok) {
+        localStorage.setItem(cacheKey, data.analysis);
         setAiAnalysis({ docTitle: doc.title, text: data.analysis });
       } else {
         toast.error(data.error || 'Failed to analyze document');
@@ -69,6 +78,17 @@ export default function AppointmentDetailPage() {
       toast.error('Failed to analyze document');
     }
     setAiLoading(null);
+  };
+
+  const handleDownloadInsights = () => {
+    if (!aiAnalysis) return;
+    const blob = new Blob([`AI Insights — ${aiAnalysis.docTitle}\n${'='.repeat(50)}\n\n${aiAnalysis.text}`], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `AI-Insights-${aiAnalysis.docTitle.replace(/[^a-zA-Z0-9]/g, '-')}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const openViewer = (index: number) => setViewerIndex(index);
@@ -374,7 +394,7 @@ export default function AppointmentDetailPage() {
                             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                             </svg>
-                            AI Insights
+                            {typeof window !== 'undefined' && localStorage.getItem(`ai-insight-${doc.id}`) ? 'View Insights' : 'AI Insights'}
                           </>
                         )}
                       </button>
@@ -531,13 +551,35 @@ export default function AppointmentDetailPage() {
 
             {/* Footer */}
             <div className="px-6 py-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between flex-shrink-0">
-              <p className="text-xs text-gray-500">Powered by Google Gemini AI</p>
-              <button
-                onClick={() => setAiAnalysis(null)}
-                className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
-              >
-                Close
-              </button>
+              <p className="text-xs text-gray-500">Powered by Claude AI</p>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleDownloadInsights}
+                  className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Download
+                </button>
+                <button
+                  onClick={() => {
+                    const docId = Object.keys(localStorage).find(k => k.startsWith('ai-insight-') && localStorage.getItem(k) === aiAnalysis?.text);
+                    if (docId) {
+                      const realId = docId.replace('ai-insight-', '');
+                      const doc = documents.find((d: DocumentItem) => d.id === realId);
+                      if (doc) handleAiAnalyze(doc, true);
+                    }
+                  }}
+                  disabled={!!aiLoading}
+                  className="px-3 py-1.5 text-xs font-medium text-purple-600 bg-purple-50 border border-purple-200 rounded-lg hover:bg-purple-100 disabled:opacity-50 transition-colors"
+                >
+                  Regenerate
+                </button>
+                <button
+                  onClick={() => setAiAnalysis(null)}
+                  className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         </div>
