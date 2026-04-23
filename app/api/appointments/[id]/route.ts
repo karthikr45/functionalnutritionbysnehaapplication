@@ -21,7 +21,14 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       patient: { include: { user: { select: { name: true, email: true, phone: true } } } },
       doctor: { include: { user: { select: { name: true, image: true } } } },
       payment: true,
-      documents: { include: { uploadedBy: { select: { name: true, role: true } } } },
+      documents: {
+        select: {
+          id: true, title: true, type: true, fileUrl: true, fileType: true,
+          fileSize: true, notes: true, appointmentId: true, isShared: true,
+          aiAnalyzedAt: true, createdAt: true,
+          uploadedBy: { select: { name: true, role: true } },
+        },
+      },
       packageBooking: { include: { package: true } },
     },
   });

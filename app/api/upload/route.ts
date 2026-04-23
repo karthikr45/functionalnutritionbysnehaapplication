@@ -81,8 +81,25 @@ export async function GET(req: NextRequest) {
   const documents = await prisma.document.findMany({
     where,
     orderBy: { createdAt: 'desc' },
-    include: { uploadedBy: { select: { name: true, role: true } } },
+    select: {
+      id: true,
+      title: true,
+      type: true,
+      fileUrl: true,
+      filePublicId: true,
+      fileType: true,
+      fileSize: true,
+      notes: true,
+      appointmentId: true,
+      isShared: true,
+      aiAnalyzedAt: true,
+      createdAt: true,
+      uploadedBy: { select: { name: true, role: true } },
+    },
   });
 
-  return NextResponse.json({ documents });
+  // Add boolean flag so clients can show 'View Insights' vs 'AI Insights'
+  const docsWithFlag = documents.map((d) => ({ ...d, hasAiAnalysis: !!d.aiAnalyzedAt }));
+
+  return NextResponse.json({ documents: docsWithFlag });
 }

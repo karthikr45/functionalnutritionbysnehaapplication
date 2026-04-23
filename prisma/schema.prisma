@@ -489,6 +489,8 @@ model Document {
   notes         String?
   appointmentId String?
   isShared      Boolean      @default(false) // shared between doctor and patient
+  aiAnalysis    String?      @db.Text        // Cached Claude analysis
+  aiAnalyzedAt  DateTime?
   createdAt     DateTime     @default(now())
 
   uploadedBy  User         @relation(fields: [uploadedById], references: [id])

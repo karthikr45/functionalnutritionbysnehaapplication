@@ -24,6 +24,7 @@ interface DocumentItem {
   fileType: string;
   fileSize: number | null;
   notes: string | null;
+  aiAnalyzedAt: string | null;
   createdAt: string;
   uploadedBy: { name: string; role: string };
 }
@@ -43,7 +44,7 @@ export default function AppointmentDetailPage() {
   const [showUpload, setShowUpload] = useState(false);
   const [viewerIndex, setViewerIndex] = useState<number | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [aiAnalysis, setAiAnalysis] = useState<{ docTitle: string; text: string } | null>(null);
+  const [aiAnalysis, setAiAnalysis] = useState<{ docId: string; docTitle: string; text: string } | null>(null);
   const [aiLoading, setAiLoading] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const pollRef = useRef<NodeJS.Timeout | null>(null);
@@ -51,13 +52,26 @@ export default function AppointmentDetailPage() {
   const isDoctor = session?.user?.role === 'DOCTOR';
 
   const handleAiAnalyze = async (doc: DocumentItem, forceRegenerate = false) => {
-    const cacheKey = `ai-insight-${doc.id}`;
-    if (!forceRegenerate) {
-      const cached = localStorage.getItem(cacheKey);
-      if (cached) {
-        setAiAnalysis({ docTitle: doc.title, text: cached });
-        return;
+    // If doc already has cached analysis from DB and we're not forcing, show it
+    if (!forceRegenerate && doc.aiAnalyzedAt) {
+      setAiLoading(doc.id);
+      try {
+        const res = await fetch('/api/ai/analyze-document', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ documentId: doc.id }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          setAiAnalysis({ docId: doc.id, docTitle: doc.title, text: data.analysis });
+        } else {
+          toast.error(data.error || 'Failed to load insights');
+        }
+      } catch {
+        toast.error('Failed to load insights');
       }
+      setAiLoading(null);
+      return;
     }
     setAiLoading(doc.id);
     setAiAnalysis(null);
@@ -65,12 +79,13 @@ export default function AppointmentDetailPage() {
       const res = await fetch('/api/ai/analyze-document', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ documentId: doc.id }),
+        body: JSON.stringify({ documentId: doc.id, force: forceRegenerate }),
       });
       const data = await res.json();
       if (res.ok) {
-        localStorage.setItem(cacheKey, data.analysis);
-        setAiAnalysis({ docTitle: doc.title, text: data.analysis });
+        setAiAnalysis({ docId: doc.id, docTitle: doc.title, text: data.analysis });
+        // Update the local documents array so button shows 'View Insights'
+        setDocuments((prev: DocumentItem[]) => prev.map((d: DocumentItem) => d.id === doc.id ? { ...d, aiAnalyzedAt: data.analyzedAt } : d));
       } else {
         toast.error(data.error || 'Failed to analyze document');
       }
@@ -394,7 +409,7 @@ export default function AppointmentDetailPage() {
                             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                             </svg>
-                            {typeof window !== 'undefined' && localStorage.getItem(`ai-insight-${doc.id}`) ? 'View Insights' : 'AI Insights'}
+                            {doc.aiAnalyzedAt ? 'View Insights' : 'AI Insights'}
                           </>
                         )}
                       </button>
@@ -561,12 +576,8 @@ export default function AppointmentDetailPage() {
                 </button>
                 <button
                   onClick={() => {
-                    const docId = Object.keys(localStorage).find(k => k.startsWith('ai-insight-') && localStorage.getItem(k) === aiAnalysis?.text);
-                    if (docId) {
-                      const realId = docId.replace('ai-insight-', '');
-                      const doc = documents.find((d: DocumentItem) => d.id === realId);
-                      if (doc) handleAiAnalyze(doc, true);
-                    }
+                    const doc = documents.find((d: DocumentItem) => d.id === aiAnalysis?.docId);
+                    if (doc) handleAiAnalyze(doc, true);
                   }}
                   disabled={!!aiLoading}
                   className="px-3 py-1.5 text-xs font-medium text-purple-600 bg-purple-50 border border-purple-200 rounded-lg hover:bg-purple-100 disabled:opacity-50 transition-colors"

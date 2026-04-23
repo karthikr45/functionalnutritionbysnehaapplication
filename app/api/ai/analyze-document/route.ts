@@ -42,12 +42,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'AI not configured. Add ANTHROPIC_API_KEY to .env' }, { status: 500 });
   }
 
-  const { documentId } = await req.json();
+  const { documentId, force } = await req.json();
   if (!documentId) return NextResponse.json({ error: 'documentId required' }, { status: 400 });
 
   try {
     const document = await prisma.document.findUnique({ where: { id: documentId } });
     if (!document) return NextResponse.json({ error: 'Document not found' }, { status: 404 });
+
+    // Return cached analysis unless force regenerate
+    if (!force && document.aiAnalysis) {
+      return NextResponse.json({
+        analysis: document.aiAnalysis,
+        documentTitle: document.title,
+        documentType: document.type,
+        cached: true,
+        analyzedAt: document.aiAnalyzedAt,
+      });
+    }
 
     const fileRes = await fetch(document.fileUrl);
     if (!fileRes.ok) return NextResponse.json({ error: 'Failed to fetch document file' }, { status: 500 });
@@ -110,10 +121,19 @@ export async function POST(req: NextRequest) {
       .map((block) => block.text)
       .join('\n');
 
+    // Persist to DB so future requests return from cache
+    const now = new Date();
+    await prisma.document.update({
+      where: { id: documentId },
+      data: { aiAnalysis: analysis, aiAnalyzedAt: now },
+    });
+
     return NextResponse.json({
       analysis,
       documentTitle: document.title,
       documentType: document.type,
+      cached: false,
+      analyzedAt: now,
     });
   } catch (err: any) {
     console.error('[ai-analyze] Error:', err);
