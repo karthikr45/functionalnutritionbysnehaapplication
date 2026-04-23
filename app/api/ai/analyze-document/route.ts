@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import Anthropic from '@anthropic-ai/sdk';
 import { getAuthSession } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
 const NUTRITION_PROMPT = `You are an expert clinical nutritionist analyzing a patient's medical document for a functional nutrition consultation.
 
@@ -26,7 +26,6 @@ Analyze the content provided and return a structured analysis with the following
 Be concise, actionable, and professional. This is for the doctor's reference only — do not include disclaimers about consulting a doctor since the doctor IS the user.`;
 
 async function extractPdfText(buffer: Buffer): Promise<string> {
-  // Dynamic import to avoid build-time issues with pdf-parse
   const pdfParseModule: any = await import('pdf-parse');
   const pdfParse = pdfParseModule.default || pdfParseModule;
   const data = await pdfParse(buffer);
@@ -39,8 +38,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized — Doctor only' }, { status: 401 });
   }
 
-  if (!GEMINI_API_KEY) {
-    return NextResponse.json({ error: 'AI not configured. Add GEMINI_API_KEY to .env from https://aistudio.google.com/apikey' }, { status: 500 });
+  if (!ANTHROPIC_API_KEY) {
+    return NextResponse.json({ error: 'AI not configured. Add ANTHROPIC_API_KEY to .env' }, { status: 500 });
   }
 
   const { documentId } = await req.json();
@@ -50,7 +49,6 @@ export async function POST(req: NextRequest) {
     const document = await prisma.document.findUnique({ where: { id: documentId } });
     if (!document) return NextResponse.json({ error: 'Document not found' }, { status: 404 });
 
-    // Fetch the file from Cloudinary
     const fileRes = await fetch(document.fileUrl);
     if (!fileRes.ok) return NextResponse.json({ error: 'Failed to fetch document file' }, { status: 500 });
     const buffer = Buffer.from(await fileRes.arrayBuffer());
@@ -58,13 +56,11 @@ export async function POST(req: NextRequest) {
     const mimeType = document.fileType || (document.fileUrl.endsWith('.pdf') ? 'application/pdf' : 'image/jpeg');
     const isPdf = mimeType.includes('pdf') || document.fileUrl.endsWith('.pdf');
 
-    const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const client = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
 
-    let result;
+    const contentBlocks: Anthropic.MessageCreateParams['messages'][0]['content'] = [];
 
     if (isPdf) {
-      // Step 1: Try to extract text from PDF
       let pdfText = '';
       try {
         pdfText = await extractPdfText(buffer);
@@ -73,36 +69,46 @@ export async function POST(req: NextRequest) {
       }
 
       if (pdfText && pdfText.trim().length >= 20) {
-        // Text-based PDF: send extracted text (no size limit)
         const truncatedText = pdfText.substring(0, 30000);
-        result = await model.generateContent([
-          NUTRITION_PROMPT,
-          `\n\n--- DOCUMENT CONTENT ---\n${truncatedText}\n--- END OF DOCUMENT ---`,
-        ]);
+        contentBlocks.push({
+          type: 'text',
+          text: `${NUTRITION_PROMPT}\n\n--- DOCUMENT CONTENT ---\n${truncatedText}\n--- END OF DOCUMENT ---`,
+        });
       } else {
-        // Scanned/image-based PDF: fall back to vision API (4MB limit)
         const fileSizeMB = buffer.byteLength / (1024 * 1024);
-        if (fileSizeMB > 4) {
+        if (fileSizeMB > 20) {
           return NextResponse.json({
-            error: `This PDF appears to be a scanned image (${fileSizeMB.toFixed(1)}MB) and exceeds the 4MB vision limit. Please compress it or split it into smaller files.`,
+            error: `PDF is ${fileSizeMB.toFixed(1)}MB and exceeds the size limit. Please compress or split the file.`,
           }, { status: 413 });
         }
         const base64 = buffer.toString('base64');
-        result = await model.generateContent([
-          NUTRITION_PROMPT,
-          { inlineData: { mimeType: 'application/pdf', data: base64 } },
-        ]);
+        contentBlocks.push({
+          type: 'document',
+          source: { type: 'base64', media_type: 'application/pdf', data: base64 },
+        } as any);
+        contentBlocks.push({ type: 'text', text: NUTRITION_PROMPT });
       }
     } else {
-      // For images, use inline data (images are usually small)
+      const supportedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      const imgType = supportedImageTypes.includes(mimeType) ? mimeType : 'image/jpeg';
       const base64 = buffer.toString('base64');
-      result = await model.generateContent([
-        NUTRITION_PROMPT,
-        { inlineData: { mimeType, data: base64 } },
-      ]);
+      contentBlocks.push({
+        type: 'image',
+        source: { type: 'base64', media_type: imgType as any, data: base64 },
+      });
+      contentBlocks.push({ type: 'text', text: NUTRITION_PROMPT });
     }
 
-    const analysis = result.response.text();
+    const response = await client.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 4096,
+      messages: [{ role: 'user', content: contentBlocks }],
+    });
+
+    const analysis = response.content
+      .filter((block): block is Anthropic.TextBlock => block.type === 'text')
+      .map((block) => block.text)
+      .join('\n');
 
     return NextResponse.json({
       analysis,
@@ -112,14 +118,14 @@ export async function POST(req: NextRequest) {
   } catch (err: any) {
     console.error('[ai-analyze] Error:', err);
     const msg = err?.message || '';
-    if (msg.includes('quota') || msg.includes('429') || msg.includes('Too Many')) {
+    if (msg.includes('rate_limit') || msg.includes('429') || msg.includes('Too Many')) {
       return NextResponse.json({
-        error: 'AI rate limit reached. Please wait a minute and try again. (Free tier: 15 requests/minute)',
+        error: 'AI rate limit reached. Please wait a moment and try again.',
       }, { status: 429 });
     }
-    if (msg.includes('API_KEY') || msg.includes('API key')) {
+    if (msg.includes('authentication') || msg.includes('api_key') || msg.includes('invalid')) {
       return NextResponse.json({
-        error: 'AI API key is invalid. Please check GEMINI_API_KEY in .env',
+        error: 'AI API key is invalid. Please check ANTHROPIC_API_KEY in .env',
       }, { status: 500 });
     }
     return NextResponse.json({
