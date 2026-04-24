@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { formatTime, STATUS_COLORS } from '@/lib/utils';
 import DocumentUpload from '@/components/DocumentUpload';
 import ClinicalInsights from '@/components/ClinicalInsights';
+import AnalysisProgress from '@/components/AnalysisProgress';
 import toast from 'react-hot-toast';
 
 interface Message {
@@ -47,13 +48,14 @@ export default function AppointmentDetailPage() {
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [aiAnalysis, setAiAnalysis] = useState<{ docId: string; docTitle: string; text: string } | null>(null);
   const [aiLoading, setAiLoading] = useState<string | null>(null);
+  const [aiLoadingTitle, setAiLoadingTitle] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const pollRef = useRef<NodeJS.Timeout | null>(null);
 
   const isDoctor = session?.user?.role === 'DOCTOR';
 
   const handleAiAnalyze = async (doc: DocumentItem, forceRegenerate = false) => {
-    // If doc already has cached analysis from DB and we're not forcing, show it
+    // Cached: load from DB instantly (no progress overlay)
     if (!forceRegenerate && doc.aiAnalyzedAt) {
       setAiLoading(doc.id);
       try {
@@ -74,7 +76,9 @@ export default function AppointmentDetailPage() {
       setAiLoading(null);
       return;
     }
+    // Fresh analysis: show progress overlay
     setAiLoading(doc.id);
+    setAiLoadingTitle(doc.title);
     setAiAnalysis(null);
     try {
       const res = await fetch('/api/ai/analyze-document', {
@@ -85,7 +89,6 @@ export default function AppointmentDetailPage() {
       const data = await res.json();
       if (res.ok) {
         setAiAnalysis({ docId: doc.id, docTitle: doc.title, text: data.analysis });
-        // Update the local documents array so button shows 'View Insights'
         setDocuments((prev: DocumentItem[]) => prev.map((d: DocumentItem) => d.id === doc.id ? { ...d, aiAnalyzedAt: data.analyzedAt } : d));
       } else {
         toast.error(data.error || 'Failed to analyze document');
@@ -94,6 +97,7 @@ export default function AppointmentDetailPage() {
       toast.error('Failed to analyze document');
     }
     setAiLoading(null);
+    setAiLoadingTitle('');
   };
 
   const handleDownloadInsights = () => {
@@ -425,7 +429,7 @@ export default function AppointmentDetailPage() {
                               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                             </svg>
-                            Analyzing...
+                            {doc.aiAnalyzedAt ? 'Loading...' : 'Analyzing...'}
                           </>
                         ) : (
                           <>
@@ -516,6 +520,9 @@ export default function AppointmentDetailPage() {
           </div>
         </div>
       )}
+
+      {/* AI Analysis Progress Overlay */}
+      <AnalysisProgress isActive={!!aiLoadingTitle && !aiAnalysis} documentTitle={aiLoadingTitle} />
 
       {/* AI Insights Modal */}
       {aiAnalysis && (
