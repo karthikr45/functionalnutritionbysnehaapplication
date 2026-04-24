@@ -56,10 +56,10 @@ export default async function DoctorDashboard() {
   } catch {}
 
   const stats = [
-    { label: "Today's Appointments", value: todayAppts.length, icon: '📅', color: 'bg-blue-50 text-blue-700' },
-    { label: 'Total Patients', value: totalPatients.length, icon: '👥', color: 'bg-purple-50 text-purple-700' },
-    { label: 'Completed Sessions', value: completedTotal, icon: '✅', color: 'bg-primary-50 text-primary-700' },
-    { label: 'Total Revenue', value: `₹${((pendingPayments._sum.amount || 0) / 100).toLocaleString('en-IN')}`, icon: '💰', color: 'bg-amber-50 text-amber-700' },
+    { label: "Today's Appointments", value: todayAppts.length, icon: '📅', color: 'bg-blue-50 text-blue-700', href: '/doctor/appointments' },
+    { label: 'Total Patients', value: totalPatients.length, icon: '👥', color: 'bg-purple-50 text-purple-700', href: '/doctor/appointments' },
+    { label: 'Completed Sessions', value: completedTotal, icon: '✅', color: 'bg-primary-50 text-primary-700', href: '/doctor/appointments' },
+    { label: 'Total Revenue', value: `₹${(pendingPayments._sum.amount || 0).toLocaleString('en-IN')}`, icon: '💰', color: 'bg-amber-50 text-amber-700', href: '/doctor/appointments' },
   ];
 
   return (
@@ -77,11 +77,11 @@ export default async function DoctorDashboard() {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat) => (
-          <div key={stat.label} className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+          <Link key={stat.label} href={stat.href} className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:border-primary-200 hover:shadow-md transition-all">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl mb-3 ${stat.color}`}>{stat.icon}</div>
             <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
             <p className="text-sm text-gray-500 mt-0.5">{stat.label}</p>
-          </div>
+          </Link>
         ))}
       </div>
 

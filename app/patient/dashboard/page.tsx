@@ -43,11 +43,15 @@ export default async function PatientDashboard() {
     take: 3,
   });
 
+  const totalDocs = await prisma.document.count({
+    where: { uploadedById: session.user.id },
+  });
+
   const stats = [
-    { label: 'Total Consultations', value: totalAppointments, icon: '🗓', color: 'bg-blue-50 text-blue-700' },
-    { label: 'Completed Sessions', value: completedAppointments, icon: '✅', color: 'bg-primary-50 text-primary-700' },
-    { label: 'Active Packages', value: patientProfile?.packageBookings.length || 0, icon: '📦', color: 'bg-purple-50 text-purple-700' },
-    { label: 'Documents Uploaded', value: recentDocs.length, icon: '📄', color: 'bg-amber-50 text-amber-700' },
+    { label: 'Total Consultations', value: totalAppointments, icon: '🗓', color: 'bg-blue-50 text-blue-700', href: '/patient/appointments' },
+    { label: 'Completed Sessions', value: completedAppointments, icon: '✅', color: 'bg-primary-50 text-primary-700', href: '/patient/appointments?status=COMPLETED' },
+    { label: 'Active Packages', value: patientProfile?.packageBookings.length || 0, icon: '📦', color: 'bg-purple-50 text-purple-700', href: '/patient/packages' },
+    { label: 'Documents Uploaded', value: totalDocs, icon: '📄', color: 'bg-amber-50 text-amber-700', href: '/patient/documents' },
   ];
 
   return (
@@ -74,13 +78,13 @@ export default async function PatientDashboard() {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat) => (
-          <div key={stat.label} className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+          <Link key={stat.label} href={stat.href} className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:border-primary-200 hover:shadow-md transition-all">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl mb-3 ${stat.color}`}>
               {stat.icon}
             </div>
             <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
             <p className="text-sm text-gray-500 mt-0.5">{stat.label}</p>
-          </div>
+          </Link>
         ))}
       </div>
 
@@ -157,7 +161,7 @@ export default async function PatientDashboard() {
                       <div className="h-1.5 bg-gray-200 rounded-full">
                         <div
                           className="h-1.5 bg-primary-600 rounded-full"
-                          style={{ width: `${(booking.usedSessions / booking.totalSessions) * 100}%` }}
+                          style={{ width: `${booking.totalSessions > 0 ? (booking.usedSessions / booking.totalSessions) * 100 : 0}%` }}
                         />
                       </div>
                     </div>

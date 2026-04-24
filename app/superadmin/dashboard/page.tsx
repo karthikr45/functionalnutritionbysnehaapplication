@@ -60,8 +60,11 @@ export default function SuperAdminDashboard() {
         // Redirect to the impersonated user's dashboard
         if (user.role === 'DOCTOR') {
           router.push('/doctor/dashboard');
-        } else {
+        } else if (user.role === 'PATIENT') {
           router.push('/patient/dashboard');
+        } else {
+          toast.error('Cannot impersonate this role');
+          return;
         }
       } else {
         const data = await res.json();
