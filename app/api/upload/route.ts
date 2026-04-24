@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAuthSession } from '@/lib/auth';
 import { uploadToCloudinary } from '@/lib/cloudinary';
 import { prisma } from '@/lib/prisma';
+import { createNotification } from '@/lib/notifications';
 
 export async function POST(req: NextRequest) {
   const session = await getAuthSession();
@@ -44,6 +45,23 @@ export async function POST(req: NextRequest) {
       appointmentId: appointmentId || null,
     },
   });
+
+  // Notify the doctor if patient uploads to an appointment
+  if (appointmentId && session.user.role === 'PATIENT') {
+    const appt = await prisma.appointment.findUnique({
+      where: { id: appointmentId },
+      include: { doctor: { select: { userId: true } } },
+    });
+    if (appt) {
+      createNotification({
+        userId: appt.doctor.userId,
+        type: 'DOCUMENT',
+        title: 'New document uploaded',
+        message: `${session.user.name} uploaded "${title}" for your review.`,
+        link: `/appointment/${appointmentId}`,
+      }).catch(() => {});
+    }
+  }
 
   return NextResponse.json({ document }, { status: 201 });
 }

@@ -3,6 +3,7 @@ import { getAuthSession } from '@/lib/auth';
 import { verifyRazorpaySignature } from '@/lib/razorpay';
 import { prisma } from '@/lib/prisma';
 import { addDays } from 'date-fns';
+import { createNotifications } from '@/lib/notifications';
 import {
   sendEmail,
   appointmentConfirmationEmail,
@@ -95,6 +96,17 @@ export async function POST(req: NextRequest) {
               healthConcerns: appt.healthConcerns || undefined,
             }),
           }).catch((e) => console.error('[email/doctor-notify] failed:', e));
+        }
+
+        // Create notifications for both parties
+        const patientUserId = await prisma.patientProfile.findUnique({ where: { id: appt.patientId }, select: { userId: true } });
+        const doctorUserId = await prisma.doctorProfile.findUnique({ where: { id: appt.doctorId }, select: { userId: true } });
+        if (patientUserId && doctorUserId) {
+          createNotifications([
+            { userId: patientUserId.userId, type: 'APPOINTMENT_CONFIRMED', title: 'Appointment Confirmed', message: `Your appointment with Dr. ${appt.doctor.user.name} on ${formatDate(appt.date)} is confirmed.`, link: `/appointment/${appt.id}` },
+            { userId: doctorUserId.userId, type: 'APPOINTMENT_CONFIRMED', title: 'New Appointment', message: `${appt.patient.user.name} booked a ${appt.type.replace('_', ' ').toLowerCase()} on ${formatDate(appt.date)}.`, link: `/appointment/${appt.id}` },
+            { userId: doctorUserId.userId, type: 'PAYMENT', title: 'Payment Received', message: `₹${payment.amount} received from ${appt.patient.user.name}.`, link: '/doctor/revenue' },
+          ]).catch(() => {});
         }
       }
     }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getAuthSession } from '@/lib/auth';
 import { refundRazorpayPayment } from '@/lib/razorpay';
+import { createNotifications } from '@/lib/notifications';
 import {
   sendEmail,
   appointmentCancelledEmail,
@@ -207,6 +208,26 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
         appointmentUrl,
       }),
     }).catch((e) => console.error('[email/reschedule] failed:', e));
+  }
+
+  // Create notifications
+  const patientUserId = await prisma.patientProfile.findUnique({ where: { id: appointment.patientId }, select: { userId: true } });
+  const doctorUserId = await prisma.doctorProfile.findUnique({ where: { id: appointment.doctorId }, select: { userId: true } });
+  if (patientUserId && doctorUserId) {
+    const notifs = [];
+    if (isCancel) {
+      notifs.push(
+        { userId: patientUserId.userId, type: 'APPOINTMENT_CANCELLED', title: 'Appointment Cancelled', message: `Your appointment with Dr. ${doctorName} has been cancelled.${refundAmount > 0 ? ` Refund of ₹${refundAmount} initiated.` : ''}`, link: '/patient/appointments' },
+        { userId: doctorUserId.userId, type: 'APPOINTMENT_CANCELLED', title: 'Appointment Cancelled', message: `${patientName} cancelled their appointment.`, link: '/doctor/appointments' },
+      );
+    }
+    if (isReschedule) {
+      notifs.push(
+        { userId: patientUserId.userId, type: 'APPOINTMENT_RESCHEDULED', title: 'Appointment Rescheduled', message: `Your appointment with Dr. ${doctorName} has been rescheduled to ${formatDate(body._newDate)}.`, link: `/appointment/${appointment.id}` },
+        { userId: doctorUserId.userId, type: 'APPOINTMENT_RESCHEDULED', title: 'Appointment Rescheduled', message: `${patientName} rescheduled to ${formatDate(body._newDate)}.`, link: `/appointment/${appointment.id}` },
+      );
+    }
+    if (notifs.length > 0) createNotifications(notifs).catch(() => {});
   }
 
   return NextResponse.json({ appointment: updated, refundAmount });

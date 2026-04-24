@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getAuthSession } from '@/lib/auth';
+import { createNotification } from '@/lib/notifications';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getAuthSession();
@@ -75,6 +76,16 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     },
     include: { sender: { select: { id: true, name: true, role: true } } },
   });
+
+  // Notify the other party
+  const recipientId = isDoctor ? appointment.patient.userId : appointment.doctor.user.id;
+  createNotification({
+    userId: recipientId,
+    type: 'MESSAGE',
+    title: `New message from ${session.user.name}`,
+    message: content.trim().substring(0, 100),
+    link: `/appointment/${params.id}`,
+  }).catch(() => {});
 
   return NextResponse.json({ message }, { status: 201 });
 }

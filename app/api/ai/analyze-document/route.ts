@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
 import { getAuthSession } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { createNotification } from '@/lib/notifications';
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
@@ -185,6 +186,15 @@ export async function POST(req: NextRequest) {
       where: { id: documentId },
       data: { aiAnalysis: analysis, aiAnalyzedAt: now },
     });
+
+    // Notify the doctor that insights are ready
+    createNotification({
+      userId: session.user.id,
+      type: 'AI_INSIGHT',
+      title: 'AI Insights Ready',
+      message: `Clinical analysis for "${document.title}" is complete.`,
+      link: document.appointmentId ? `/appointment/${document.appointmentId}` : undefined,
+    }).catch(() => {});
 
     return NextResponse.json({
       analysis,
