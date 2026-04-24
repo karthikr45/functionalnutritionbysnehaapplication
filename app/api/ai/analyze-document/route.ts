@@ -80,7 +80,8 @@ RULES:
 - Reference evidence-based nutrition and functional medicine principles
 - Write for a clinical peer — use appropriate medical terminology
 - No disclaimers about "consulting a doctor" — you ARE addressing the doctor
-- Keep total response focused and efficient — no padding or repetition`;
+- Keep total response focused and efficient — no padding or repetition
+- IMPORTANT: Complete every section fully. Never truncate mid-sentence. If a section has nothing to report, write one line and move on. Prioritize completeness over verbosity.`;
 
 async function extractPdfText(buffer: Buffer): Promise<string> {
   const pdfParseModule: any = await import('pdf-parse');
@@ -169,7 +170,7 @@ export async function POST(req: NextRequest) {
 
     const response = await client.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 4096,
+      max_tokens: 8192,
       messages: [{ role: 'user', content: contentBlocks }],
     });
 

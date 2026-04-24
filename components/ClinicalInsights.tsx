@@ -102,10 +102,28 @@ function renderLine(line: string, key: number, sectionTitle: string) {
     );
   }
 
-  // Lab finding with severity tag
+  // Lab finding or alert with severity tag
   if (trimmed.match(/^\[[A-Z\-]+\]/)) {
     const rendered = renderLabFinding(trimmed, key);
     if (rendered) return rendered;
+
+    // Freeform severity line (no Parameter: Value format)
+    const freeMatch = trimmed.match(/^\[([A-Z\-]+)\]\s*(.+)$/);
+    if (freeMatch) {
+      const severity = freeMatch[1];
+      const content = freeMatch[2];
+      const style = SEVERITY_STYLES[severity] || { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-300', icon: '●' };
+      return (
+        <div key={key} className={`${style.bg} ${style.border} border rounded-xl p-3 mb-2`}>
+          <div className="flex items-start gap-3">
+            <div className={`flex-shrink-0 px-2 py-1 ${style.text} text-[10px] font-bold uppercase text-center rounded-md ${style.bg === 'bg-red-600' ? 'bg-red-700' : 'bg-white/60'}`}>
+              {style.icon} {severity}
+            </div>
+            <p className={`text-sm flex-1 leading-relaxed ${style.text === 'text-white' ? 'text-red-50' : 'text-gray-800'}`}>{content}</p>
+          </div>
+        </div>
+      );
+    }
   }
 
   // Patient snapshot rows
