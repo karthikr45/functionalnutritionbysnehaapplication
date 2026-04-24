@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import Logo from './Logo';
-import NotificationBell from './NotificationBell';
 
 const navItems = [
   { href: '/doctor/dashboard', label: 'Dashboard', icon: '🏠' },
@@ -25,13 +24,10 @@ export default function DoctorSidebar() {
 
   return (
     <aside className="w-64 bg-white border-r border-gray-200 flex flex-col h-full shadow-sm">
-      <div className="p-5 border-b border-gray-100 flex items-center justify-between">
+      <div className="p-5 border-b border-gray-100">
         <Link href="/">
           <Logo size="sm" />
         </Link>
-        <div className="hidden lg:block">
-          <NotificationBell />
-        </div>
       </div>
 
       <div className="p-5 border-b border-gray-100">

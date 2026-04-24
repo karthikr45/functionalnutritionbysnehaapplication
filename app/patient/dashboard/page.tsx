@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { STATUS_COLORS, formatDate, formatTime } from '@/lib/utils';
-import CartButton from '@/components/CartButton';
+
 
 export default async function PatientDashboard() {
   const session = await getAuthSession();
@@ -64,15 +64,12 @@ export default async function PatientDashboard() {
           </h1>
           <p className="text-gray-500 mt-1 text-sm sm:text-base">Here&apos;s your health journey overview.</p>
         </div>
-        <div className="flex items-center gap-3">
-          <CartButton />
-          <Link
-            href="/patient/book"
-            className="flex items-center gap-2 px-4 sm:px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-colors shadow-sm text-sm whitespace-nowrap"
-          >
-            + Book Appointment
-          </Link>
-        </div>
+        <Link
+          href="/patient/book"
+          className="flex items-center gap-2 px-4 sm:px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-colors shadow-sm text-sm whitespace-nowrap self-start"
+        >
+          + Book Appointment
+        </Link>
       </div>
 
       {/* Stats */}

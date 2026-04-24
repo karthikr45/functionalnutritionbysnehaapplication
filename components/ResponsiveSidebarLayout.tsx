@@ -2,8 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import Logo from './Logo';
 import NotificationBell from './NotificationBell';
+import CartButton from './CartButton';
 
 interface Props {
   sidebar: React.ReactNode;
@@ -14,6 +17,9 @@ interface Props {
 export default function ResponsiveSidebarLayout({ sidebar, children, topBar }: Props) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
+  const { data: session } = useSession();
+
+  const isPatient = session?.user?.role === 'PATIENT';
 
   useEffect(() => { setSidebarOpen(false); }, [pathname]);
 
@@ -46,6 +52,19 @@ export default function ResponsiveSidebarLayout({ sidebar, children, topBar }: P
       <div className="flex-1 flex flex-col overflow-hidden">
         {topBar}
 
+        {/* Desktop header bar */}
+        <div className="hidden lg:flex items-center justify-between bg-white border-b border-gray-100 px-8 py-2.5 flex-shrink-0">
+          <div className="flex items-center gap-2">
+            <p className="text-sm text-gray-500">
+              Welcome, <span className="font-semibold text-gray-800">{session?.user?.name?.split(' ')[0]}</span>
+            </p>
+          </div>
+          <div className="flex items-center gap-1">
+            <NotificationBell />
+            {isPatient && <CartButton />}
+          </div>
+        </div>
+
         {/* Mobile top bar */}
         <div className="lg:hidden flex items-center justify-between bg-white border-b border-gray-200 px-4 py-3 flex-shrink-0">
           <button
@@ -58,7 +77,10 @@ export default function ResponsiveSidebarLayout({ sidebar, children, topBar }: P
             </svg>
           </button>
           <Logo size="sm" showText={false} />
-          <NotificationBell />
+          <div className="flex items-center gap-1">
+            <NotificationBell />
+            {isPatient && <CartButton />}
+          </div>
         </div>
 
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
