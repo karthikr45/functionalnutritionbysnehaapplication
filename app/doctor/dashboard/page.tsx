@@ -59,7 +59,7 @@ export default async function DoctorDashboard() {
     { label: "Today's Appointments", value: todayAppts.length, icon: '📅', color: 'bg-blue-50 text-blue-700', href: '/doctor/appointments' },
     { label: 'Total Patients', value: totalPatients.length, icon: '👥', color: 'bg-purple-50 text-purple-700', href: '/doctor/appointments' },
     { label: 'Completed Sessions', value: completedTotal, icon: '✅', color: 'bg-primary-50 text-primary-700', href: '/doctor/appointments' },
-    { label: 'Total Revenue', value: `₹${(pendingPayments._sum.amount || 0).toLocaleString('en-IN')}`, icon: '💰', color: 'bg-amber-50 text-amber-700', href: '/doctor/appointments' },
+    { label: 'Total Revenue', value: `₹${(pendingPayments._sum.amount || 0).toLocaleString('en-IN')}`, icon: '💰', color: 'bg-amber-50 text-amber-700', href: '/doctor/revenue' },
   ];
 
   return (
