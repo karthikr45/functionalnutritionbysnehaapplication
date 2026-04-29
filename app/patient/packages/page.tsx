@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import RazorpayPayment from '@/components/RazorpayPayment';
 import DoctorProfileCard, { DoctorProfileCardData } from '@/components/DoctorProfileCard';
@@ -10,6 +10,10 @@ interface Package { id: string; name: string; description: string; price: number
 interface PackageBooking { id: string; status: string; usedSessions: number; totalSessions: number; expiryDate: string; package: Package; payment: any; }
 
 export default function PackagesPage() {
+  return <Suspense><PackagesContent /></Suspense>;
+}
+
+function PackagesContent() {
   const searchParams = useSearchParams();
   const highlight = searchParams.get('highlight');
 

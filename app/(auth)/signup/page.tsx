@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Logo from '@/components/Logo';
@@ -10,6 +10,10 @@ import toast from 'react-hot-toast';
 type Step = 'details' | 'otp';
 
 export default function SignupPage() {
+  return <Suspense><SignupContent /></Suspense>;
+}
+
+function SignupContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const packageId = searchParams.get('package');
