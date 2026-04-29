@@ -1,9 +1,22 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+
 export default function WhatsAppButton() {
+  const [waNumber, setWaNumber] = useState('919391675213');
+
+  useEffect(() => {
+    fetch('/api/site-settings')
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.settings?.whatsappNumber) setWaNumber(d.settings.whatsappNumber);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <a
-      href="https://wa.me/919391675213?text=Hi%2C%20I%27d%20like%20to%20know%20more%20about%20your%20nutrition%20consultations."
+      href={`https://wa.me/${waNumber}?text=Hi%2C%20I%27d%20like%20to%20know%20more%20about%20your%20nutrition%20consultations.`}
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 z-50 bg-primary-500 hover:bg-primary-600 text-white w-14 h-14 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 group"

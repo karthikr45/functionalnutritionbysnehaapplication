@@ -2,9 +2,25 @@
 
 import { useState } from 'react';
 
-export default function Contact() {
+interface ContactProps {
+  settings?: {
+    contactEmail?: string;
+    contactPhone?: string;
+    whatsappNumber?: string;
+    consultationHours?: string;
+    consultationMode?: string;
+  } | null;
+}
+
+export default function Contact({ settings }: ContactProps) {
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
+
+  const email = settings?.contactEmail || 'hello@gutshell.com';
+  const phone = settings?.contactPhone || '+91 93916 75213';
+  const waNumber = settings?.whatsappNumber || '919391675213';
+  const hours = settings?.consultationHours || 'Mon–Sat, 9 AM – 7 PM';
+  const mode = settings?.consultationMode || 'Online (Pan India & International)';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,10 +63,10 @@ export default function Contact() {
 
             <div className="space-y-5">
               {[
-                { icon: '📧', label: 'Email', value: 'hello@gutshell.com' },
-                { icon: '📱', label: 'WhatsApp', value: '+91 93916 75213' },
-                { icon: '🕐', label: 'Consultation Hours', value: 'Mon–Sat, 9 AM – 7 PM' },
-                { icon: '📍', label: 'Consultations', value: 'Online (Pan India & International)' },
+                { icon: '📧', label: 'Email', value: email },
+                { icon: '📱', label: 'WhatsApp', value: phone },
+                { icon: '🕐', label: 'Consultation Hours', value: hours },
+                { icon: '📍', label: 'Consultations', value: mode },
               ].map((info) => (
                 <div key={info.label} className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
@@ -64,7 +80,6 @@ export default function Contact() {
               ))}
             </div>
 
-            {/* Free discovery call CTA */}
             <div className="bg-primary-50 border border-primary-200 rounded-2xl p-6">
               <h4 className="font-bold text-primary-800 text-lg">Not sure where to start?</h4>
               <p className="text-primary-700 text-sm mt-2">
@@ -72,7 +87,7 @@ export default function Contact() {
                 and recommend the right plan for you. No commitment, no pressure.
               </p>
               <a
-                href="https://wa.me/919391675213?text=Hi%2C%20I%27d%20like%20to%20book%20a%20free%20discovery%20call."
+                href={`https://wa.me/${waNumber}?text=Hi%2C%20I%27d%20like%20to%20book%20a%20free%20discovery%20call.`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-primary-600 text-white rounded-xl font-semibold text-sm hover:bg-primary-700 transition-colors"
@@ -104,7 +119,7 @@ export default function Contact() {
                 {[
                   { name: 'name', label: 'Full Name', type: 'text', placeholder: 'Your name' },
                   { name: 'email', label: 'Email Address', type: 'email', placeholder: 'your@email.com' },
-                  { name: 'phone', label: 'Phone / WhatsApp Number', type: 'tel', placeholder: '+91 93916 75213' },
+                  { name: 'phone', label: 'Phone / WhatsApp Number', type: 'tel', placeholder: phone },
                 ].map((field) => (
                   <div key={field.name}>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">{field.label}</label>

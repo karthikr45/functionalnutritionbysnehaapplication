@@ -35,29 +35,46 @@ const socialItems = [
   { name: 'Facebook', icon: <FacebookIcon />, key: 'facebookUrl' },
 ];
 
-export default function Footer() {
-  const [socials, setSocials] = useState<Record<string, string>>({});
+interface FooterProps {
+  settings?: {
+    instagramUrl?: string;
+    youtubeUrl?: string;
+    linkedinUrl?: string;
+    facebookUrl?: string;
+    contactEmail?: string;
+    contactPhone?: string;
+    consultationHours?: string;
+    consultationMode?: string;
+  } | null;
+}
+
+export default function Footer({ settings: propSettings }: FooterProps) {
+  const [fetchedSettings, setFetchedSettings] = useState<Record<string, string>>({});
 
   useEffect(() => {
+    if (propSettings) return;
     fetch('/api/site-settings')
       .then((r) => r.json())
-      .then((d) => {
-        const s = d.settings || {};
-        setSocials({
-          instagramUrl: s.instagramUrl || '',
-          youtubeUrl: s.youtubeUrl || '',
-          linkedinUrl: s.linkedinUrl || '',
-          facebookUrl: s.facebookUrl || '',
-        });
-      })
+      .then((d) => setFetchedSettings(d.settings || {}))
       .catch(() => {});
-  }, []);
+  }, [propSettings]);
+
+  const s: any = propSettings || fetchedSettings;
+  const socials: Record<string, string> = {
+    instagramUrl: s.instagramUrl || '',
+    youtubeUrl: s.youtubeUrl || '',
+    linkedinUrl: s.linkedinUrl || '',
+    facebookUrl: s.facebookUrl || '',
+  };
+  const email = s.contactEmail || 'hello@gutshell.com';
+  const phone = s.contactPhone || '+91 93916 75213';
+  const hours = s.consultationHours || 'Mon–Sat, 9 AM – 7 PM';
+  const mode = s.consultationMode || 'Online (Pan India & International)';
 
   return (
     <footer className="bg-gray-900 text-gray-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand */}
           <div className="col-span-1 md:col-span-2 space-y-4">
             <Link href="/">
               <Logo variant="light" />
@@ -67,41 +84,29 @@ export default function Footer() {
               No fad diets, no quick fixes — just sustainable health transformation through the power of real food.
             </p>
             <div className="flex gap-3">
-              {socialItems.map((s) => {
-                const url = socials[s.key];
+              {socialItems.map((item) => {
+                const url = socials[item.key];
                 if (url) {
                   return (
-                    <a
-                      key={s.name}
-                      href={url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={s.name}
-                      className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-primary-600 transition-colors"
-                    >
-                      {s.icon}
+                    <a key={item.name} href={url} target="_blank" rel="noopener noreferrer" aria-label={item.name} className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-primary-600 transition-colors">
+                      {item.icon}
                     </a>
                   );
                 }
                 return (
-                  <span
-                    key={s.name}
-                    className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-600 cursor-default"
-                    title={s.name}
-                  >
-                    {s.icon}
+                  <span key={item.name} className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-600 cursor-default" title={item.name}>
+                    {item.icon}
                   </span>
                 );
               })}
             </div>
           </div>
 
-          {/* Quick Links */}
           <div>
             <h4 className="text-white font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2.5 text-sm">
               {[
-                { href: '/#about', label: 'About Us' },
+                { href: '/about-doctor', label: 'About Us' },
                 { href: '/#services', label: 'Services' },
                 { href: '/#packages', label: 'Packages & Pricing' },
                 { href: '/#testimonials', label: 'Success Stories' },
@@ -110,27 +115,21 @@ export default function Footer() {
                 { href: '/#contact', label: 'Contact' },
               ].map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="hover:text-primary-400 transition-colors">
-                    {link.label}
-                  </Link>
+                  <Link href={link.href} className="hover:text-primary-400 transition-colors">{link.label}</Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Contact */}
           <div>
             <h4 className="text-white font-semibold mb-4">Contact</h4>
             <ul className="space-y-2.5 text-sm">
-              <li>📧 hello@gutshell.com</li>
-              <li>📱 +91 93916 75213</li>
-              <li>🕐 Mon–Sat, 9 AM – 7 PM</li>
-              <li>📍 Online Consultations (Pan India)</li>
+              <li>📧 {email}</li>
+              <li>📱 {phone}</li>
+              <li>🕐 {hours}</li>
+              <li>📍 {mode}</li>
               <li className="mt-4">
-                <Link
-                  href="/#packages"
-                  className="inline-block px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-colors"
-                >
+                <Link href="/#packages" className="inline-block px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-colors">
                   Book Consultation →
                 </Link>
               </li>
@@ -146,12 +145,7 @@ export default function Footer() {
             <Link href="/refund" className="hover:text-white transition-colors">Refund Policy</Link>
             <span className="flex items-center gap-1.5">
               Powered by{' '}
-              <a
-                href="https://mktechmonk.in"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary-400 hover:text-primary-300 font-semibold transition-colors"
-              >
+              <a href="https://mktechmonk.in" target="_blank" rel="noopener noreferrer" className="text-primary-400 hover:text-primary-300 font-semibold transition-colors">
                 MK Tech Monk
               </a>
             </span>

@@ -41,7 +41,12 @@ export const SITE_SETTINGS_QUERY = `
     instagramUrl,
     youtubeUrl,
     linkedinUrl,
-    facebookUrl
+    facebookUrl,
+    contactEmail,
+    contactPhone,
+    whatsappNumber,
+    consultationHours,
+    consultationMode
   }
 `;
 
