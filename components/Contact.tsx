@@ -52,7 +52,7 @@ export default function Contact({ settings }: ContactProps) {
     }
   };
 
-  const inputCls = 'w-full px-5 py-3.5 bg-transparent border-2 border-amber-300 rounded-full text-gray-800 placeholder-amber-700/60 focus:border-amber-500 focus:ring-0 outline-none text-sm font-medium';
+  const inputCls = 'w-full px-5 py-4 bg-white/70 border border-amber-400/50 rounded-2xl text-gray-800 placeholder-amber-800/40 focus:bg-white focus:border-amber-600 focus:shadow-md focus:shadow-amber-200/30 outline-none text-sm font-medium transition-all duration-200';
 
   return (
     <section id="contact" className="py-0">
