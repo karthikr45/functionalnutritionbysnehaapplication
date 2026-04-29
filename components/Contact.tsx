@@ -55,11 +55,11 @@ export default function Contact({ settings }: ContactProps) {
   const inputCls = 'w-full px-5 py-3.5 bg-transparent border-2 border-amber-300 rounded-full text-gray-800 placeholder-amber-700/60 focus:border-amber-500 focus:ring-0 outline-none text-sm font-medium';
 
   return (
-    <section id="contact" className="py-20 bg-white">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="contact" className="py-0">
+      <div className="max-w-full">
 
-        {/* Form Card */}
-        <div className="bg-amber-300 rounded-[2rem] p-8 sm:p-12">
+        {/* Form Card — full width */}
+        <div className="bg-amber-300 px-4 sm:px-8 md:px-16 lg:px-32 py-16 sm:py-20">
           {status === 'sent' ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-4xl mb-6 shadow-sm">✅</div>
@@ -83,7 +83,7 @@ export default function Contact({ settings }: ContactProps) {
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4 max-w-xl mx-auto">
+              <form onSubmit={handleSubmit} className="space-y-5 max-w-2xl mx-auto">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <input
                     type="text"
@@ -138,8 +138,8 @@ export default function Contact({ settings }: ContactProps) {
           )}
         </div>
 
-        {/* WhatsApp CTA */}
-        <div className="mt-8 bg-primary-600 rounded-[2rem] p-8 sm:p-10 text-white text-center">
+        {/* WhatsApp CTA — full width */}
+        <div className="bg-primary-600 px-4 sm:px-8 md:px-16 lg:px-32 py-12 sm:py-16 text-white text-center">
           <div className="flex flex-col items-center">
             <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-2xl mb-4">
               💬
