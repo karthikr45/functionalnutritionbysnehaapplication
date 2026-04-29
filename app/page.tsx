@@ -13,6 +13,7 @@ import FAQ from '@/components/FAQ';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
+import ScrollReveal from '@/components/ScrollReveal';
 import { client } from '@/sanity/lib/client';
 import { RECENT_POSTS_QUERY, SITE_SETTINGS_QUERY } from '@/sanity/lib/queries';
 import Link from 'next/link';
@@ -42,15 +43,34 @@ export default async function HomePage() {
       <Navbar />
       <main>
         <Hero settings={settings} />
-        <About settings={settings} />
-        <Services />
-        <HowItWorks />
-        <Packages />
-        <Testimonials />
-        <VideoCarousel />
+
+        <ScrollReveal animation="fade-up">
+          <About settings={settings} />
+        </ScrollReveal>
+
+        <ScrollReveal animation="fade-up" delay={100}>
+          <Services />
+        </ScrollReveal>
+
+        <ScrollReveal animation="fade-up">
+          <HowItWorks />
+        </ScrollReveal>
+
+        <ScrollReveal animation="scale-up">
+          <Packages />
+        </ScrollReveal>
+
+        <ScrollReveal animation="fade-in">
+          <Testimonials />
+        </ScrollReveal>
+
+        <ScrollReveal animation="fade-up">
+          <VideoCarousel />
+        </ScrollReveal>
 
         {/* Blog Preview */}
         {posts.length > 0 && (
+          <ScrollReveal animation="fade-up">
           <section className="py-20 bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between mb-10">
@@ -98,11 +118,15 @@ export default async function HomePage() {
               </div>
             </div>
           </section>
+          </ScrollReveal>
         )}
 
-        <FAQ />
+        <ScrollReveal animation="fade-up">
+          <FAQ />
+        </ScrollReveal>
 
         {/* Final CTA */}
+        <ScrollReveal animation="blur-in">
         <section className="py-20 bg-primary-600 text-white text-center">
           <div className="max-w-3xl mx-auto px-4">
             <h2 className="text-3xl sm:text-4xl font-bold font-serif mb-4">
@@ -130,8 +154,11 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+        </ScrollReveal>
 
-        <Contact settings={settings} />
+        <ScrollReveal animation="fade-up">
+          <Contact settings={settings} />
+        </ScrollReveal>
       </main>
       <Footer settings={settings} />
       <WhatsAppButton />

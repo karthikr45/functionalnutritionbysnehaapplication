@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import ScrollReveal from './ScrollReveal';
 import Link from 'next/link';
 
 interface Service {
@@ -169,8 +170,8 @@ export default function Services() {
             const slug = service.slug?.current || '';
 
             return (
+              <ScrollReveal key={service._id} animation="fade-up" delay={displayServices.indexOf(service) * 120}>
               <Link
-                key={service._id}
                 href={`/services/${slug}`}
                 className="group rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 hover:border-primary-200 transition-all duration-300"
               >
@@ -207,6 +208,7 @@ export default function Services() {
                   )}
                 </div>
               </Link>
+              </ScrollReveal>
             );
           })}
         </div>

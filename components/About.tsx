@@ -1,3 +1,5 @@
+import ScrollReveal from './ScrollReveal';
+
 interface AboutProps {
   settings?: {
     doctorImage?: string;
@@ -43,6 +45,7 @@ export default function About({ settings }: AboutProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Image side */}
+          <ScrollReveal animation="slide-right">
           <div className="relative">
             <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-3xl p-8">
               {image ? (
@@ -75,8 +78,10 @@ export default function About({ settings }: AboutProps) {
               </div>
             </div>
           </div>
+          </ScrollReveal>
 
           {/* Content side */}
+          <ScrollReveal animation="slide-left" delay={200}>
           <div className="space-y-6">
             <div>
               <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">About Me</p>
@@ -112,6 +117,7 @@ export default function About({ settings }: AboutProps) {
               ))}
             </div>
           </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
