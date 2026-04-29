@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { client } from '@/sanity/lib/client';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const settings = await client.fetch(`*[_type == "siteSettings"][0] {
@@ -8,7 +10,12 @@ export async function GET() {
       instagramUrl,
       youtubeUrl,
       linkedinUrl,
-      facebookUrl
+      facebookUrl,
+      contactEmail,
+      contactPhone,
+      whatsappNumber,
+      consultationHours,
+      consultationMode
     }`);
     return NextResponse.json({ settings });
   } catch (err: any) {

@@ -1,4 +1,7 @@
 import Navbar from '@/components/Navbar';
+
+export const revalidate = 60;
+
 import Hero from '@/components/Hero';
 import About from '@/components/About';
 import Services from '@/components/Services';

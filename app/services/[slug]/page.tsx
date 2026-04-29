@@ -1,6 +1,8 @@
 import { client } from '@/sanity/lib/client';
 import { SERVICE_BY_SLUG_QUERY, SITE_SETTINGS_QUERY } from '@/sanity/lib/queries';
 import { PortableText } from '@portabletext/react';
+
+export const revalidate = 60;
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
