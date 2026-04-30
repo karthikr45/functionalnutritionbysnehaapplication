@@ -97,7 +97,7 @@ export default async function AboutPage() {
 
       {/* Hero — image left, bio right */}
       <section className="relative bg-warm-footer text-white overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
             {/* Image */}
@@ -134,11 +134,11 @@ export default async function AboutPage() {
 
               <div className="space-y-5">
                 <p className="text-cream-dark/90 text-lg leading-relaxed font-medium">
-                  {highlightText(description[0] || '')}
+                  {description[0] || ''}
                 </p>
                 {description.slice(1).map((para: string, i: number) => (
                   <p key={i} className="text-cream-dark/75 text-base leading-relaxed">
-                    {highlightText(para)}
+                    {para}
                   </p>
                 ))}
               </div>
