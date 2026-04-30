@@ -1,8 +1,8 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
-import { SplitLetterReveal, ImageReveal, CountUp } from '@/components/AnimationEffects';
-import { GraduationIcon, MedalIcon, PillIcon, DnaIcon, RunnerIcon, LeafIcon, MicroscopeIcon, SproutIcon } from '@/components/Icons';
+import { ImageReveal, CountUp, MagneticButton } from '@/components/AnimationEffects';
+import { GraduationIcon, MedalIcon, PillIcon, DnaIcon, LeafIcon } from '@/components/Icons';
 import { client } from '@/sanity/lib/client';
 import { SITE_SETTINGS_QUERY } from '@/sanity/lib/queries';
 import Link from 'next/link';
@@ -34,15 +34,46 @@ const defaultStats = [
 ];
 
 const credentialIcons = [
-  <GraduationIcon key="g" className="w-6 h-6" />,
-  <MedalIcon key="m" className="w-6 h-6" />,
-  <PillIcon key="p" className="w-6 h-6" />,
-  <DnaIcon key="d" className="w-6 h-6" />,
-  <RunnerIcon key="r" className="w-6 h-6" />,
-  <LeafIcon key="l" className="w-6 h-6" />,
-  <MicroscopeIcon key="mi" className="w-6 h-6" />,
-  <SproutIcon key="s" className="w-6 h-6" />,
+  <GraduationIcon key="g" className="w-5 h-5" />,
+  <MedalIcon key="m" className="w-5 h-5" />,
+  <PillIcon key="p" className="w-5 h-5" />,
+  <DnaIcon key="d" className="w-5 h-5" />,
+  <LeafIcon key="l" className="w-5 h-5" />,
 ];
+
+const highlights = [
+  { word: 'bloating', color: 'text-primary-700' },
+  { word: 'fatigue', color: 'text-primary-700' },
+  { word: 'skin flare-ups', color: 'text-primary-700' },
+  { word: 'hormonal shifts', color: 'text-primary-700' },
+  { word: 'food-first', color: 'text-primary-700 font-semibold' },
+  { word: 'root-cause', color: 'text-primary-700 font-semibold' },
+  { word: 'gut health', color: 'text-primary-700 font-semibold' },
+  { word: 'calming inflammation', color: 'text-primary-700 font-semibold' },
+  { word: "Bachelor's and Master's", color: 'font-semibold text-gray-900' },
+  { word: 'clinical nutrition', color: 'font-semibold text-gray-900' },
+  { word: 'evidence-based wellness', color: 'font-semibold text-gray-900' },
+];
+
+function highlightText(text: string): JSX.Element {
+  let result: (string | JSX.Element)[] = [text];
+  highlights.forEach(({ word, color }) => {
+    result = result.flatMap((part) => {
+      if (typeof part !== 'string') return [part];
+      const idx = part.toLowerCase().indexOf(word.toLowerCase());
+      if (idx === -1) return [part];
+      const before = part.slice(0, idx);
+      const match = part.slice(idx, idx + word.length);
+      const after = part.slice(idx + word.length);
+      return [
+        before,
+        <span key={`${word}-${idx}`} className={color}>{match}</span>,
+        after,
+      ].filter(Boolean);
+    });
+  });
+  return <>{result}</>;
+}
 
 async function getSettings() {
   try { return await client.fetch(SITE_SETTINGS_QUERY); }
@@ -64,122 +95,145 @@ export default async function AboutPage() {
     <div className="min-h-screen bg-cream overflow-x-hidden">
       <Navbar />
 
-      {/* Hero banner */}
-      <section className="bg-warm-footer text-white py-20 sm:py-28">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-primary-300 font-semibold text-sm uppercase tracking-[0.2em] mb-4">About Me</p>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-serif leading-tight">
-            <SplitLetterReveal text={title} stagger={30} />
-          </h1>
-          <p className="text-cream-dark/70 mt-4 max-w-2xl mx-auto text-lg">
-            Functional Nutritionist &middot; Gut Health Practitioner
-          </p>
-        </div>
-      </section>
-
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-
-          {/* Image side */}
-          <ScrollReveal animation="fade-up">
-            <div className="sticky top-24">
-              {image ? (
-                <ImageReveal className="rounded-3xl aspect-[4/5] shadow-xl" color="bg-primary-400">
-                  <img src={image} alt={name} className="w-full h-full object-cover rounded-3xl" />
-                </ImageReveal>
-              ) : (
-                <div className="bg-cream-dark rounded-3xl aspect-[4/5] flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-32 h-32 bg-primary-100 rounded-full mx-auto mb-4 flex items-center justify-center text-6xl">🌿</div>
-                    <p className="text-warm-text text-sm">Upload photo in Sanity</p>
-                  </div>
-                </div>
-              )}
-
-              {/* Stats below image */}
-              <div className="grid grid-cols-2 gap-4 mt-6">
-                {stats.map((stat: { number: string; label: string }) => (
-                  <div key={stat.label} className="bg-cream-dark rounded-2xl p-5 text-center">
-                    <p className="text-3xl font-bold text-primary-700 font-serif">
-                      {/^\d+/.test(stat.number) ? (
-                        <CountUp end={parseInt(stat.number)} suffix={stat.number.replace(/^\d+/, '')} />
-                      ) : stat.number}
-                    </p>
-                    <p className="text-warm-text text-sm mt-1">{stat.label}</p>
-                  </div>
+      {/* Hero — full width image with overlay */}
+      <section className="relative bg-warm-footer text-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-32">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="text-primary-300 font-semibold text-sm uppercase tracking-[0.25em] mb-6">About Me</p>
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-medium font-serif leading-[1.1] mb-6">
+                {title}
+              </h1>
+              <div className="w-16 h-[2px] bg-gradient-to-r from-primary-400 to-primary-300 mb-6" />
+              <p className="text-cream-dark/80 text-lg leading-relaxed max-w-lg">
+                Functional Nutritionist &middot; Gut Health Practitioner
+              </p>
+              <div className="flex flex-wrap gap-3 mt-8">
+                {specializations.split('|').map((s: string) => (
+                  <span key={s.trim()} className="px-4 py-1.5 border border-primary-400/30 text-primary-200 text-xs rounded-full uppercase tracking-wider">
+                    {s.trim()}
+                  </span>
                 ))}
               </div>
             </div>
-          </ScrollReveal>
 
-          {/* Content side */}
-          <div className="space-y-10">
-            <ScrollReveal animation="fade-up">
-              <div className="space-y-6">
-                {description.map((para: string, i: number) => (
-                  <p key={i} className={`text-warm-text leading-relaxed ${i === 0 ? 'text-lg font-medium text-gray-800' : 'text-base'}`}>
-                    {para}
-                  </p>
-                ))}
+            {/* Image in hero */}
+            {image && (
+              <div className="hidden lg:block">
+                <ScrollReveal animation="fade-up">
+                  <div className="relative">
+                    <div className="absolute -inset-4 bg-gradient-to-br from-primary-600/20 to-transparent rounded-[2rem] blur-2xl" />
+                    <img src={image} alt={name} className="relative w-full aspect-[3/4] object-cover rounded-[2rem] shadow-2xl" />
+                  </div>
+                </ScrollReveal>
               </div>
-            </ScrollReveal>
-
-            {/* Specializations */}
-            <ScrollReveal animation="fade-up" delay={100}>
-              <div>
-                <h3 className="text-sm font-semibold text-primary-600 uppercase tracking-[0.15em] mb-4">Specializations</h3>
-                <div className="flex flex-wrap gap-2">
-                  {specializations.split('|').map((s: string) => (
-                    <span key={s.trim()} className="px-4 py-2 bg-cream-dark text-warm-text text-sm rounded-full border border-primary-200/30">
-                      {s.trim()}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </ScrollReveal>
-
-            {/* Credentials */}
-            <ScrollReveal animation="fade-up" delay={200}>
-              <div>
-                <h3 className="text-sm font-semibold text-primary-600 uppercase tracking-[0.15em] mb-5">Qualifications & Expertise</h3>
-                <div className="space-y-4">
-                  {credentials.map((label: string, i: number) => (
-                    <div key={label} className="flex items-center gap-4 p-3 rounded-xl hover:bg-cream-dark transition-colors">
-                      <div className="w-12 h-12 border-2 border-primary-200 rounded-full flex items-center justify-center text-primary-600 flex-shrink-0">
-                        {credentialIcons[i] || <LeafIcon className="w-6 h-6" />}
-                      </div>
-                      <span className="text-gray-800 font-medium">{label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </ScrollReveal>
-
-            {/* CTA */}
-            <ScrollReveal animation="fade-up" delay={300}>
-              <div className="bg-warm-footer rounded-2xl p-8 text-white">
-                <h3 className="text-2xl font-bold font-serif mb-3">Ready to start your healing journey?</h3>
-                <p className="text-cream-dark/70 text-sm mb-6">
-                  Book a consultation and let&apos;s create a personalized nutrition plan designed specifically for your needs.
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  <Link
-                    href="/#packages"
-                    className="px-6 py-3 bg-cream text-warm-footer font-bold rounded-xl hover:bg-white transition-colors text-sm"
-                  >
-                    View Packages & Book
-                  </Link>
-                  <Link
-                    href="/#contact"
-                    className="px-6 py-3 border border-cream-dark/30 text-white font-medium rounded-xl hover:bg-white/10 transition-colors text-sm"
-                  >
-                    Get in Touch
-                  </Link>
-                </div>
-              </div>
-            </ScrollReveal>
+            )}
           </div>
         </div>
+      </section>
+
+      {/* Quote strip */}
+      <section className="bg-cream-dark py-10 sm:py-14 border-b border-primary-100/30">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <ScrollReveal animation="fade-up">
+            <blockquote className="text-2xl sm:text-3xl font-serif font-medium text-gray-800 italic leading-relaxed">
+              &ldquo;Your body speaks. My work is helping you listen.&rdquo;
+            </blockquote>
+            <p className="mt-4 text-primary-600 font-signature text-2xl">— {name}</p>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* Story section */}
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+
+        {/* Mobile image */}
+        {image && (
+          <div className="lg:hidden mb-12">
+            <ScrollReveal animation="fade-up">
+              <ImageReveal className="rounded-3xl aspect-[4/5] shadow-xl" color="bg-primary-400">
+                <img src={image} alt={name} className="w-full h-full object-cover rounded-3xl" />
+              </ImageReveal>
+            </ScrollReveal>
+          </div>
+        )}
+
+        {/* Story paragraphs with highlights */}
+        <div className="max-w-3xl mx-auto space-y-8">
+          {description.map((para: string, i: number) => (
+            <ScrollReveal key={i} animation="fade-up" delay={i * 100}>
+              <p className={`leading-[1.9] ${i === 0 ? 'text-xl sm:text-2xl font-serif font-medium text-gray-900' : 'text-base sm:text-lg text-warm-text'}`}>
+                {highlightText(para)}
+              </p>
+            </ScrollReveal>
+          ))}
+        </div>
+
+        {/* Stats row */}
+        <ScrollReveal animation="fade-up">
+          <div className="flex flex-wrap justify-center gap-8 mt-16 mb-16">
+            {stats.map((stat: { number: string; label: string }) => (
+              <div key={stat.label} className="text-center px-8">
+                <p className="text-5xl sm:text-6xl font-serif font-medium text-primary-700">
+                  {/^\d+/.test(stat.number) ? (
+                    <CountUp end={parseInt(stat.number)} suffix={stat.number.replace(/^\d+/, '')} duration={2500} />
+                  ) : stat.number}
+                </p>
+                <p className="text-warm-text text-sm mt-2 uppercase tracking-wider">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </ScrollReveal>
+
+        {/* Credentials */}
+        <ScrollReveal animation="fade-up">
+          <div className="max-w-3xl mx-auto">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="h-px flex-1 bg-primary-200/50" />
+              <h3 className="text-sm font-semibold text-primary-600 uppercase tracking-[0.2em]">Qualifications</h3>
+              <div className="h-px flex-1 bg-primary-200/50" />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {credentials.map((label: string, i: number) => (
+                <div key={label} className="flex items-center gap-4 bg-cream-dark rounded-2xl p-4 hover:shadow-md transition-all duration-300 group">
+                  <div className="w-11 h-11 bg-gradient-to-br from-primary-700 to-primary-600 rounded-xl flex items-center justify-center text-white flex-shrink-0 group-hover:scale-110 transition-transform">
+                    {credentialIcons[i] || <LeafIcon className="w-5 h-5" />}
+                  </div>
+                  <span className="text-gray-800 font-medium text-sm">{label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </ScrollReveal>
+
+        {/* CTA */}
+        <ScrollReveal animation="fade-up">
+          <div className="max-w-3xl mx-auto mt-16 bg-warm-footer rounded-3xl p-10 sm:p-12 text-white text-center">
+            <h3 className="text-3xl sm:text-4xl font-medium font-serif mb-4">Ready to start your healing journey?</h3>
+            <p className="text-cream-dark/70 max-w-lg mx-auto mb-8">
+              Book a consultation and let&apos;s create a personalized nutrition plan designed specifically for your needs.
+            </p>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <MagneticButton>
+                <Link
+                  href="/#services"
+                  className="px-8 py-4 bg-cream text-warm-footer font-bold rounded-xl hover:bg-white transition-colors text-sm shadow-lg"
+                >
+                  View Services & Book
+                </Link>
+              </MagneticButton>
+              <MagneticButton>
+                <Link
+                  href="/#contact"
+                  className="px-8 py-4 border border-cream-dark/30 text-white font-medium rounded-xl hover:bg-white/10 transition-colors text-sm"
+                >
+                  Get in Touch
+                </Link>
+              </MagneticButton>
+            </div>
+          </div>
+        </ScrollReveal>
       </main>
 
       <Footer settings={settings} />
