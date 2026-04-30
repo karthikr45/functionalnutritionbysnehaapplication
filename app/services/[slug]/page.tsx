@@ -372,8 +372,9 @@ export default async function ServicePage({ params }: { params: { slug: string }
           )}
 
           {/* Guidelines */}
-          {service.guidelines && (
+          {service.guidelines && (service.guidelines.suitable || service.guidelines.notIncluded) && (
             <div className="max-w-3xl mx-auto mb-16 grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {service.guidelines.suitable?.length > 0 && (
               <div className="bg-cream-dark rounded-3xl p-8 border border-primary-100/30">
                 <h3 className="font-semibold text-gray-900 mb-4">✅ Suitable For</h3>
                 <ul className="space-y-2">
@@ -384,6 +385,8 @@ export default async function ServicePage({ params }: { params: { slug: string }
                   ))}
                 </ul>
               </div>
+              )}
+              {service.guidelines.notIncluded?.length > 0 && (
               <div className="bg-cream-dark rounded-3xl p-8 border border-red-100/30">
                 <h3 className="font-semibold text-gray-900 mb-4">❌ Not Included</h3>
                 <ul className="space-y-2">
@@ -394,6 +397,7 @@ export default async function ServicePage({ params }: { params: { slug: string }
                   ))}
                 </ul>
               </div>
+              )}
             </div>
           )}
 
