@@ -95,19 +95,54 @@ export default async function AboutPage() {
     <div className="min-h-screen bg-cream overflow-x-hidden">
       <Navbar />
 
-      {/* Hero — full width image with overlay */}
+      {/* Hero — image left, bio right */}
       <section className="relative bg-warm-footer text-white overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-32">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+
+            {/* Image */}
             <div>
-              <p className="text-primary-300 font-semibold text-sm uppercase tracking-[0.25em] mb-6">About Me</p>
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-medium font-serif leading-[1.1] mb-6">
-                {title}
-              </h1>
+              {/* Mobile header — above image */}
+              <div className="lg:hidden mb-6">
+                <p className="text-primary-300 font-semibold text-sm uppercase tracking-[0.25em] mb-3">About Me</p>
+                <h1 className="text-4xl font-medium font-serif leading-[1.1]">{title}</h1>
+              </div>
+
+              {image ? (
+                <ScrollReveal animation="fade-up">
+                  <div className="relative">
+                    <div className="absolute -inset-4 bg-gradient-to-br from-primary-600/20 to-transparent rounded-[2rem] blur-2xl" />
+                    <img src={image} alt={name} className="relative w-full aspect-[3/4] object-cover rounded-[2rem] shadow-2xl" />
+                  </div>
+                </ScrollReveal>
+              ) : (
+                <div className="bg-primary-900/30 rounded-[2rem] aspect-[3/4] flex items-center justify-center">
+                  <p className="text-cream-dark/50 text-sm">Upload photo in Sanity</p>
+                </div>
+              )}
+            </div>
+
+            {/* Bio text */}
+            <div>
+              {/* Desktop header */}
+              <div className="hidden lg:block mb-6">
+                <p className="text-primary-300 font-semibold text-sm uppercase tracking-[0.25em] mb-3">About Me</p>
+                <h1 className="text-5xl lg:text-6xl font-medium font-serif leading-[1.1]">{title}</h1>
+              </div>
+
               <div className="w-16 h-[2px] bg-gradient-to-r from-primary-400 to-primary-300 mb-6" />
-              <p className="text-cream-dark/80 text-lg leading-relaxed max-w-lg">
-                Functional Nutritionist &middot; Gut Health Practitioner
-              </p>
+
+              <div className="space-y-5">
+                <p className="text-cream-dark/90 text-lg leading-relaxed font-medium">
+                  {highlightText(description[0] || '')}
+                </p>
+                {description.slice(1).map((para: string, i: number) => (
+                  <p key={i} className="text-cream-dark/75 text-base leading-relaxed">
+                    {highlightText(para)}
+                  </p>
+                ))}
+              </div>
+
               <div className="flex flex-wrap gap-3 mt-8">
                 {specializations.split('|').map((s: string) => (
                   <span key={s.trim()} className="px-4 py-1.5 border border-primary-400/30 text-primary-200 text-xs rounded-full uppercase tracking-wider">
@@ -116,18 +151,6 @@ export default async function AboutPage() {
                 ))}
               </div>
             </div>
-
-            {/* Image in hero */}
-            {image && (
-              <div className="hidden lg:block">
-                <ScrollReveal animation="fade-up">
-                  <div className="relative">
-                    <div className="absolute -inset-4 bg-gradient-to-br from-primary-600/20 to-transparent rounded-[2rem] blur-2xl" />
-                    <img src={image} alt={name} className="relative w-full aspect-[3/4] object-cover rounded-[2rem] shadow-2xl" />
-                  </div>
-                </ScrollReveal>
-              </div>
-            )}
           </div>
         </div>
       </section>
@@ -144,30 +167,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* Story section */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-
-        {/* Mobile image */}
-        {image && (
-          <div className="lg:hidden mb-12">
-            <ScrollReveal animation="fade-up">
-              <ImageReveal className="rounded-3xl aspect-[4/5] shadow-xl" color="bg-primary-400">
-                <img src={image} alt={name} className="w-full h-full object-cover rounded-3xl" />
-              </ImageReveal>
-            </ScrollReveal>
-          </div>
-        )}
-
-        {/* Story paragraphs with highlights */}
-        <div className="max-w-3xl mx-auto space-y-8">
-          {description.map((para: string, i: number) => (
-            <ScrollReveal key={i} animation="fade-up" delay={i * 100}>
-              <p className={`leading-[1.9] ${i === 0 ? 'text-xl sm:text-2xl font-serif font-medium text-gray-900' : 'text-base sm:text-lg text-warm-text'}`}>
-                {highlightText(para)}
-              </p>
-            </ScrollReveal>
-          ))}
-        </div>
 
         {/* Stats row */}
         <ScrollReveal animation="fade-up">
