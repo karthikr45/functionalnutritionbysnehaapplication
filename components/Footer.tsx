@@ -66,7 +66,7 @@ export default function Footer({ settings: propSettings }: FooterProps) {
     linkedinUrl: s.linkedinUrl || '',
     facebookUrl: s.facebookUrl || '',
   };
-  const email = s.contactEmail || 'hello@gutshell.com';
+  const email = s.contactEmail || 'gutshell.com@gmail.com';
   const phone = s.contactPhone || '+91 93916 75213';
   const hours = s.consultationHours || 'Mon–Sat, 9 AM – 7 PM';
   const mode = s.consultationMode || 'Online (Pan India & International)';

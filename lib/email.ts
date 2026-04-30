@@ -33,7 +33,7 @@ interface SendEmailOptions {
 }
 
 export async function sendEmail({ to, subject, html, text }: SendEmailOptions) {
-  const from = process.env.SMTP_FROM || process.env.SMTP_USER || 'noreply@gutshell.com';
+  const from = process.env.SMTP_FROM || process.env.SMTP_USER || 'gutshell.com@gmail.com';
   const fromName = process.env.SMTP_FROM_NAME || 'Gut Shell';
 
   const t = getTransporter();

@@ -94,7 +94,7 @@ export default defineType({
     defineField({ name: 'facebookUrl', title: 'Facebook URL', type: 'url' }),
 
     // Contact Details
-    defineField({ name: 'contactEmail', title: 'Contact Email', type: 'string', initialValue: 'hello@gutshell.com' }),
+    defineField({ name: 'contactEmail', title: 'Contact Email', type: 'string', initialValue: 'gutshell.com@gmail.com' }),
     defineField({ name: 'contactPhone', title: 'Phone / WhatsApp Number', type: 'string', initialValue: '+91 93916 75213' }),
     defineField({ name: 'whatsappNumber', title: 'WhatsApp Number (digits only, with country code)', type: 'string', initialValue: '919391675213', description: 'Used for wa.me links. Example: 919391675213' }),
     defineField({ name: 'consultationHours', title: 'Consultation Hours', type: 'string', initialValue: 'Mon–Sat, 9 AM – 7 PM' }),

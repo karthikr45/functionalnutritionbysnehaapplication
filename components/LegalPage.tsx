@@ -14,8 +14,8 @@ const FALLBACKS: Record<string, { title: string; subtitle: string; content: stri
       'How We Use Information: To provide consultation services, process payments, send appointment reminders, personalize your experience, and comply with legal obligations.',
       'Data Security: We use industry-standard encryption (SSL/TLS), secure payment processors (Razorpay), and hashed passwords. Your medical information is protected under applicable health privacy laws.',
       'Data Sharing: We never sell your data. We share data only with payment processors for transactions, cloud storage providers (Cloudinary) for documents, and as required by law.',
-      'Your Rights: You can access, update, or delete your data anytime from your dashboard. Contact us at hello@gutshell.com for data deletion requests.',
-      'Contact: For privacy questions, email hello@gutshell.com',
+      'Your Rights: You can access, update, or delete your data anytime from your dashboard. Contact us at gutshell.com@gmail.com for data deletion requests.',
+      'Contact: For privacy questions, email gutshell.com@gmail.com',
       'This policy is subject to Indian data protection laws including the Information Technology Act, 2000 and its rules.',
     ],
   },
@@ -31,7 +31,7 @@ const FALLBACKS: Record<string, { title: string; subtitle: string; content: stri
       'Intellectual Property: All content (diet plans, recipes, articles) is the intellectual property of Gut Shell. Redistribution without permission is prohibited.',
       'Liability: We are not liable for any adverse health outcomes. Nutrition plans are suggestions based on the information you provide. Individual results vary.',
       'Governing Law: These terms are governed by Indian law. Disputes will be resolved in the courts of India.',
-      'Contact: For questions, email hello@gutshell.com',
+      'Contact: For questions, email gutshell.com@gmail.com',
     ],
   },
   refund: {
@@ -43,10 +43,10 @@ const FALLBACKS: Record<string, { title: string; subtitle: string; content: stri
       'Package Refunds: Unused package sessions are refundable within 7 days of purchase, minus a 10% processing fee. After 7 days, packages become non-refundable.',
       'Product Orders: Products can be returned within 7 days of delivery if unopened and in original condition. Refunds are processed within 5-10 business days after we receive the returned product.',
       'Cancellation Fees: If you cancel an appointment less than 24 hours in advance, you may forfeit that session. Cancellations 24+ hours in advance are free of charge.',
-      'How to Request a Refund: Email hello@gutshell.com with your order/appointment number and reason. We will respond within 2 business days.',
+      'How to Request a Refund: Email gutshell.com@gmail.com with your order/appointment number and reason. We will respond within 2 business days.',
       'Refund Processing: Approved refunds are processed to the original payment method within 5-10 business days. Refund timelines depend on your bank.',
       'Non-Refundable Items: Personalized diet plans once delivered, digital content downloads, and opened/used supplements are non-refundable.',
-      'Contact: For refund requests, email hello@gutshell.com',
+      'Contact: For refund requests, email gutshell.com@gmail.com',
     ],
   },
 };
@@ -107,8 +107,8 @@ export default async function LegalPageContent({ pageType }: Props) {
         <div className="mt-12 p-6 bg-primary-50 rounded-2xl border border-primary-100">
           <p className="text-sm text-primary-800">
             Have questions about this policy? Email us at{' '}
-            <a href="mailto:hello@gutshell.com" className="font-semibold underline">
-              hello@gutshell.com
+            <a href="mailto:gutshell.com@gmail.com" className="font-semibold underline">
+              gutshell.com@gmail.com
             </a>
           </p>
         </div>
