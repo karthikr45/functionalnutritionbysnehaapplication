@@ -15,17 +15,18 @@ export const metadata = {
 };
 
 const defaultDescription = [
-  "I'm Sneha, a certified Gut Shell Consultant passionate about helping people heal from the root cause — not just manage symptoms. With over 8 years of experience, I combine the principles of functional medicine with personalized nutrition to create lasting health transformations.",
-  'I specialize in hormonal imbalances (PCOS, thyroid), gut health issues (IBS, bloating, acid reflux), diabetes management, weight loss, and autoimmune conditions. My approach goes beyond calorie counting — I look at your complete health picture including lab work, lifestyle, stress, sleep, and gut health.',
-  'My philosophy is simple: food is medicine. When you give your body the right nutrition, it has an incredible ability to heal itself. Every plan I create is rooted in science, customized to Indian food habits, and designed for real life — not just theory.',
+  "I'm a Functional Nutritionist and Gut Health Practitioner, and the voice behind this practice.",
+  "I've always been drawn to understanding how the body works — not just how it looks, but how it feels, responds, and communicates. Over time, that curiosity grew into a deeper focus on the signals we often ignore: bloating, fatigue, skin flare-ups, hormonal shifts, and the everyday symptoms that are easy to dismiss but rarely random.",
+  "My work is rooted in helping you understand what your body has been trying to say all along. Through a food-first, root-cause approach, I focus on restoring gut health, calming inflammation, and supporting the body's natural ability to heal and regulate itself.",
+  "I hold both a Bachelor's and Master's degree in Nutrition and Dietetics, and my practice is built on a strong foundation in clinical nutrition, therapeutic healing, and evidence-based wellness.",
 ];
 
 const defaultCredentials = [
-  'Certified Gut Shell Consultant',
-  'Advanced Clinical Nutrition & Dietetics',
-  'Certified in Functional Medicine Approach',
-  'Gut Microbiome & Hormonal Health Specialist',
-  'Sports & Performance Nutrition Certified',
+  "Bachelor's in Nutrition & Dietetics",
+  "Master's in Nutrition & Dietetics",
+  'Functional Nutrition Practitioner',
+  'Gut Health Specialist',
+  'Clinical Nutrition & Therapeutic Healing',
 ];
 
 const defaultStats = [
@@ -57,7 +58,7 @@ export default async function AboutPage() {
   const credentials = settings?.aboutCredentials?.length ? settings.aboutCredentials : defaultCredentials;
   const stats = settings?.aboutStats?.length ? settings.aboutStats : defaultStats;
   const image = settings?.aboutImage || settings?.doctorImage;
-  const specializations = settings?.aboutSpecializations || 'PCOS | Thyroid | Gut Health | Weight Management | Diabetes';
+  const specializations = settings?.aboutSpecializations || 'Gut Health | Hormonal Balance | Inflammation | Therapeutic Nutrition';
 
   return (
     <div className="min-h-screen bg-cream overflow-x-hidden">
@@ -71,7 +72,7 @@ export default async function AboutPage() {
             <SplitLetterReveal text={title} stagger={30} />
           </h1>
           <p className="text-cream-dark/70 mt-4 max-w-2xl mx-auto text-lg">
-            Functional Nutritionist &middot; {specializations.split('|').slice(0, 3).join(' · ')}
+            Functional Nutritionist &middot; Gut Health Practitioner
           </p>
         </div>
       </section>
@@ -115,23 +116,11 @@ export default async function AboutPage() {
           <div className="space-y-10">
             <ScrollReveal animation="fade-up">
               <div className="space-y-6">
-                {description.map((para: string, i: number) => {
-                  if (para.includes('food is medicine')) {
-                    const parts = para.split('food is medicine');
-                    return (
-                      <p key={i} className="text-warm-text leading-relaxed text-base">
-                        {parts[0]}
-                        <strong className="text-primary-700">food is medicine.</strong>
-                        {parts[1]?.replace(/^\./, '')}
-                      </p>
-                    );
-                  }
-                  return (
-                    <p key={i} className={`text-warm-text leading-relaxed ${i === 0 ? 'text-lg' : 'text-base'}`}>
-                      {para}
-                    </p>
-                  );
-                })}
+                {description.map((para: string, i: number) => (
+                  <p key={i} className={`text-warm-text leading-relaxed ${i === 0 ? 'text-lg font-medium text-gray-800' : 'text-base'}`}>
+                    {para}
+                  </p>
+                ))}
               </div>
             </ScrollReveal>
 
