@@ -91,7 +91,7 @@ export default function VideoCarousel() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <p className="text-amber-400 font-semibold text-sm uppercase tracking-wide">Watch & Learn</p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white font-serif mt-2">
+          <h2 className="text-3xl sm:text-4xl font-medium text-white font-serif mt-2">
             Wellness Video Stories
           </h2>
           <p className="text-gray-400 mt-4 max-w-2xl mx-auto text-lg">
@@ -162,7 +162,7 @@ export default function VideoCarousel() {
 
                         {/* Content overlay */}
                         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-                          <h3 className="text-2xl md:text-3xl font-bold text-white font-serif leading-tight mb-2">
+                          <h3 className="text-xl md:text-2xl font-medium text-white font-serif leading-tight mb-2">
                             {video.title}
                           </h3>
                           {video.description && (
