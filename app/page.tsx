@@ -3,7 +3,7 @@ import Navbar from '@/components/Navbar';
 export const revalidate = 60;
 
 import Hero from '@/components/Hero';
-import About from '@/components/About';
+
 import Services from '@/components/Services';
 import HowItWorks from '@/components/HowItWorks';
 import Packages from '@/components/Packages';
@@ -45,10 +45,6 @@ export default async function HomePage() {
       <Navbar />
       <main>
         <Hero settings={settings} />
-        <ScrollReveal animation="fade-up">
-          <About settings={settings} />
-        </ScrollReveal>
-
         <ScrollReveal animation="fade-up" delay={100}>
           <Services />
         </ScrollReveal>

@@ -70,6 +70,7 @@ export default withAuth(
           '/forgot-password',
           '/reset-password',
           '/about-doctor',
+          '/about',
           '/api/contact',
         ];
         const isPublic = publicPaths.some((p) => pathname === p || pathname.startsWith(p + '/') || pathname.startsWith(p));
