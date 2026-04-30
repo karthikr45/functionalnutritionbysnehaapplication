@@ -102,7 +102,7 @@ export default function Hero({ settings }: HeroProps) {
       </section>
 
       {/* Content section below the banner */}
-      <section className="relative bg-gradient-to-br from-primary-50 via-white to-primary-50 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-cream-dark via-cream to-cream-dark overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary-100 rounded-full -translate-y-1/2 translate-x-1/4 opacity-60" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">

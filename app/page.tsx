@@ -41,12 +41,12 @@ export default async function HomePage() {
   const [posts, settings] = await Promise.all([getRecentPosts(), getSiteSettings()]);
 
   return (
-    <div className="min-h-screen overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden bg-cream">
       <ScrollProgressBar />
       <Navbar />
       <main>
         <Hero settings={settings} />
-        <WaveDivider color="#ffffff" bgColor="var(--primary-50)" variant="curve" />
+        <WaveDivider color="#FDFBF7" bgColor="#F5F0E8" variant="curve" />
 
         <ScrollReveal animation="fade-up">
           <About settings={settings} />
@@ -68,7 +68,7 @@ export default async function HomePage() {
           <Testimonials />
         </ScrollReveal>
 
-        <WaveDivider color="#111827" bgColor="#ffffff" variant="wave" />
+        <WaveDivider color="#111827" bgColor="#F0EBE0" variant="wave" />
         <ScrollReveal animation="fade-up">
           <VideoCarousel />
         </ScrollReveal>
@@ -76,7 +76,7 @@ export default async function HomePage() {
         {/* Blog Preview */}
         {posts.length > 0 && (
           <ScrollReveal animation="fade-up">
-          <section className="py-20 bg-gray-50">
+          <section className="py-20 bg-cream-dark">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between mb-10">
                 <div>
@@ -131,7 +131,7 @@ export default async function HomePage() {
         </ScrollReveal>
 
         {/* Final CTA */}
-        <WaveDivider color="var(--primary-600)" bgColor="#f9fafb" variant="tilt" />
+        <WaveDivider color="var(--primary-600)" bgColor="#F5F0E8" variant="tilt" />
         <ScrollReveal animation="blur-in">
         <section className="py-20 bg-primary-600 text-white text-center">
           <div className="max-w-3xl mx-auto px-4">

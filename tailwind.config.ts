@@ -26,6 +26,16 @@ const config: Config = {
           500: '#f59e0b',
           600: '#d97706',
         },
+        cream: {
+          DEFAULT: '#FDFBF7',
+          dark: '#F5F0E8',
+          section: '#F0EBE0',
+        },
+        warm: {
+          text: '#4A4A3F',
+          footer: '#2D3319',
+          'footer-text': '#A4A88C',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],

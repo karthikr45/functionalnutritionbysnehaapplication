@@ -153,7 +153,7 @@ export default function Services() {
   const displayServices = services.length > 0 ? services : fallbackServices;
 
   return (
-    <section id="services" className="py-20 bg-gray-50">
+    <section id="services" className="py-20 bg-cream-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">Our Programs</p>

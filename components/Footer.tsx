@@ -72,7 +72,7 @@ export default function Footer({ settings: propSettings }: FooterProps) {
   const mode = s.consultationMode || 'Online (Pan India & International)';
 
   return (
-    <footer className="bg-gray-900 text-gray-400">
+    <footer className="bg-warm-footer text-warm-footer-text">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2 space-y-4">
@@ -166,7 +166,7 @@ export default function Footer({ settings: propSettings }: FooterProps) {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+        <div className="border-t border-primary-900/30 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
           <p>&copy; {new Date().getFullYear()} Gut Shell. All rights reserved.</p>
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>

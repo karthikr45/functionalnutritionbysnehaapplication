@@ -47,7 +47,7 @@ export default function Packages() {
   };
 
   return (
-    <section id="packages" className="py-20 bg-gradient-to-br from-primary-50 to-white">
+    <section id="packages" className="py-20 bg-gradient-to-br from-cream-dark to-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">Pricing</p>
