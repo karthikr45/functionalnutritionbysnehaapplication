@@ -64,7 +64,7 @@ export default function Hero({ settings }: HeroProps) {
           <img
             src={desktopImage}
             alt={name}
-            className="hidden lg:block absolute inset-0 w-full h-full object-cover object-center z-[1]"
+            className="hidden lg:block absolute inset-0 w-full h-full object-cover object-top z-[1]"
           />
         )}
 
