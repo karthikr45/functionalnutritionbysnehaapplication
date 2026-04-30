@@ -42,55 +42,62 @@ export default function Hero({ settings }: HeroProps) {
   return (
     <>
       {/* Hero Banner — Full-width doctor image */}
-      <section className="relative w-full h-[60vh] sm:h-[70vh] lg:h-[85vh] overflow-hidden bg-gray-100">
-        {/* Doctor Image */}
+      <section className="relative w-full h-screen overflow-hidden bg-gray-900">
+        {/* Doctor Image — cover full screen */}
         {doctorImage ? (
           <img
             src={doctorImage}
             alt={name}
-            className="absolute inset-0 w-full h-full object-cover object-top"
+            className="absolute inset-0 w-full h-full object-cover"
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-primary-100 flex items-center justify-center">
             <div className="text-center">
               <div className="w-40 h-40 bg-primary-100 rounded-full mx-auto mb-6 flex items-center justify-center text-7xl">🌿</div>
-              <p className="text-gray-400 text-sm">Upload doctor image in Sanity → Site Settings → Doctor Profile Image</p>
+              <p className="text-gray-400 text-sm">Upload doctor image in Sanity → Site Settings</p>
             </div>
           </div>
         )}
 
-        {/* Gradient overlay at bottom for text readability */}
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+        {/* Gradient overlay at bottom */}
+        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
-        {/* Bottom-left: Signature name — slides from left */}
-        <div
-          className="absolute bottom-8 sm:bottom-12 left-6 sm:left-12 lg:left-16 z-10 transition-all duration-1000 ease-out"
-          style={{
-            transform: mounted ? 'translateX(0)' : 'translateX(-100%)',
-            opacity: mounted ? 1 : 0,
-            transitionDelay: '300ms',
-          }}
-        >
-          <p className="font-signature text-white text-5xl sm:text-6xl lg:text-8xl drop-shadow-lg">
-            {name}
-          </p>
-        </div>
+        {/* Bottom overlays — stacked on mobile, side-by-side on desktop */}
+        <div className="absolute inset-x-0 bottom-0 z-10 p-6 sm:p-10 lg:p-16">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 sm:gap-4">
+            {/* Left: Signature name — slides from bottom */}
+            <div
+              className="transition-all duration-1000 ease-out"
+              style={{
+                transform: mounted ? 'translateY(0)' : 'translateY(80px)',
+                opacity: mounted ? 1 : 0,
+                transitionDelay: '300ms',
+                transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
+              }}
+            >
+              <p className="font-signature text-white text-4xl sm:text-5xl lg:text-7xl xl:text-8xl drop-shadow-2xl leading-tight">
+                {name}
+              </p>
+            </div>
 
-        {/* Bottom-right: Title + specializations — slides from right */}
-        <div
-          className="absolute bottom-8 sm:bottom-12 right-6 sm:right-12 lg:right-16 z-10 text-right transition-all duration-1000 ease-out"
-          style={{
-            transform: mounted ? 'translateX(0)' : 'translateX(100%)',
-            opacity: mounted ? 1 : 0,
-            transitionDelay: '600ms',
-          }}
-        >
-          <p className="text-white text-lg sm:text-xl lg:text-2xl font-serif font-semibold tracking-wide">
-            Functional Nutritionist
-          </p>
-          <p className="text-white/80 text-xs sm:text-sm mt-1 tracking-widest uppercase">
-            {specializations}
-          </p>
+            {/* Right: Title + specializations — slides from bottom with delay */}
+            <div
+              className="transition-all duration-1000 ease-out sm:text-right"
+              style={{
+                transform: mounted ? 'translateY(0)' : 'translateY(80px)',
+                opacity: mounted ? 1 : 0,
+                transitionDelay: '700ms',
+                transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
+              }}
+            >
+              <p className="text-white text-base sm:text-lg lg:text-2xl font-serif font-semibold tracking-wide">
+                Functional Nutritionist
+              </p>
+              <p className="text-white/70 text-[10px] sm:text-xs mt-1 tracking-[0.2em] uppercase">
+                {specializations}
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
