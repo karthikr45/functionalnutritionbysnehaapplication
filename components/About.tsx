@@ -1,5 +1,6 @@
 import ScrollReveal from './ScrollReveal';
 import { ImageReveal, SplitLetterReveal } from './AnimationEffects';
+import { GraduationIcon, MedalIcon, PillIcon, DnaIcon, RunnerIcon, LeafIcon, MicroscopeIcon, SproutIcon } from './Icons';
 
 interface AboutProps {
   settings?: {
@@ -31,7 +32,16 @@ const defaultStats = [
   { number: '8+', label: 'Years Experience' },
 ];
 
-const credentialIcons = ['🎓', '🏅', '💊', '🧬', '🏃', '📋', '🔬', '🌿'];
+const credentialIcons = [
+  <GraduationIcon key="g" className="w-5 h-5" />,
+  <MedalIcon key="m" className="w-5 h-5" />,
+  <PillIcon key="p" className="w-5 h-5" />,
+  <DnaIcon key="d" className="w-5 h-5" />,
+  <RunnerIcon key="r" className="w-5 h-5" />,
+  <LeafIcon key="l" className="w-5 h-5" />,
+  <MicroscopeIcon key="mi" className="w-5 h-5" />,
+  <SproutIcon key="s" className="w-5 h-5" />,
+];
 
 export default function About({ settings }: AboutProps) {
   const image = settings?.aboutImage || settings?.doctorImage;
@@ -113,7 +123,7 @@ export default function About({ settings }: AboutProps) {
               <h4 className="font-semibold text-gray-800">Qualifications &amp; Expertise</h4>
               {credentials.map((label, i) => (
                 <div key={label} className="flex items-center gap-3">
-                  <span className="text-2xl">{credentialIcons[i] || '✨'}</span>
+                  <span className="text-primary-600">{credentialIcons[i] || <LeafIcon className="w-5 h-5" />}</span>
                   <span className="text-gray-700 text-sm">{label}</span>
                 </div>
               ))}

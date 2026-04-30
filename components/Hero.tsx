@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { CountUp, MagneticButton } from './AnimationEffects';
+import { LeafIcon, MicroscopeIcon, BowlFoodIcon } from './Icons';
 
 interface HeroProps {
   settings?: {
@@ -21,7 +22,11 @@ const defaultHighlights = ['Functional Medicine Approach', 'Root Cause Analysis'
 const defaultStats = [
   { number: '8+', label: 'Years Experience' },
 ];
-const defaultIcons = ['🌿', '🔬', '🥗'];
+const defaultIcons = [
+  <LeafIcon key="leaf" className="w-5 h-5 text-primary-600" />,
+  <MicroscopeIcon key="mic" className="w-5 h-5 text-primary-600" />,
+  <BowlFoodIcon key="bowl" className="w-5 h-5 text-primary-600" />,
+];
 
 export default function Hero({ settings }: HeroProps) {
   const badge = settings?.heroBadge || 'Certified Gut Shell Consultant';
@@ -128,7 +133,7 @@ export default function Hero({ settings }: HeroProps) {
             <div className="flex flex-wrap gap-6 text-sm text-gray-600 justify-center">
               {highlights.map((label, i) => (
                 <div key={label} className="flex items-center gap-2">
-                  <span className="text-2xl">{defaultIcons[i] || '✨'}</span>
+                  <span>{defaultIcons[i] || <LeafIcon className="w-5 h-5 text-primary-600" />}</span>
                   <span className="font-semibold text-gray-800">{label}</span>
                 </div>
               ))}

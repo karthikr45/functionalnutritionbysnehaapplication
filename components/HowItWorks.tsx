@@ -1,31 +1,34 @@
-const steps = [
+import { ClipboardCheckIcon, HeartHandIcon, SproutIcon, HandHoldingHeartIcon } from './Icons';
+import { ReactNode } from 'react';
+
+const steps: { step: string; icon: ReactNode; title: string; description: string }[] = [
   {
     step: '01',
-    icon: '📋',
-    title: 'Book Your Consultation',
+    icon: <ClipboardCheckIcon className="w-8 h-8 text-primary-700" />,
+    title: 'Begin Your Journey',
     description:
-      'Choose a consultation package that suits your needs. Pick a convenient date and time from the live availability calendar. No login needed to explore — sign in only when you\'re ready to book.',
+      'Select a consultation that aligns with your needs and schedule at your convenience. This is where your journey toward deeper healing begins.',
   },
   {
     step: '02',
-    icon: '🔬',
-    title: 'Detailed Health Assessment',
+    icon: <HeartHandIcon className="w-8 h-8 text-primary-700" />,
+    title: 'Deep Understanding',
     description:
-      'Share your complete health history, current symptoms, lab reports, medications, lifestyle, stress levels, and food preferences. The more I know, the better your plan will be.',
+      'We take the time to understand you — your body, your history, your lifestyle. Every detail matters, because true healing is never one-size-fits-all.',
   },
   {
     step: '03',
-    icon: '📊',
-    title: 'Root Cause Analysis & Custom Plan',
+    icon: <SproutIcon className="w-8 h-8 text-primary-700" />,
+    title: 'Personalized Strategy',
     description:
-      'Based on functional medicine principles, I identify the root cause of your health issues and create a personalized diet plan with meal timings, recipes, and grocery lists — all using Indian food.',
+      'A carefully designed plan is created to address the root cause, with tailored nutrition, routines, and guidance crafted just for you.',
   },
   {
     step: '04',
-    icon: '🚀',
-    title: 'Ongoing Support & Follow-ups',
+    icon: <HandHoldingHeartIcon className="w-8 h-8 text-primary-700" />,
+    title: 'Ongoing Guidance',
     description:
-      'Your plan evolves with you. Regular follow-up sessions track your progress, adjust your diet as needed, and keep you motivated. WhatsApp support is included for quick questions between sessions.',
+      'Healing is a journey, not a moment. With continuous support and thoughtful adjustments, we walk with you every step of the way.',
   },
 ];
 
@@ -34,31 +37,35 @@ export default function HowItWorks() {
     <section id="how-it-works" className="py-20 bg-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">The Process</p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-serif mt-2">
-            How It Works
+          <p className="text-primary-600 font-semibold text-sm uppercase tracking-[0.2em]">The Experience</p>
+          <div className="flex items-center justify-center gap-3 my-3">
+            <div className="w-12 h-px bg-primary-300" />
+            <SproutIcon className="w-5 h-5 text-primary-400" />
+            <div className="w-12 h-px bg-primary-300" />
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-serif">
+            How Your Transformation Unfolds
           </h2>
-          <p className="text-gray-600 mt-4 max-w-2xl mx-auto text-lg">
-            A simple, structured process designed to make your health transformation as smooth and effective as possible.
+          <p className="text-warm-text mt-4 max-w-2xl mx-auto text-base">
+            A refined, step-by-step journey designed to restore your health with clarity, care, and precision.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-          {/* Connector line (desktop) */}
-          <div className="hidden lg:block absolute top-16 left-1/4 right-1/4 h-0.5 bg-primary-100 -z-0" />
-
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0">
           {steps.map((step, i) => (
-            <div key={step.step} className="relative text-center">
-              <div className="relative z-10">
-                <div className="w-16 h-16 bg-primary-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">
-                  {step.icon}
-                </div>
-                <div className="absolute -top-2 -right-2 w-6 h-6 bg-amber-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                  {i + 1}
-                </div>
+            <div
+              key={step.step}
+              className={`relative text-center px-6 py-8 ${
+                i < steps.length - 1 ? 'lg:border-r border-b lg:border-b-0 border-primary-200/50' : ''
+              }`}
+            >
+              <p className="text-primary-400 font-serif text-2xl mb-4">{step.step}</p>
+              <div className="w-16 h-16 border-2 border-primary-300 rounded-full flex items-center justify-center mx-auto mb-5">
+                {step.icon}
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mt-5 mb-3">{step.title}</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">{step.description}</p>
+              <h3 className="text-lg font-bold text-gray-900 font-serif mb-2">{step.title}</h3>
+              <div className="w-8 h-0.5 bg-primary-400 mx-auto mb-4" />
+              <p className="text-warm-text text-sm leading-relaxed">{step.description}</p>
             </div>
           ))}
         </div>
