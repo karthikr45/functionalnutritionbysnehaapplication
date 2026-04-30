@@ -41,7 +41,7 @@ export default async function HomePage() {
   const [posts, settings] = await Promise.all([getRecentPosts(), getSiteSettings()]);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       <ScrollProgressBar />
       <Navbar />
       <main>

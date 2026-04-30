@@ -38,7 +38,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {/* Inject theme CSS variables BEFORE render to prevent FOUC */}
         <style dangerouslySetInnerHTML={{ __html: `:root { ${cssVars} }` }} />
       </head>
-      <body>
+      <body className="overflow-x-hidden">
         <Providers>
           <ThemeProvider>
           {children}
