@@ -13,63 +13,58 @@ interface Props {
   className?: string;
 }
 
-function useScrollProgress(ref: React.RefObject<HTMLElement | null>, offset = 0.15) {
-  const [progress, setProgress] = useState(0);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setProgress(1); return; }
-    const handleScroll = () => {
-      const rect = el.getBoundingClientRect();
-      const start = window.innerHeight * (1 - offset);
-      const end = window.innerHeight * 0.3;
-      const raw = (start - rect.top) / (start - end);
-      setProgress(Math.max(0, Math.min(1, raw)));
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [ref, offset]);
-  return progress;
-}
-
 export default function ScrollReveal({
   children,
   animation = 'fade-up',
   delay = 0,
+  duration = 800,
+  threshold = 0.15,
   className = '',
 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  const progress = useScrollProgress(ref as React.RefObject<HTMLElement>);
+  const [isVisible, setIsVisible] = useState(false);
 
-  const delayedProgress = delay > 0
-    ? Math.max(0, Math.min(1, (progress - delay / 1000) * 1.5))
-    : progress;
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setIsVisible(true); return; }
 
-  const eased = 1 - Math.pow(1 - delayedProgress, 3);
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setIsVisible(true); observer.unobserve(el); } },
+      { threshold, rootMargin: '0px 0px -60px 0px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [threshold]);
 
-  const transforms: Record<Animation, { transform: string; filter?: string }> = {
-    'fade-up': { transform: `translateY(${(1 - eased) * 60}px)` },
-    'fade-down': { transform: `translateY(${-(1 - eased) * 60}px)` },
-    'fade-in': { transform: 'none' },
-    'slide-left': { transform: `translateX(${-(1 - eased) * 80}px)` },
-    'slide-right': { transform: `translateX(${(1 - eased) * 80}px)` },
-    'scale-up': { transform: `scale(${0.85 + eased * 0.15})` },
-    'blur-in': { transform: `translateY(${(1 - eased) * 30}px)`, filter: `blur(${(1 - eased) * 12}px)` },
+  const baseStyle: React.CSSProperties = {
+    transitionProperty: 'opacity, transform, filter',
+    transitionDuration: `${duration}ms`,
+    transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
+    transitionDelay: `${delay}ms`,
   };
 
-  const { transform, filter } = transforms[animation];
+  const hiddenStyles: Record<Animation, React.CSSProperties> = {
+    'fade-up': { opacity: 0, transform: 'translateY(40px)' },
+    'fade-down': { opacity: 0, transform: 'translateY(-40px)' },
+    'fade-in': { opacity: 0 },
+    'slide-left': { opacity: 0, transform: 'translateX(-60px)' },
+    'slide-right': { opacity: 0, transform: 'translateX(60px)' },
+    'scale-up': { opacity: 0, transform: 'scale(0.9)' },
+    'blur-in': { opacity: 0, filter: 'blur(10px)', transform: 'translateY(20px)' },
+  };
+
+  const visibleStyle: React.CSSProperties = {
+    opacity: 1,
+    transform: 'translate(0, 0) scale(1)',
+    filter: 'blur(0px)',
+  };
 
   return (
     <div
       ref={ref}
       className={className}
-      style={{
-        opacity: eased,
-        transform,
-        filter: filter || 'none',
-        willChange: 'opacity, transform, filter',
-      }}
+      style={{ ...baseStyle, ...(isVisible ? visibleStyle : hiddenStyles[animation]) }}
     >
       {children}
     </div>
@@ -79,7 +74,7 @@ export default function ScrollReveal({
 export function StaggerReveal({
   children,
   animation = 'fade-up',
-  staggerDelay = 100,
+  staggerDelay = 120,
   baseDelay = 0,
   className = '',
 }: {

@@ -1,5 +1,5 @@
 import ScrollReveal from './ScrollReveal';
-import { ImageReveal, SplitLetterReveal, ClipRevealText } from './AnimationEffects';
+import { ImageReveal, SplitLetterReveal } from './AnimationEffects';
 
 interface AboutProps {
   settings?: {
@@ -95,21 +95,17 @@ export default function About({ settings }: AboutProps) {
               if (para.includes('food is medicine')) {
                 const parts = para.split('food is medicine');
                 return (
-                  <ClipRevealText key={i}>
-                    <p className="text-gray-600 leading-relaxed">
-                      {parts[0]}
-                      <strong className="text-primary-700">food is medicine.</strong>
-                      {parts[1]?.replace(/^\./, '')}
-                    </p>
-                  </ClipRevealText>
+                  <p key={i} className="text-gray-600 leading-relaxed">
+                    {parts[0]}
+                    <strong className="text-primary-700">food is medicine.</strong>
+                    {parts[1]?.replace(/^\./, '')}
+                  </p>
                 );
               }
               return (
-                <ClipRevealText key={i}>
-                  <p className={`text-gray-600 leading-relaxed ${i === 0 ? 'text-lg' : ''}`}>
-                    {para}
-                  </p>
-                </ClipRevealText>
+                <p key={i} className={`text-gray-600 leading-relaxed ${i === 0 ? 'text-lg' : ''}`}>
+                  {para}
+                </p>
               );
             })}
 
