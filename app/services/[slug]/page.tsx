@@ -142,10 +142,26 @@ export default async function ServicePage({ params }: { params: { slug: string }
     ]);
   } catch {}
 
-  // Use fallback if Sanity data not available
-  if (!service) {
-    service = fallbackData[params.slug];
-    if (!service) notFound();
+  // Use fallback if Sanity data not available, or merge fallback for missing fields
+  const fallback = fallbackData[params.slug];
+  if (!service && !fallback) notFound();
+
+  // Merge: Sanity fields take priority, fallback fills gaps
+  service = {
+    ...fallback,
+    ...service,
+    // For nested/array fields, use Sanity if non-empty, else fallback
+    benefits: service?.benefits?.length ? service.benefits : fallback?.benefits,
+    conditions: service?.conditions?.length ? service.conditions : fallback?.conditions,
+    philosophy: service?.philosophy || fallback?.philosophy,
+    whyGutHealth: service?.whyGutHealth || fallback?.whyGutHealth,
+    steps: service?.steps?.length ? service.steps : fallback?.steps,
+    programStructure: service?.programStructure?.length ? service.programStructure : fallback?.programStructure,
+    investment: service?.investment || fallback?.investment,
+    guidelines: (service?.guidelines?.suitable?.length || service?.guidelines?.notIncluded?.length)
+      ? service.guidelines
+      : fallback?.guidelines,
+  };
   }
 
   const image = service.image;
