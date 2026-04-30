@@ -32,7 +32,7 @@ export default function Navbar() {
       : '/dashboard';
 
   return (
-    <nav className="bg-warm-footer backdrop-blur-sm border-b border-primary-900/20 sticky top-0 z-50 shadow-sm">
+    <nav className="bg-primary-700 backdrop-blur-sm border-b border-primary-800/30 sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -117,7 +117,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="lg:hidden border-t border-primary-900/20 bg-warm-footer px-4 py-4 space-y-3">
+        <div className="lg:hidden border-t border-primary-800/30 bg-primary-700 px-4 py-4 space-y-3">
           {navLinks.map((link) => (
             <Link
               key={link.href}
