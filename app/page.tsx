@@ -6,7 +6,6 @@ import Hero from '@/components/Hero';
 
 import Services from '@/components/Services';
 import HowItWorks from '@/components/HowItWorks';
-import Packages from '@/components/Packages';
 import Testimonials from '@/components/Testimonials';
 import VideoCarousel from '@/components/VideoCarousel';
 import FAQ from '@/components/FAQ';
@@ -51,10 +50,6 @@ export default async function HomePage() {
 
         <ScrollReveal animation="fade-up">
           <HowItWorks />
-        </ScrollReveal>
-
-        <ScrollReveal animation="scale-up">
-          <Packages />
         </ScrollReveal>
 
         <ScrollReveal animation="fade-in">
@@ -135,10 +130,10 @@ export default async function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/#packages"
+                href="/#services"
                 className="inline-flex items-center justify-center px-8 py-4 bg-cream text-warm-footer font-bold rounded-xl hover:bg-white transition-colors shadow-lg"
               >
-                View Packages & Book
+                View Services & Book
               </Link>
               <a
                 href={`https://wa.me/${settings?.whatsappNumber || '919391675213'}?text=Hi%2C%20I%27d%20like%20to%20book%20a%20consultation.`}
