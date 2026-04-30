@@ -121,7 +121,16 @@ export const SERVICE_BY_SLUG_QUERY = `
     "image": image.asset->url,
     body,
     benefits,
-    conditions
+    conditions,
+    philosophy,
+    whyGutHealth,
+    steps,
+    programStructure,
+    investment,
+    "guidelines": {
+      "suitable": guidelinesSuitable,
+      "notIncluded": guidelinesNotIncluded
+    }
   }
 `;
 
