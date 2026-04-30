@@ -6,6 +6,7 @@ import { GraduationIcon, MedalIcon, PillIcon, DnaIcon, LeafIcon } from '@/compon
 import { client } from '@/sanity/lib/client';
 import { SITE_SETTINGS_QUERY } from '@/sanity/lib/queries';
 import Link from 'next/link';
+import WhatsAppButton from '@/components/WhatsAppButton';
 
 export const revalidate = 60;
 
@@ -368,6 +369,7 @@ export default async function AboutPage() {
       </main>
 
       <Footer settings={settings} />
+      <WhatsAppButton />
     </div>
   );
 }
