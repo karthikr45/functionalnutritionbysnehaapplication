@@ -68,7 +68,7 @@ const fallbackServices: Service[] = [
 
 // SVG icons similar to the reference design
 function ServiceIcon({ slug }: { slug: string }) {
-  const iconClass = 'w-12 h-12 text-primary-800';
+  const iconClass = 'w-10 h-10 text-primary-700';
 
   switch (slug) {
     case 'gut-reset-program':
@@ -156,17 +156,17 @@ export default function Services() {
     <section id="services" className="py-20 bg-cream-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">Our Programs</p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-serif mt-2">
-            Specialized Nutrition Programs
+          <p className="text-primary-600 font-semibold text-sm uppercase tracking-[0.2em]">How I Can Help</p>
+          <h2 className="text-3xl sm:text-4xl font-medium text-gray-900 font-serif mt-3">
+            Specialised Gut Health Services
           </h2>
-          <p className="text-gray-600 mt-4 max-w-2xl mx-auto text-lg">
+          <p className="text-warm-text mt-4 max-w-2xl mx-auto text-base">
             Evidence-based functional nutrition programs designed to address your specific health concerns
             and help you achieve lasting wellness.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {displayServices.map((service) => {
             const slug = service.slug?.current || '';
 
@@ -175,39 +175,43 @@ export default function Services() {
               <TiltCard>
               <Link
                 href={`/services/${slug}`}
-                className="group rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 hover:border-primary-200 transition-all duration-300"
+                className="group bg-cream rounded-2xl overflow-hidden border border-primary-100/40 hover:border-primary-300 hover:shadow-xl transition-all duration-300"
               >
-                {/* Top section — olive green background with icon and title */}
-                <div className="p-6 min-h-[160px] flex flex-col justify-between relative overflow-hidden" style={{ backgroundColor: '#D4DE95' }}>
-                  {/* Subtle decorative circle */}
-                  <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full" style={{ backgroundColor: 'rgba(99,107,47,0.15)' }} />
-                  <div className="relative z-10">
-                    <ServiceIcon slug={slug} />
-                  </div>
-                  <div className="relative z-10 mt-4">
-                    <h3 className="text-xl font-bold text-primary-900 group-hover:text-primary-700 transition-colors leading-tight">
-                      {service.title}
-                    </h3>
-                    {service.subtitle && (
-                      <p className="text-primary-800 text-sm mt-1.5 leading-relaxed line-clamp-2">{service.subtitle}</p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Image section */}
-                <div className="aspect-[4/3] overflow-hidden bg-gray-100">
+                {/* Image */}
+                <div className="aspect-[4/3] overflow-hidden">
                   {service.image ? (
                     <img
                       src={service.image}
                       alt={service.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       loading="lazy"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-primary-50 text-6xl">
-                      {service.icon || '🌿'}
+                    <div className="w-full h-full flex items-center justify-center bg-cream-dark">
+                      <div className="w-20 h-20 border-2 border-primary-200 rounded-full flex items-center justify-center">
+                        <ServiceIcon slug={slug} />
+                      </div>
                     </div>
                   )}
+                </div>
+
+                {/* Content */}
+                <div className="p-6">
+                  <div className="w-12 h-12 border border-primary-200 rounded-full flex items-center justify-center mb-4 group-hover:border-primary-400 transition-colors">
+                    <ServiceIcon slug={slug} />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 font-serif group-hover:text-primary-700 transition-colors leading-tight">
+                    {service.title}
+                  </h3>
+                  {service.subtitle && (
+                    <p className="text-warm-text text-sm mt-2 leading-relaxed line-clamp-2">{service.subtitle}</p>
+                  )}
+                  <div className="mt-4 flex items-center gap-1.5 text-primary-600 text-sm font-medium">
+                    <span>Learn More</span>
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </div>
                 </div>
               </Link>
               </TiltCard>
