@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import ScrollReveal from './ScrollReveal';
+import { TiltCard } from './AnimationEffects';
 import Link from 'next/link';
 
 interface Service {
@@ -171,6 +172,7 @@ export default function Services() {
 
             return (
               <ScrollReveal key={service._id} animation="fade-up" delay={displayServices.indexOf(service) * 120}>
+              <TiltCard>
               <Link
                 href={`/services/${slug}`}
                 className="group rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 hover:border-primary-200 transition-all duration-300"
@@ -208,6 +210,7 @@ export default function Services() {
                   )}
                 </div>
               </Link>
+              </TiltCard>
               </ScrollReveal>
             );
           })}

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { WordReveal, TypingEffect, GradientShimmer, CountUp, Parallax } from './AnimationEffects';
 
 interface HeroProps {
   settings?: {
@@ -51,15 +52,17 @@ export default function Hero({ settings }: HeroProps) {
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight font-serif">
               {hasHighlight ? (
                 <>
-                  {titleParts[0]}
-                  <span className="text-primary-600">Gut Shell</span>
-                  {titleParts[1]}
+                  <WordReveal text={titleParts[0].trim()} stagger={100} />
+                  {' '}<GradientShimmer className="font-bold text-4xl sm:text-5xl lg:text-6xl font-serif">Gut Shell</GradientShimmer>
+                  {titleParts[1] && <WordReveal text={titleParts[1].trim()} delay={500} stagger={100} />}
                 </>
               ) : (
-                title
+                <WordReveal text={title} stagger={100} />
               )}
             </h1>
-            <p className="text-xl text-gray-600 leading-relaxed">{subtitle}</p>
+            <p className="text-xl text-gray-600 leading-relaxed">
+              <TypingEffect text={subtitle} delay={1200} speed={20} />
+            </p>
 
             <div className="flex flex-wrap gap-6 text-sm text-gray-600">
               {highlights.map((label, i) => (
@@ -92,7 +95,11 @@ export default function Hero({ settings }: HeroProps) {
             <div className="flex flex-wrap gap-4 pt-4">
               {stats.map((stat) => (
                 <div key={stat.label} className="text-center px-4 py-2 bg-white rounded-xl shadow-sm border border-gray-100">
-                  <p className="text-xl font-bold text-primary-600">{stat.number}</p>
+                  <p className="text-xl font-bold text-primary-600">
+                    {/^\d+/.test(stat.number) ? (
+                      <CountUp end={parseInt(stat.number)} suffix={stat.number.replace(/^\d+/, '')} duration={2000} />
+                    ) : stat.number}
+                  </p>
                   <p className="text-xs text-gray-500">{stat.label}</p>
                 </div>
               ))}
@@ -100,7 +107,7 @@ export default function Hero({ settings }: HeroProps) {
           </div>
 
           {/* Right Image */}
-          <div className="relative flex justify-center lg:justify-end">
+          <Parallax speed={0.15} className="relative flex justify-center lg:justify-end">
             <div className="relative w-full max-w-md">
               <div className="absolute inset-0 bg-gradient-to-br from-primary-200 to-primary-400 rounded-3xl rotate-3 opacity-30" />
               <div className="relative bg-white rounded-3xl shadow-2xl overflow-hidden aspect-[4/5]">
@@ -159,7 +166,7 @@ export default function Hero({ settings }: HeroProps) {
                 </div>
               </div>
             </div>
-          </div>
+          </Parallax>
         </div>
       </div>
     </section>

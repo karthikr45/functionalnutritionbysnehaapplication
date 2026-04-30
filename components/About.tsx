@@ -1,4 +1,5 @@
 import ScrollReveal from './ScrollReveal';
+import { ImageReveal, SplitLetterReveal } from './AnimationEffects';
 
 interface AboutProps {
   settings?: {
@@ -49,7 +50,7 @@ export default function About({ settings }: AboutProps) {
           <div className="relative">
             <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-3xl p-8">
               {image ? (
-                <div className="relative rounded-2xl overflow-hidden aspect-[4/5] shadow-lg">
+                <ImageReveal className="rounded-2xl aspect-[4/5] shadow-lg" color="bg-amber-400">
                   <img
                     src={image}
                     alt={name}
@@ -60,7 +61,7 @@ export default function About({ settings }: AboutProps) {
                     <h3 className="text-xl font-bold text-white font-serif">{name}</h3>
                     <p className="text-primary-300 text-sm font-medium">Gut Shell Consultant</p>
                   </div>
-                </div>
+                </ImageReveal>
               ) : (
                 <div className="text-center">
                   <div className="w-48 h-48 bg-white rounded-full mx-auto shadow-lg flex items-center justify-center text-8xl mb-6">
@@ -85,7 +86,9 @@ export default function About({ settings }: AboutProps) {
           <div className="space-y-6">
             <div>
               <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">About Me</p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-serif mt-2">{title}</h2>
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-serif mt-2">
+                <SplitLetterReveal text={title} stagger={35} />
+              </h2>
             </div>
 
             {description.map((para, i) => {
