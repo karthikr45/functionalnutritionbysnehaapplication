@@ -14,7 +14,6 @@ import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import ScrollReveal from '@/components/ScrollReveal';
-import WaveDivider from '@/components/WaveDivider';
 import { ScrollProgressBar } from '@/components/AnimationEffects';
 import { client } from '@/sanity/lib/client';
 import { RECENT_POSTS_QUERY, SITE_SETTINGS_QUERY } from '@/sanity/lib/queries';
@@ -46,8 +45,6 @@ export default async function HomePage() {
       <Navbar />
       <main>
         <Hero settings={settings} />
-        <WaveDivider color="#FDFBF7" bgColor="#F5F0E8" variant="curve" />
-
         <ScrollReveal animation="fade-up">
           <About settings={settings} />
         </ScrollReveal>
@@ -68,7 +65,6 @@ export default async function HomePage() {
           <Testimonials />
         </ScrollReveal>
 
-        <WaveDivider color="#111827" bgColor="#F0EBE0" variant="wave" />
         <ScrollReveal animation="fade-up">
           <VideoCarousel />
         </ScrollReveal>
@@ -131,7 +127,6 @@ export default async function HomePage() {
         </ScrollReveal>
 
         {/* Final CTA */}
-        <WaveDivider color="var(--primary-600)" bgColor="#F5F0E8" variant="tilt" />
         <ScrollReveal animation="blur-in">
         <section className="py-20 bg-primary-600 text-white text-center">
           <div className="max-w-3xl mx-auto px-4">
