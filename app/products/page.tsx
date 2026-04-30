@@ -95,7 +95,7 @@ export default function ProductsPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-gray-50">
+      <main className="min-h-screen bg-cream">
         {/* Hero */}
         <div className="bg-primary-600 text-white py-12 text-center">
           <h1 className="text-3xl md:text-4xl font-bold mb-2">Our Products</h1>

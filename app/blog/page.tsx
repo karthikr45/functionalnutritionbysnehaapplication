@@ -16,11 +16,11 @@ export default async function BlogPage() {
   const posts = await getPosts();
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-cream">
       <Navbar />
       <main>
         {/* Hero */}
-        <div className="bg-gradient-to-br from-primary-50 to-white py-16 text-center">
+        <div className="bg-gradient-to-br from-cream-dark to-cream py-16 text-center">
           <div className="max-w-3xl mx-auto px-4">
             <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">Expert Insights</p>
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 font-serif mt-3">

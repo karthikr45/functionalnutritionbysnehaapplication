@@ -72,7 +72,7 @@ export default async function LegalPageContent({ pageType }: Props) {
 
   return (
     <div>
-      <section className="bg-gradient-to-br from-primary-50 to-white py-16">
+      <section className="bg-gradient-to-br from-cream-dark to-cream py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 font-serif">{title}</h1>
           <p className="text-gray-600 mt-3 text-lg">{subtitle}</p>

@@ -42,7 +42,7 @@ function LoginContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-white flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-cream-dark to-cream flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -53,7 +53,7 @@ function LoginContent() {
           <p className="text-gray-500 mt-1 text-sm">Sign in to your account to continue</p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8">
+        <div className="bg-cream rounded-3xl shadow-lg border border-primary-100/30 p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="label">Email Address</label>
@@ -100,7 +100,7 @@ function LoginContent() {
           </div>
 
           {/* Demo credentials */}
-          <div className="mt-6 p-4 bg-gray-50 rounded-xl text-xs text-gray-500 space-y-1">
+          <div className="mt-6 p-4 bg-cream-dark rounded-xl text-xs text-gray-500 space-y-1">
             <p className="font-semibold text-gray-700 mb-2">Demo Credentials:</p>
             <p>Patient: patient@example.com / Patient@123</p>
             <p>Doctor: sneha@functionalnutrition.com / Doctor@123</p>

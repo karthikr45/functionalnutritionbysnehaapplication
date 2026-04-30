@@ -132,7 +132,7 @@ function SignupContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-white flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-br from-cream-dark to-cream flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex justify-center mb-4">
@@ -146,7 +146,7 @@ function SignupContent() {
           </p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8">
+        <div className="bg-cream rounded-3xl shadow-lg border border-primary-100/30 p-8">
           {packageId && step === 'details' && (
             <div className="mb-5 p-3 bg-primary-50 border border-primary-100 rounded-xl text-sm text-primary-700">
               🎯 You&apos;re signing up to book a package. Complete registration to proceed.

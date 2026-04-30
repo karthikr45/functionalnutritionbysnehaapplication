@@ -86,7 +86,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-white flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-br from-cream-dark to-cream flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex justify-center mb-4">
@@ -104,7 +104,7 @@ export default function ForgotPasswordPage() {
           </p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8">
+        <div className="bg-cream rounded-3xl shadow-lg border border-primary-100/30 p-8">
           {step === 'email' && (
             <form onSubmit={handleSendOtp} className="space-y-5">
               <div>

@@ -68,11 +68,11 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   if (!post) notFound();
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-cream">
       <Navbar />
       <main>
         {/* Hero */}
-        <div className="bg-gradient-to-br from-primary-50 to-white py-12">
+        <div className="bg-gradient-to-br from-cream-dark to-cream py-12">
           <div className="max-w-3xl mx-auto px-4">
             <Link href="/blog" className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 text-sm font-medium mb-6">
               ← Back to Blog

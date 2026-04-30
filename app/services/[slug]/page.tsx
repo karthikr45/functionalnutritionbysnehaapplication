@@ -83,7 +83,7 @@ export default async function ServicePage({ params }: { params: { slug: string }
   const conditions = service.conditions || [];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-cream">
       <Navbar />
 
       {/* Hero */}
