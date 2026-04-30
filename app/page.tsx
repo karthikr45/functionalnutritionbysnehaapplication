@@ -128,19 +128,19 @@ export default async function HomePage() {
 
         {/* Final CTA */}
         <ScrollReveal animation="blur-in">
-        <section className="py-20 bg-primary-600 text-white text-center">
+        <section className="py-20 bg-warm-footer text-white text-center">
           <div className="max-w-3xl mx-auto px-4">
             <h2 className="text-3xl sm:text-4xl font-bold font-serif mb-4">
               Ready to Heal from the Root Cause?
             </h2>
-            <p className="text-primary-100 text-lg mb-8">
+            <p className="text-cream-dark/80 text-lg mb-8">
               Join hundreds of clients who have transformed their health through functional nutrition.
               Your journey to lasting wellness starts with a single consultation.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/#packages"
-                className="inline-flex items-center justify-center px-8 py-4 bg-white text-primary-600 font-bold rounded-xl hover:bg-primary-50 transition-colors shadow-lg"
+                className="inline-flex items-center justify-center px-8 py-4 bg-cream text-warm-footer font-bold rounded-xl hover:bg-white transition-colors shadow-lg"
               >
                 View Packages & Book
               </Link>

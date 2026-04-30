@@ -52,19 +52,19 @@ export default function Contact({ settings }: ContactProps) {
     }
   };
 
-  const inputCls = 'w-full px-5 py-4 bg-white/70 border border-amber-400/50 rounded-2xl text-gray-800 placeholder-amber-800/40 focus:bg-white focus:border-amber-600 focus:shadow-md focus:shadow-amber-200/30 outline-none text-sm font-medium transition-all duration-200';
+  const inputCls = 'w-full px-5 py-4 bg-cream border border-primary-200/50 rounded-2xl text-gray-800 placeholder-warm-text/50 focus:bg-white focus:border-primary-400 focus:shadow-md focus:shadow-primary-100/30 outline-none text-sm font-medium transition-all duration-200';
 
   return (
     <section id="contact" className="py-0">
       <div className="max-w-full">
 
         {/* Form Card — full width */}
-        <div className="bg-amber-300 px-4 sm:px-8 md:px-16 lg:px-32 py-16 sm:py-20">
+        <div className="bg-cream-dark px-4 sm:px-8 md:px-16 lg:px-32 py-16 sm:py-20">
           {status === 'sent' ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-4xl mb-6 shadow-sm">✅</div>
               <h3 className="text-2xl font-bold text-gray-900 font-serif mb-2">Message Sent!</h3>
-              <p className="text-amber-800 max-w-xs">
+              <p className="text-warm-text max-w-xs">
                 Thank you for reaching out. We&apos;ll get back to you within 24 hours.
               </p>
               <button
@@ -78,7 +78,7 @@ export default function Contact({ settings }: ContactProps) {
             <>
               <div className="text-center mb-8">
                 <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-serif">Get In Touch</h2>
-                <p className="text-amber-800 text-sm leading-relaxed mt-3 max-w-lg mx-auto">
+                <p className="text-warm-text text-sm leading-relaxed mt-3 max-w-lg mx-auto">
                   Share your details and our team will reach out to guide you on the next steps toward better health
                 </p>
               </div>
