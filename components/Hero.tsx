@@ -42,16 +42,26 @@ export default function Hero({ settings }: HeroProps) {
   return (
     <>
       {/* Hero Banner — Full-width doctor image */}
-      <section className="relative w-full h-screen overflow-hidden bg-gray-900">
-        {/* Doctor Image — cover full screen */}
+      <section className="relative w-full h-[100svh] overflow-hidden bg-gray-900">
+        {/* Blurred background — same image stretched to fill */}
+        {doctorImage && (
+          <img
+            src={doctorImage}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl brightness-50"
+          />
+        )}
+
+        {/* Sharp center image — portrait fitted */}
         {doctorImage ? (
           <img
             src={doctorImage}
             alt={name}
-            className="absolute inset-0 w-full h-full object-cover object-top"
+            className="absolute inset-0 w-full h-full object-contain object-center z-[1]"
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-primary-100 flex items-center justify-center">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-primary-100 flex items-center justify-center z-[1]">
             <div className="text-center">
               <div className="w-40 h-40 bg-primary-100 rounded-full mx-auto mb-6 flex items-center justify-center text-7xl">🌿</div>
               <p className="text-gray-400 text-sm">Upload doctor image in Sanity → Site Settings</p>
@@ -60,40 +70,40 @@ export default function Hero({ settings }: HeroProps) {
         )}
 
         {/* Gradient overlay at bottom */}
-        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-[2]" />
 
-        {/* Bottom overlays — stacked on mobile, side-by-side on desktop */}
-        <div className="absolute inset-x-0 bottom-0 z-10 p-6 sm:p-10 lg:p-16">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 sm:gap-4">
-            {/* Left: Signature name — slides from bottom */}
+        {/* Bottom overlays */}
+        <div className="absolute inset-x-0 bottom-0 z-[3] p-4 pb-6 sm:p-8 lg:p-12">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-1 sm:gap-4">
+            {/* Left: Signature name */}
             <div
               className="transition-all duration-1000 ease-out"
               style={{
-                transform: mounted ? 'translateY(0)' : 'translateY(80px)',
+                transform: mounted ? 'translateY(0)' : 'translateY(60px)',
                 opacity: mounted ? 1 : 0,
                 transitionDelay: '300ms',
                 transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
               }}
             >
-              <p className="font-signature text-white text-4xl sm:text-5xl lg:text-7xl xl:text-8xl drop-shadow-2xl leading-tight">
+              <p className="font-signature text-white text-3xl sm:text-5xl lg:text-7xl xl:text-8xl drop-shadow-2xl leading-none">
                 {name}
               </p>
             </div>
 
-            {/* Right: Title + specializations — slides from bottom with delay */}
+            {/* Right: Title + specializations */}
             <div
               className="transition-all duration-1000 ease-out sm:text-right"
               style={{
-                transform: mounted ? 'translateY(0)' : 'translateY(80px)',
+                transform: mounted ? 'translateY(0)' : 'translateY(60px)',
                 opacity: mounted ? 1 : 0,
                 transitionDelay: '700ms',
                 transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
               }}
             >
-              <p className="text-white text-base sm:text-lg lg:text-2xl font-serif font-semibold tracking-wide">
+              <p className="text-white text-sm sm:text-lg lg:text-2xl font-serif font-semibold tracking-wide">
                 Functional Nutritionist
               </p>
-              <p className="text-white/70 text-[10px] sm:text-xs mt-1 tracking-[0.2em] uppercase">
+              <p className="text-white/70 text-[9px] sm:text-xs mt-0.5 tracking-[0.15em] uppercase">
                 {specializations}
               </p>
             </div>
