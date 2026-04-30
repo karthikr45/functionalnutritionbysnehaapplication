@@ -162,7 +162,6 @@ export default async function ServicePage({ params }: { params: { slug: string }
       ? service.guidelines
       : fallback?.guidelines,
   };
-  }
 
   const image = service.image;
   const benefits = service.benefits || [];
