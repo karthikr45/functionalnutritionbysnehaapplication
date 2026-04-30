@@ -51,22 +51,42 @@ export default function Hero({ settings }: HeroProps) {
       {/* Hero Banner */}
       <section className="relative w-full h-[calc(100svh-64px)] overflow-hidden bg-gray-900">
         {/* Mobile image — portrait, cover */}
-        {doctorImage ? (
+        {doctorImage && (
           <img
             src={doctorImage}
             alt={name}
             className="lg:hidden absolute inset-0 w-full h-full object-cover object-top z-[1]"
           />
-        ) : null}
+        )}
 
-        {/* Desktop image — wide landscape, cover */}
-        {(desktopImage || doctorImage) ? (
+        {/* Desktop: if wide image exists, use it with cover */}
+        {desktopImage && (
           <img
-            src={desktopImage || doctorImage!}
+            src={desktopImage}
             alt={name}
             className="hidden lg:block absolute inset-0 w-full h-full object-cover object-center z-[1]"
           />
-        ) : (
+        )}
+
+        {/* Desktop fallback: portrait with blurred bg + contain */}
+        {!desktopImage && doctorImage && (
+          <>
+            <img
+              src={doctorImage}
+              alt=""
+              aria-hidden="true"
+              className="hidden lg:block absolute inset-0 w-full h-full object-cover scale-110 blur-2xl brightness-50"
+            />
+            <img
+              src={doctorImage}
+              alt={name}
+              className="hidden lg:block absolute inset-0 w-full h-full object-contain object-center z-[1]"
+            />
+          </>
+        )}
+
+        {/* No image placeholder */}
+        {!doctorImage && !desktopImage && (
           <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-primary-100 flex items-center justify-center z-[1]">
             <div className="text-center">
               <div className="w-40 h-40 bg-primary-100 rounded-full mx-auto mb-6 flex items-center justify-center text-7xl">🌿</div>
