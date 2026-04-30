@@ -15,6 +15,7 @@ import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import ScrollReveal from '@/components/ScrollReveal';
 import WaveDivider from '@/components/WaveDivider';
+import { ScrollProgressBar } from '@/components/AnimationEffects';
 import { client } from '@/sanity/lib/client';
 import { RECENT_POSTS_QUERY, SITE_SETTINGS_QUERY } from '@/sanity/lib/queries';
 import Link from 'next/link';
@@ -41,6 +42,7 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen">
+      <ScrollProgressBar />
       <Navbar />
       <main>
         <Hero settings={settings} />

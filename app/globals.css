@@ -70,3 +70,11 @@
   100% { background-position: -200% 0; }
 }
 .animate-shimmer { animation: shimmer 4s ease-in-out infinite; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(2deg); }
+}
+.animate-float { animation: float 4s ease-in-out infinite; }
+.animate-float-delayed { animation: float 5s ease-in-out 1s infinite; }
+.animate-float-slow { animation: float 6s ease-in-out 0.5s infinite; }

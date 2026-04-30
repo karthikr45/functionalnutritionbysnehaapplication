@@ -1,6 +1,27 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, ReactNode } from 'react';
+
+function useScrollProgress(ref: React.RefObject<HTMLElement | null>, offset = 0.2) {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const handleScroll = () => {
+      const rect = el.getBoundingClientRect();
+      const start = window.innerHeight * (1 - offset);
+      const end = -rect.height * offset;
+      const raw = (start - rect.top) / (start - end);
+      setProgress(Math.max(0, Math.min(1, raw)));
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [ref, offset]);
+
+  return progress;
+}
 
 export function WordReveal({
   text,
@@ -17,35 +38,24 @@ export function WordReveal({
   highlight?: string;
   highlightClass?: string;
 }) {
-  const ref = useRef<HTMLElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
-      { threshold: 0.3 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  const ref = useRef<HTMLSpanElement>(null);
+  const progress = useScrollProgress(ref as React.RefObject<HTMLElement>, 0.1);
 
   const words = text.split(' ');
 
   return (
     <span ref={ref} className={className}>
       {words.map((word, i) => {
+        const wordProgress = Math.max(0, Math.min(1, (progress * words.length - i) * 1.5));
         const isHighlight = highlight && word.includes(highlight);
         return (
           <span key={i} className="inline-block overflow-hidden mr-[0.3em]">
             <span
-              className={`inline-block transition-all duration-700 ${isHighlight ? highlightClass : ''}`}
+              className={`inline-block ${isHighlight ? highlightClass : ''}`}
               style={{
-                transitionDelay: `${delay + i * stagger}ms`,
-                transform: visible ? 'translateY(0)' : 'translateY(110%)',
-                opacity: visible ? 1 : 0,
-                transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+                transform: `translateY(${(1 - wordProgress) * 120}%)`,
+                opacity: wordProgress,
+                transition: 'none',
               }}
             >
               {word}
@@ -133,7 +143,7 @@ export function CountUp({
           const start = performance.now();
           const animate = (now: number) => {
             const progress = Math.min((now - start) / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
+            const eased = 1 - Math.pow(1 - progress, 4);
             setCount(Math.floor(eased * end));
             if (progress < 1) requestAnimationFrame(animate);
           };
@@ -153,6 +163,41 @@ export function CountUp({
   );
 }
 
+export function ClipRevealText({
+  children,
+  className = '',
+  direction = 'up',
+}: {
+  children: ReactNode;
+  className?: string;
+  direction?: 'up' | 'left' | 'right';
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const progress = useScrollProgress(ref as React.RefObject<HTMLElement>, 0.15);
+
+  const eased = 1 - Math.pow(1 - progress, 3);
+
+  const clipPaths: Record<string, string> = {
+    up: `inset(${(1 - eased) * 100}% 0 0 0)`,
+    left: `inset(0 ${(1 - eased) * 100}% 0 0)`,
+    right: `inset(0 0 0 ${(1 - eased) * 100}%)`,
+  };
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        clipPath: clipPaths[direction],
+        transform: direction === 'up' ? `translateY(${(1 - eased) * 30}px)` : 'none',
+        willChange: 'clip-path, transform',
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
 export function SplitLetterReveal({
   text,
   className = '',
@@ -165,37 +210,27 @@ export function SplitLetterReveal({
   stagger?: number;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
-      { threshold: 0.3 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  const progress = useScrollProgress(ref as React.RefObject<HTMLElement>, 0.1);
 
   return (
     <span ref={ref} className={className} aria-label={text}>
-      {text.split('').map((char, i) => (
-        <span key={i} className="inline-block overflow-hidden">
-          <span
-            className="inline-block transition-all duration-500"
-            style={{
-              transitionDelay: `${delay + i * stagger}ms`,
-              transform: visible ? 'translateY(0) rotate(0)' : 'translateY(100%) rotate(8deg)',
-              opacity: visible ? 1 : 0,
-              transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
-            }}
-            aria-hidden="true"
-          >
-            {char === ' ' ? ' ' : char}
+      {text.split('').map((char, i) => {
+        const charProgress = Math.max(0, Math.min(1, (progress * text.length * 0.8 - i) * 0.5));
+        return (
+          <span key={i} className="inline-block overflow-hidden">
+            <span
+              className="inline-block"
+              style={{
+                transform: `translateY(${(1 - charProgress) * 110}%) rotate(${(1 - charProgress) * 10}deg)`,
+                opacity: charProgress,
+              }}
+              aria-hidden="true"
+            >
+              {char === ' ' ? ' ' : char}
+            </span>
           </span>
-        </span>
-      ))}
+        );
+      })}
     </span>
   );
 }
@@ -231,44 +266,26 @@ export function ImageReveal({
   direction?: 'left' | 'right' | 'up' | 'down';
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [revealed, setRevealed] = useState(false);
+  const progress = useScrollProgress(ref as React.RefObject<HTMLElement>, 0.15);
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setRevealed(true); observer.disconnect(); } },
-      { threshold: 0.2 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  const eased = Math.max(0, Math.min(1, (progress - 0.1) * 1.5));
+  const curtainProgress = Math.max(0, Math.min(1, (progress - 0.3) * 2));
 
-  const transforms: Record<string, { initial: string; revealed: string }> = {
-    right: { initial: 'translateX(0)', revealed: 'translateX(101%)' },
-    left: { initial: 'translateX(0)', revealed: 'translateX(-101%)' },
-    up: { initial: 'translateY(0)', revealed: 'translateY(-101%)' },
-    down: { initial: 'translateY(0)', revealed: 'translateY(101%)' },
+  const transforms: Record<string, string> = {
+    right: `translateX(${curtainProgress * 101}%)`,
+    left: `translateX(${-curtainProgress * 101}%)`,
+    up: `translateY(${-curtainProgress * 101}%)`,
+    down: `translateY(${curtainProgress * 101}%)`,
   };
 
   return (
     <div ref={ref} className={`relative overflow-hidden ${className}`}>
-      <div
-        style={{
-          opacity: revealed ? 1 : 0,
-          transition: 'opacity 0.01s',
-          transitionDelay: revealed ? '0.4s' : '0s',
-        }}
-      >
+      <div style={{ opacity: eased > 0.3 ? 1 : 0 }}>
         {children}
       </div>
       <div
         className={`absolute inset-0 ${color} z-10`}
-        style={{
-          transform: revealed ? transforms[direction].revealed : transforms[direction].initial,
-          transition: 'transform 0.8s cubic-bezier(0.77, 0, 0.175, 1)',
-          transitionDelay: revealed ? '0.3s' : '0s',
-        }}
+        style={{ transform: transforms[direction] }}
       />
     </div>
   );
@@ -291,23 +308,32 @@ export function TiltCard({
     const rect = el.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
-    el.style.transform = `perspective(600px) rotateX(${-y * maxTilt}deg) rotateY(${x * maxTilt}deg) scale3d(1.02, 1.02, 1.02)`;
+    el.style.transform = `perspective(600px) rotateX(${-y * maxTilt}deg) rotateY(${x * maxTilt}deg) scale3d(1.03, 1.03, 1.03)`;
+    const shine = el.querySelector('.tilt-shine') as HTMLElement;
+    if (shine) {
+      shine.style.opacity = '1';
+      shine.style.background = `radial-gradient(circle at ${(x + 0.5) * 100}% ${(y + 0.5) * 100}%, rgba(255,255,255,0.15) 0%, transparent 60%)`;
+    }
   };
 
   const handleMouseLeave = () => {
     const el = ref.current;
-    if (el) el.style.transform = 'perspective(600px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+    if (!el) return;
+    el.style.transform = 'perspective(600px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+    const shine = el.querySelector('.tilt-shine') as HTMLElement;
+    if (shine) shine.style.opacity = '0';
   };
 
   return (
     <div
       ref={ref}
-      className={`transition-transform duration-300 ease-out ${className}`}
+      className={`transition-transform duration-300 ease-out relative ${className}`}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ transformStyle: 'preserve-3d' }}
     >
       {children}
+      <div className="tilt-shine absolute inset-0 rounded-2xl pointer-events-none opacity-0 transition-opacity duration-300 z-10" />
     </div>
   );
 }
@@ -338,6 +364,65 @@ export function Parallax({
 
   return (
     <div ref={ref} className={className}>
+      {children}
+    </div>
+  );
+}
+
+export function ScrollProgressBar() {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(total > 0 ? window.scrollY / total : 0);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <div className="fixed top-0 left-0 right-0 h-0.5 z-[100]">
+      <div
+        className="h-full bg-gradient-to-r from-primary-500 to-primary-600"
+        style={{ width: `${progress * 100}%`, transition: 'width 0.1s' }}
+      />
+    </div>
+  );
+}
+
+export function MagneticButton({
+  children,
+  className = '',
+  strength = 0.3,
+}: {
+  children: ReactNode;
+  className?: string;
+  strength?: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    el.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
+  };
+
+  const handleMouseLeave = () => {
+    const el = ref.current;
+    if (el) el.style.transform = 'translate(0, 0)';
+  };
+
+  return (
+    <div
+      ref={ref}
+      className={`inline-block transition-transform duration-300 ease-out ${className}`}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
       {children}
     </div>
   );

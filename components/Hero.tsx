@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { WordReveal, TypingEffect, GradientShimmer, CountUp, Parallax } from './AnimationEffects';
+import { WordReveal, TypingEffect, GradientShimmer, CountUp, Parallax, MagneticButton } from './AnimationEffects';
 
 interface HeroProps {
   settings?: {
@@ -74,21 +74,25 @@ export default function Hero({ settings }: HeroProps) {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link
-                href="/#packages"
-                className="inline-flex items-center justify-center px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-lg"
-              >
-                Book a Consultation
-                <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-              <Link
-                href="#services"
-                className="inline-flex items-center justify-center px-8 py-4 border-2 border-primary-600 text-primary-600 hover:bg-primary-50 font-semibold rounded-xl transition-all duration-200 text-lg"
-              >
-                Explore Services
-              </Link>
+              <MagneticButton strength={0.2}>
+                <Link
+                  href="/#packages"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-lg"
+                >
+                  Book a Consultation
+                  <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+              </MagneticButton>
+              <MagneticButton strength={0.2}>
+                <Link
+                  href="#services"
+                  className="inline-flex items-center justify-center px-8 py-4 border-2 border-primary-600 text-primary-600 hover:bg-primary-50 font-semibold rounded-xl transition-all duration-200 text-lg"
+                >
+                  Explore Services
+                </Link>
+              </MagneticButton>
             </div>
 
             {/* Trust badges */}
@@ -146,7 +150,7 @@ export default function Hero({ settings }: HeroProps) {
               </div>
 
               {/* Floating cards */}
-              <div className="absolute -top-4 -left-2 sm:-left-8 bg-white rounded-2xl shadow-lg p-3 sm:p-4 border border-primary-100 z-10">
+              <div className="absolute -top-4 -left-2 sm:-left-8 bg-white rounded-2xl shadow-lg p-3 sm:p-4 border border-primary-100 z-10 animate-float">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center text-xl">🥗</div>
                   <div>
@@ -156,7 +160,7 @@ export default function Hero({ settings }: HeroProps) {
                 </div>
               </div>
 
-              <div className="absolute -bottom-4 -right-2 sm:-right-8 bg-white rounded-2xl shadow-lg p-3 sm:p-4 border border-primary-100 z-10">
+              <div className="absolute -bottom-4 -right-2 sm:-right-8 bg-white rounded-2xl shadow-lg p-3 sm:p-4 border border-primary-100 z-10 animate-float-delayed">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center text-xl">🎯</div>
                   <div>

@@ -1,5 +1,5 @@
 import ScrollReveal from './ScrollReveal';
-import { ImageReveal, SplitLetterReveal } from './AnimationEffects';
+import { ImageReveal, SplitLetterReveal, ClipRevealText } from './AnimationEffects';
 
 interface AboutProps {
   settings?: {
@@ -92,21 +92,24 @@ export default function About({ settings }: AboutProps) {
             </div>
 
             {description.map((para, i) => {
-              // Make "food is medicine" bold in the last paragraph
               if (para.includes('food is medicine')) {
                 const parts = para.split('food is medicine');
                 return (
-                  <p key={i} className="text-gray-600 leading-relaxed">
-                    {parts[0]}
-                    <strong className="text-primary-700">food is medicine.</strong>
-                    {parts[1]?.replace(/^\./, '')}
-                  </p>
+                  <ClipRevealText key={i}>
+                    <p className="text-gray-600 leading-relaxed">
+                      {parts[0]}
+                      <strong className="text-primary-700">food is medicine.</strong>
+                      {parts[1]?.replace(/^\./, '')}
+                    </p>
+                  </ClipRevealText>
                 );
               }
               return (
-                <p key={i} className={`text-gray-600 leading-relaxed ${i === 0 ? 'text-lg' : ''}`}>
-                  {para}
-                </p>
+                <ClipRevealText key={i}>
+                  <p className={`text-gray-600 leading-relaxed ${i === 0 ? 'text-lg' : ''}`}>
+                    {para}
+                  </p>
+                </ClipRevealText>
               );
             })}
 
