@@ -87,7 +87,7 @@ export default function VideoCarousel() {
   };
 
   return (
-    <section className="py-20 bg-gray-900">
+    <section className="py-20 bg-warm-footer">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <p className="text-amber-400 font-semibold text-sm uppercase tracking-wide">Watch & Learn</p>
@@ -116,7 +116,7 @@ export default function VideoCarousel() {
                   key={video._id}
                   className="flex-shrink-0 w-[85vw] md:w-[600px] lg:w-[700px] snap-center"
                 >
-                  <div className="relative rounded-2xl overflow-hidden bg-gray-800 shadow-2xl group">
+                  <div className="relative rounded-2xl overflow-hidden bg-primary-900 shadow-2xl group">
                     {/* Video or Thumbnail */}
                     {isPlaying && ytId ? (
                       <div className="aspect-video">
@@ -228,7 +228,7 @@ export default function VideoCarousel() {
                 key={i}
                 onClick={() => scrollTo(i)}
                 className={`w-2.5 h-2.5 rounded-full transition-all ${
-                  i === current ? 'bg-amber-400 w-8' : 'bg-gray-600 hover:bg-gray-500'
+                  i === current ? 'bg-primary-400 w-8' : 'bg-primary-800 hover:bg-primary-700'
                 }`}
               />
             ))}
