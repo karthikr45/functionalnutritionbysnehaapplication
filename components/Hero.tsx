@@ -101,14 +101,14 @@ export default function Hero({ settings }: HeroProps) {
         {/* Bottom overlays */}
         <div className="absolute inset-x-0 bottom-0 z-[3] px-4 pb-4 sm:px-8 sm:pb-8 lg:px-12 lg:pb-10 pr-20 sm:pr-24">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-0.5 sm:gap-4">
-            {/* Left: Signature name */}
+            {/* Left: Signature name — slides from left, slow */}
             <div
-              className="transition-all duration-1000 ease-out"
+              className="transition-all duration-[2000ms]"
               style={{
-                transform: mounted ? 'translateY(0)' : 'translateY(60px)',
+                transform: mounted ? 'translateX(0)' : 'translateX(-100px)',
                 opacity: mounted ? 1 : 0,
-                transitionDelay: '300ms',
-                transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
+                transitionDelay: '500ms',
+                transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
               }}
             >
               <p className="font-signature text-white text-3xl sm:text-5xl lg:text-7xl drop-shadow-2xl leading-none">
@@ -116,14 +116,14 @@ export default function Hero({ settings }: HeroProps) {
               </p>
             </div>
 
-            {/* Right: Title + specializations */}
+            {/* Right: Title + specializations — slides from right, slower */}
             <div
-              className="transition-all duration-1000 ease-out sm:text-right"
+              className="transition-all duration-[2500ms] sm:text-right"
               style={{
-                transform: mounted ? 'translateY(0)' : 'translateY(60px)',
+                transform: mounted ? 'translateX(0)' : 'translateX(100px)',
                 opacity: mounted ? 1 : 0,
-                transitionDelay: '700ms',
-                transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
+                transitionDelay: '1200ms',
+                transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
               }}
             >
               <p className="text-white text-xs sm:text-lg lg:text-2xl font-serif font-semibold tracking-wide">
