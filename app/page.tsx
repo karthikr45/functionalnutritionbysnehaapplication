@@ -2,7 +2,7 @@ import Navbar from '@/components/Navbar';
 
 export const revalidate = 60;
 
-import Hero from '@/components/Hero';
+import Hero, { HeroContent } from '@/components/Hero';
 
 import Services from '@/components/Services';
 import HowItWorks from '@/components/HowItWorks';
@@ -46,6 +46,10 @@ export default async function HomePage() {
         <Hero settings={settings} />
         <ScrollReveal animation="fade-up" delay={100}>
           <Services />
+        </ScrollReveal>
+
+        <ScrollReveal animation="fade-up">
+          <HeroContent settings={settings} />
         </ScrollReveal>
 
         <ScrollReveal animation="fade-up">

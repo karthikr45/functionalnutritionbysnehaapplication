@@ -136,8 +136,20 @@ export default function Hero({ settings }: HeroProps) {
           </div>
         </div>
       </section>
+    </>
+  );
+}
 
-      {/* Content section below the banner */}
+export function HeroContent({ settings }: HeroProps) {
+  const badge = settings?.heroBadge || 'Certified Gut Shell Consultant';
+  const title = settings?.heroTitle || 'Heal Your Body with Gut Shell';
+  const subtitle = settings?.heroSubtitle || 'Discover the root cause of your health issues through personalized, science-backed nutrition plans. No fad diets, no quick fixes — just sustainable healing through the power of real food.';
+  const highlights = settings?.heroHighlights?.length ? settings.heroHighlights : defaultHighlights;
+  const stats = settings?.heroStats?.length ? settings.heroStats : defaultStats;
+  const titleParts = title.split('Gut Shell');
+  const hasHighlight = titleParts.length > 1;
+
+  return (
       <section className="relative bg-gradient-to-br from-cream-dark via-cream to-cream-dark overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary-100 rounded-full -translate-y-1/2 translate-x-1/4 opacity-60" />
 
@@ -207,6 +219,5 @@ export default function Hero({ settings }: HeroProps) {
           </div>
         </div>
       </section>
-    </>
   );
 }
