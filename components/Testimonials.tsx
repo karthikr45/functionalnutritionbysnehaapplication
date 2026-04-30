@@ -28,7 +28,7 @@ export default function Testimonials() {
   if (!loaded) return null;
 
   return (
-    <section id="testimonials" className="py-20 bg-cream-section">
+    <section id="testimonials" className="py-20 bg-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">What Our Clients Say</p>
