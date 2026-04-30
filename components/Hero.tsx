@@ -140,84 +140,112 @@ export default function Hero({ settings }: HeroProps) {
   );
 }
 
-export function HeroContent({ settings }: HeroProps) {
-  const badge = settings?.heroBadge || 'Certified Gut Shell Consultant';
-  const title = settings?.heroTitle || 'Heal Your Body with Gut Shell';
-  const subtitle = settings?.heroSubtitle || 'Discover the root cause of your health issues through personalized, science-backed nutrition plans. No fad diets, no quick fixes — just sustainable healing through the power of real food.';
-  const highlights = settings?.heroHighlights?.length ? settings.heroHighlights : defaultHighlights;
-  const stats = settings?.heroStats?.length ? settings.heroStats : defaultStats;
-  const titleParts = title.split('Gut Shell');
-  const hasHighlight = titleParts.length > 1;
-
+export function HeroContent() {
   return (
-      <section className="relative bg-gradient-to-br from-cream-dark via-cream to-cream-dark overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary-100 rounded-full -translate-y-1/2 translate-x-1/4 opacity-60" />
+    <section className="relative bg-cream-dark overflow-hidden py-16 sm:py-20">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
-          <div className="max-w-3xl mx-auto text-center space-y-8">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary-100 text-primary-700 text-sm font-medium">
-              {badge}
-            </div>
+        {/* Pre-Consultation Blood Work */}
+        <div className="text-center mb-12">
+          <p className="text-primary-600 font-semibold text-sm uppercase tracking-[0.2em] mb-3">Lab Work</p>
+          <h2 className="text-3xl sm:text-4xl font-medium text-gray-900 font-serif">Pre-Consultation &amp; Annual Blood Work</h2>
+        </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight font-serif">
-              {hasHighlight ? (
-                <>
-                  {titleParts[0]}
-                  <span className="text-primary-600">Gut Shell</span>
-                  {titleParts[1]}
-                </>
-              ) : (
-                title
-              )}
-            </h1>
+        <div className="max-w-3xl mx-auto mb-12">
+          <p className="text-warm-text text-base leading-relaxed mb-8 text-center">
+            Whether you&apos;re beginning your health journey or simply staying on top of your wellbeing, this panel is designed to give a more complete view of what your body may need. Instead of navigating multiple tests and still missing the full picture, this package brings together essential markers in one place.
+          </p>
 
-            <p className="text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">{subtitle}</p>
+          <h3 className="text-sm font-semibold text-primary-600 uppercase tracking-[0.15em] mb-4">Why does this blood work matter</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+            {[
+              'Offers a clearer picture of your overall health',
+              'Helps identify early imbalances before they progress',
+              'Covers key markers in one complete panel',
+              'Reduces guesswork from scattered testing',
+              'Gives clearer direction for nutrition and lifestyle support',
+            ].map((item) => (
+              <div key={item} className="flex items-start gap-2.5 text-sm text-warm-text">
+                <span className="text-primary-600 mt-0.5">✓</span> {item}
+              </div>
+            ))}
+          </div>
 
-            <div className="flex flex-wrap gap-6 text-sm text-gray-600 justify-center">
-              {highlights.map((label, i) => (
-                <div key={label} className="flex items-center gap-2">
-                  <span>{defaultIcons[i] || <LeafIcon className="w-5 h-5 text-primary-600" />}</span>
-                  <span className="font-semibold text-gray-800">{label}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <MagneticButton strength={0.2}>
-                <Link
-                  href="/#packages"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-lg"
-                >
-                  Book a Consultation
-                  <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </Link>
-              </MagneticButton>
-              <MagneticButton strength={0.2}>
-                <Link
-                  href="#services"
-                  className="inline-flex items-center justify-center px-8 py-4 border-2 border-primary-600 text-primary-600 hover:bg-primary-50 font-semibold rounded-xl transition-all duration-200 text-lg"
-                >
-                  Explore Services
-                </Link>
-              </MagneticButton>
-            </div>
-
-            <div className="flex flex-wrap gap-4 justify-center pt-4">
-              {stats.map((stat) => (
-                <div key={stat.label} className="text-center px-5 py-3 bg-white rounded-xl shadow-sm border border-gray-100">
-                  <p className="text-xl font-bold text-primary-600">
-                    {/^\d+/.test(stat.number) ? (
-                      <CountUp end={parseInt(stat.number)} suffix={stat.number.replace(/^\d+/, '')} duration={2000} />
-                    ) : stat.number}
-                  </p>
-                  <p className="text-xs text-gray-500">{stat.label}</p>
-                </div>
-              ))}
-            </div>
+          <div className="text-center">
+            <a
+              href="https://booking.thyrocare.com/landing-page?pageId=5648c507ffc84bda8905aaeb91769695941204737254874eed4514a3dae03c73"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700 transition-colors shadow-lg text-sm"
+            >
+              📎 Book Your Lab Work
+            </a>
           </div>
         </div>
-      </section>
+
+        {/* Divider */}
+        <div className="flex items-center gap-4 my-12">
+          <div className="h-px flex-1 bg-primary-200/50" />
+          <span className="text-xs font-semibold text-primary-500 uppercase tracking-[0.2em]">Advanced Testing</span>
+          <div className="h-px flex-1 bg-primary-200/50" />
+        </div>
+
+        {/* Advanced Functional Testing */}
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-medium text-gray-900 font-serif mb-4 text-center">Advanced Functional Testing</h2>
+          <p className="text-warm-text text-base leading-relaxed mb-8 text-center">
+            For cases that need deeper investigation, advanced functional testing may be recommended to explore underlying imbalances more closely. These tests are suggested only when clinically relevant and based on symptoms, health history, and case complexity.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            <div className="bg-cream rounded-3xl p-8 border border-primary-100/30">
+              <h3 className="text-sm font-semibold text-primary-600 uppercase tracking-[0.15em] mb-5">Functional Testing Available</h3>
+              <ul className="space-y-2.5">
+                {[
+                  'GI-MAP (Gut Microbiome & Infections)',
+                  'H. Pylori Testing',
+                  'SIBO Breath Testing',
+                  'DUTCH Test for Hormonal Health',
+                  'Mould Toxicity Testing',
+                  'Food Allergy & Sensitivity Testing',
+                  'Heavy Metals Testing',
+                  'Neurotransmitter Testing',
+                  'Cortisol & Adrenal Function Testing',
+                  'Additional functional testing as required',
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm text-warm-text">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary-500 mt-2 flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="bg-warm-footer rounded-3xl p-8 text-white">
+              <h3 className="text-sm font-semibold text-primary-300 uppercase tracking-[0.15em] mb-5">When deeper testing is needed</h3>
+              <ul className="space-y-2.5">
+                {[
+                  'Persistent IBS or digestive concerns',
+                  'Chronic bloating, reflux, or irregular bowel patterns',
+                  'Hormonal imbalances',
+                  'Fatigue and burnout',
+                  'Skin flare-ups and inflammation',
+                  'Food sensitivities',
+                  'Suspected infections or deeper gut dysfunction',
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm text-cream-dark/80">
+                    <span className="text-primary-300 mt-0.5">•</span> {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <p className="text-warm-text text-sm text-center italic">
+            Advanced testing allows for a more precise and personalised approach when routine testing alone does not explain the full picture.
+          </p>
+        </div>
+      </div>
+    </section>
   );
 }

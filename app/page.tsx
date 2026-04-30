@@ -49,7 +49,7 @@ export default async function HomePage() {
         </ScrollReveal>
 
         <ScrollReveal animation="fade-up">
-          <HeroContent settings={settings} />
+          <HeroContent />
         </ScrollReveal>
 
         <ScrollReveal animation="fade-up">
