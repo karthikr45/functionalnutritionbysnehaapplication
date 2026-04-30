@@ -237,11 +237,51 @@ const fallbackData: Record<string, any> = {
   },
   'personalized-nutrition-plan': {
     title: 'One-Time Personalized Nutrition Plan',
-    subtitle: 'A complete nutrition blueprint tailored to your unique health needs.',
+    subtitle: 'Expert Guidance. One Clear Plan. No Long-Term Commitment.',
     image: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=1200&h=600&fit=crop',
-    description: 'Perfect for those who want a comprehensive, one-time nutrition assessment. You\'ll receive a detailed personalized nutrition plan including meal plans, grocery lists, recipes, and supplement recommendations — all tailored to your specific health goals, food preferences, and lifestyle.',
-    benefits: ['Complete health assessment', 'Personalized 7-day meal plan', 'Grocery list and recipes', 'Supplement recommendations', 'Lab report interpretation', 'Lifestyle modification guide'],
-    conditions: ['General Wellness', 'Preventive Health', 'Energy Optimization', 'Skin Health', 'Sleep Improvement', 'Stress Management'],
+    description: 'Not everyone needs a full program. Sometimes, you just need the right roadmap. If you don\'t have any medical conditions but want to eat better, this plan is for you. We\'ll help you master the essentials — protein, carbs, fibre, and key micronutrients — so you can build lasting health and keep lifestyle diseases at bay.',
+    philosophy: 'No ongoing calls. No monthly follow-ups. Just one powerful plan to set you on the right path.',
+    benefits: [
+      'Gym Enthusiast — Clarity on protein intake, balanced meals, supplement suggestions, and blood work review',
+      'Prevent Lifestyle Diseases — Focused meal ideas to help ward off diabetes, high cholesterol, fatty liver',
+      'Weight Loss (Lighter Option) — Professional guidance without the long-term commitment',
+      'Parent of a Kid or Teen — Age-specific nutrition for healthy growth, strong immunity, and development',
+      'Vegan Diet — Plant-based plans ensuring enough protein, iron, B12, calcium — no guesswork',
+      'Frequent Traveller — Practical nutrition for home stays, plus supplement tips for the road',
+    ],
+    conditions: ['General Wellness', 'Preventive Health', 'Gym & Fitness', 'Kids & Teens', 'Vegan Nutrition', 'Travel Nutrition'],
+    whyGutHealth: 'This is a one-time plan — not a recurring program. There are no follow-up calls or ongoing support after your explanation session. And that\'s exactly the point. It\'s for people who want expert input once, then want to go live their life.',
+    steps: [
+      {
+        title: 'Book Your Case Analysis Call',
+        description: 'We\'ll talk about your goals, what you like to eat, and whether any blood work would be helpful.',
+      },
+      {
+        title: 'Team Consultation',
+        description: 'Our experts review your case behind the scenes.',
+      },
+      {
+        title: 'We Build Your Plan',
+        description: 'Once you sign up, allow 5 days for us to create your customised nutrition plan.',
+      },
+      {
+        title: 'Plan Explanation Call (30 Minutes)',
+        description: 'We walk you through your plan step by step so you leave feeling confident and clear.',
+      },
+    ],
+    programStructure: null,
+    investment: '₹15,000 — Includes case analysis call, custom plan development, and a 30-minute plan walkthrough',
+    guidelines: {
+      suitable: [
+        'One-time plan — no recurring commitment',
+        'Includes case analysis call + custom plan + 30-min walkthrough',
+        'Perfect for those without medical conditions who want to eat better',
+      ],
+      notIncluded: [
+        'No follow-up calls or ongoing support after plan explanation',
+        'Not a recurring program — designed as a one-time expert consultation',
+      ],
+    },
   },
   'group-program': {
     title: 'Group Program',
