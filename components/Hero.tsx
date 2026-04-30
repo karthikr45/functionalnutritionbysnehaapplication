@@ -1,7 +1,8 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { WordReveal, TypingEffect, GradientShimmer, CountUp, Parallax, MagneticButton } from './AnimationEffects';
+import { CountUp, MagneticButton } from './AnimationEffects';
 
 interface HeroProps {
   settings?: {
@@ -29,42 +30,95 @@ export default function Hero({ settings }: HeroProps) {
   const highlights = settings?.heroHighlights?.length ? settings.heroHighlights : defaultHighlights;
   const stats = settings?.heroStats?.length ? settings.heroStats : defaultStats;
   const doctorImage = settings?.doctorImage;
-  const name = settings?.aboutName || 'Sneha';
+  const name = settings?.aboutName || 'Sneha Agarwal';
   const specializations = settings?.aboutSpecializations || 'PCOS | Thyroid | Gut Health | Weight Management | Diabetes';
 
-  // Split title to highlight last part in green
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
   const titleParts = title.split('Gut Shell');
   const hasHighlight = titleParts.length > 1;
 
   return (
-    <section className="relative bg-gradient-to-br from-primary-50 via-white to-primary-50 overflow-hidden">
-      {/* Decorative blobs */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-primary-100 rounded-full -translate-y-1/2 translate-x-1/4 opacity-60" />
-      <div className="absolute bottom-0 left-0 w-72 h-72 bg-amber-200/20 rounded-full translate-y-1/2 -translate-x-1/4 opacity-60" />
+    <>
+      {/* Hero Banner — Full-width doctor image */}
+      <section className="relative w-full h-[60vh] sm:h-[70vh] lg:h-[85vh] overflow-hidden bg-gray-100">
+        {/* Doctor Image */}
+        {doctorImage ? (
+          <img
+            src={doctorImage}
+            alt={name}
+            className="absolute inset-0 w-full h-full object-cover object-top"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-primary-100 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-40 h-40 bg-primary-100 rounded-full mx-auto mb-6 flex items-center justify-center text-7xl">🌿</div>
+              <p className="text-gray-400 text-sm">Upload doctor image in Sanity → Site Settings → Doctor Profile Image</p>
+            </div>
+          </div>
+        )}
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-32">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
-          <div className="space-y-8">
+        {/* Gradient overlay at bottom for text readability */}
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+
+        {/* Bottom-left: Signature name — slides from left */}
+        <div
+          className="absolute bottom-8 sm:bottom-12 left-6 sm:left-12 lg:left-16 z-10 transition-all duration-1000 ease-out"
+          style={{
+            transform: mounted ? 'translateX(0)' : 'translateX(-100%)',
+            opacity: mounted ? 1 : 0,
+            transitionDelay: '300ms',
+          }}
+        >
+          <p className="font-signature text-white text-5xl sm:text-6xl lg:text-8xl drop-shadow-lg">
+            {name}
+          </p>
+        </div>
+
+        {/* Bottom-right: Title + specializations — slides from right */}
+        <div
+          className="absolute bottom-8 sm:bottom-12 right-6 sm:right-12 lg:right-16 z-10 text-right transition-all duration-1000 ease-out"
+          style={{
+            transform: mounted ? 'translateX(0)' : 'translateX(100%)',
+            opacity: mounted ? 1 : 0,
+            transitionDelay: '600ms',
+          }}
+        >
+          <p className="text-white text-lg sm:text-xl lg:text-2xl font-serif font-semibold tracking-wide">
+            Functional Nutritionist
+          </p>
+          <p className="text-white/80 text-xs sm:text-sm mt-1 tracking-widest uppercase">
+            {specializations}
+          </p>
+        </div>
+      </section>
+
+      {/* Content section below the banner */}
+      <section className="relative bg-gradient-to-br from-primary-50 via-white to-primary-50 overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary-100 rounded-full -translate-y-1/2 translate-x-1/4 opacity-60" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+          <div className="max-w-3xl mx-auto text-center space-y-8">
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary-100 text-primary-700 text-sm font-medium">
               {badge}
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight font-serif">
+
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight font-serif">
               {hasHighlight ? (
                 <>
-                  <WordReveal text={titleParts[0].trim()} stagger={100} />
-                  {' '}<GradientShimmer className="font-bold text-4xl sm:text-5xl lg:text-6xl font-serif">Gut Shell</GradientShimmer>
-                  {titleParts[1] && <WordReveal text={titleParts[1].trim()} delay={500} stagger={100} />}
+                  {titleParts[0]}
+                  <span className="text-primary-600">Gut Shell</span>
+                  {titleParts[1]}
                 </>
               ) : (
-                <WordReveal text={title} stagger={100} />
+                title
               )}
             </h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
-              <TypingEffect text={subtitle} delay={1200} speed={20} />
-            </p>
 
-            <div className="flex flex-wrap gap-6 text-sm text-gray-600">
+            <p className="text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">{subtitle}</p>
+
+            <div className="flex flex-wrap gap-6 text-sm text-gray-600 justify-center">
               {highlights.map((label, i) => (
                 <div key={label} className="flex items-center gap-2">
                   <span className="text-2xl">{defaultIcons[i] || '✨'}</span>
@@ -73,7 +127,7 @@ export default function Hero({ settings }: HeroProps) {
               ))}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <MagneticButton strength={0.2}>
                 <Link
                   href="/#packages"
@@ -95,10 +149,9 @@ export default function Hero({ settings }: HeroProps) {
               </MagneticButton>
             </div>
 
-            {/* Trust badges */}
-            <div className="flex flex-wrap gap-4 pt-4">
+            <div className="flex flex-wrap gap-4 justify-center pt-4">
               {stats.map((stat) => (
-                <div key={stat.label} className="text-center px-4 py-2 bg-white rounded-xl shadow-sm border border-gray-100">
+                <div key={stat.label} className="text-center px-5 py-3 bg-white rounded-xl shadow-sm border border-gray-100">
                   <p className="text-xl font-bold text-primary-600">
                     {/^\d+/.test(stat.number) ? (
                       <CountUp end={parseInt(stat.number)} suffix={stat.number.replace(/^\d+/, '')} duration={2000} />
@@ -109,70 +162,8 @@ export default function Hero({ settings }: HeroProps) {
               ))}
             </div>
           </div>
-
-          {/* Right Image */}
-          <Parallax speed={0.15} className="relative flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-md">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary-200 to-primary-400 rounded-3xl rotate-3 opacity-30" />
-              <div className="relative bg-white rounded-3xl shadow-2xl overflow-hidden aspect-[4/5]">
-                {doctorImage ? (
-                  <img
-                    src={doctorImage}
-                    alt={name}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="absolute inset-0 bg-gradient-to-b from-primary-50 to-white flex items-center justify-center">
-                    <div className="text-center p-8">
-                      <div className="w-40 h-40 bg-primary-100 rounded-full mx-auto mb-6 flex items-center justify-center text-6xl">
-                        🌿
-                      </div>
-                      <h3 className="text-2xl font-bold text-gray-800 font-serif">{name}</h3>
-                      <p className="text-primary-600 font-medium mt-1">Gut Shell Consultant</p>
-                      <p className="text-gray-500 text-sm mt-2">Certified in Functional Medicine &amp; Clinical Nutrition</p>
-                    </div>
-                  </div>
-                )}
-                {/* Overlay name card when image is present */}
-                {doctorImage && (
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-6">
-                    <h3 className="text-2xl font-bold text-white font-serif">{name}</h3>
-                    <p className="text-primary-300 font-medium text-sm mt-0.5">Gut Shell Consultant</p>
-                    <div className="mt-2 flex flex-wrap gap-1.5">
-                      {specializations.split('|').map((s) => (
-                        <span key={s.trim()} className="px-2 py-0.5 bg-white/20 text-white text-xs rounded-full backdrop-blur-sm">
-                          {s.trim()}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Floating cards */}
-              <div className="absolute -top-4 -left-2 sm:-left-8 bg-white rounded-2xl shadow-lg p-3 sm:p-4 border border-primary-100 z-10 animate-float">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center text-xl">🥗</div>
-                  <div>
-                    <p className="text-xs text-gray-500">Next Available</p>
-                    <p className="font-semibold text-gray-800 text-sm">Tomorrow, 10 AM</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="absolute -bottom-4 -right-2 sm:-right-8 bg-white rounded-2xl shadow-lg p-3 sm:p-4 border border-primary-100 z-10 animate-float-delayed">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center text-xl">🎯</div>
-                  <div>
-                    <p className="text-xs text-gray-500">Success Rate</p>
-                    <p className="font-semibold text-gray-800 text-sm">95% Goal Achieved</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Parallax>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
