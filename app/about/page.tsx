@@ -226,7 +226,7 @@ export default async function AboutPage() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-8 py-4 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700 transition-colors shadow-lg text-sm"
                 >
-                  📎 Book Your Lab Work
+                  Book Your Lab Work
                 </a>
               </div>
               </ScrollReveal>

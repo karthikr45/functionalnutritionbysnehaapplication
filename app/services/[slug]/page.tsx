@@ -477,7 +477,7 @@ export default async function ServicePage({ params }: { params: { slug: string }
 
                     {step.link && (
                       <a href={step.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-xl font-semibold text-sm hover:bg-primary-700 transition-colors mb-4">
-                        📎 {step.linkText || 'Book Now'}
+                        {step.linkText || 'Book Now'}
                       </a>
                     )}
 
@@ -570,10 +570,10 @@ export default async function ServicePage({ params }: { params: { slug: string }
             <p className="text-warm-text mb-6">Take the first step toward gut transformation and whole-body health.</p>
             <div className="flex flex-wrap gap-4 justify-center">
               <a href="tel:9391675213" className="px-6 py-3 bg-warm-footer text-white font-bold rounded-xl hover:bg-primary-900 transition-colors text-sm">
-                📞 Call 9391675213
+                Call 9391675213
               </a>
               <Link href="/#contact" className="px-6 py-3 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700 transition-colors text-sm">
-                📅 Book Case Analysis
+                Book Case Analysis
               </Link>
             </div>
           </div>
