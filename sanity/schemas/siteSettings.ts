@@ -39,9 +39,17 @@ export default defineType({
     }),
     defineField({
       name: 'doctorImage',
-      title: 'Doctor Profile Image (Hero & About)',
+      title: 'Doctor Profile Image (Mobile / Portrait)',
       type: 'image',
       options: { hotspot: true },
+      description: 'Portrait image used on mobile hero and About section.',
+    }),
+    defineField({
+      name: 'heroDesktopImage',
+      title: 'Hero Desktop Image (Wide / Landscape)',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Wide image for desktop hero banner. If empty, falls back to the portrait image.',
     }),
 
     // About Section

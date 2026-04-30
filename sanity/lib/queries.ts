@@ -31,6 +31,7 @@ export const SITE_SETTINGS_QUERY = `
     heroHighlights,
     heroStats,
     "doctorImage": doctorImage.asset->url,
+    "heroDesktopImage": heroDesktopImage.asset->url,
     aboutName,
     aboutTitle,
     aboutDescription,

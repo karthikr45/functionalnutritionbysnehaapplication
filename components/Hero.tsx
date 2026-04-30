@@ -13,6 +13,7 @@ interface HeroProps {
     heroHighlights?: string[];
     heroStats?: { number: string; label: string }[];
     doctorImage?: string;
+    heroDesktopImage?: string;
     aboutName?: string;
     aboutSpecializations?: string;
   } | null;
@@ -35,6 +36,7 @@ export default function Hero({ settings }: HeroProps) {
   const highlights = settings?.heroHighlights?.length ? settings.heroHighlights : defaultHighlights;
   const stats = settings?.heroStats?.length ? settings.heroStats : defaultStats;
   const doctorImage = settings?.doctorImage;
+  const desktopImage = settings?.heroDesktopImage;
   const name = settings?.aboutName || 'Sneha Agarwal';
   const specializations = settings?.aboutSpecializations || 'PCOS | Thyroid | Gut Health | Weight Management | Diabetes';
 
@@ -48,22 +50,21 @@ export default function Hero({ settings }: HeroProps) {
     <>
       {/* Hero Banner */}
       <section className="relative w-full h-[calc(100svh-64px)] overflow-hidden bg-gray-900">
-        {/* Blurred bg — desktop only to fill sides around portrait */}
-        {doctorImage && (
-          <img
-            src={doctorImage}
-            alt=""
-            aria-hidden="true"
-            className="hidden lg:block absolute inset-0 w-full h-full object-cover scale-110 blur-2xl brightness-50"
-          />
-        )}
-
-        {/* Doctor Image — cover on mobile, contain on desktop */}
+        {/* Mobile image — portrait, cover */}
         {doctorImage ? (
           <img
             src={doctorImage}
             alt={name}
-            className="absolute inset-0 w-full h-full object-cover object-top lg:object-contain lg:object-center z-[1]"
+            className="lg:hidden absolute inset-0 w-full h-full object-cover object-top z-[1]"
+          />
+        ) : null}
+
+        {/* Desktop image — wide landscape, cover */}
+        {(desktopImage || doctorImage) ? (
+          <img
+            src={desktopImage || doctorImage!}
+            alt={name}
+            className="hidden lg:block absolute inset-0 w-full h-full object-cover object-center z-[1]"
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-primary-100 flex items-center justify-center z-[1]">
