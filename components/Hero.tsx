@@ -99,7 +99,7 @@ export default function Hero({ settings }: HeroProps) {
         <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-[2]" />
 
         {/* Bottom overlays */}
-        <div className="absolute inset-x-0 bottom-0 z-[3] px-4 pb-4 sm:px-8 sm:pb-8 lg:px-12 lg:pb-10 pr-20 sm:pr-24">
+        <div className="absolute inset-x-0 bottom-0 z-[3] px-4 pb-4 sm:px-8 sm:pb-8 lg:px-12 lg:pb-10 sm:pr-28 lg:pr-32">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-0.5 sm:gap-4">
             {/* Left: Signature name — slides from left, slow */}
             <div
