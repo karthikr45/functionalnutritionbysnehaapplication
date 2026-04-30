@@ -48,7 +48,7 @@ export default function Hero({ settings }: HeroProps) {
           <img
             src={doctorImage}
             alt={name}
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover object-top"
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-primary-100 flex items-center justify-center">
