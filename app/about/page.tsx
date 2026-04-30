@@ -169,28 +169,33 @@ export default async function AboutPage() {
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
 
-        {/* Approach section */}
-        <ScrollReveal animation="fade-up">
-          <div className="max-w-3xl mx-auto space-y-6 mb-20">
+        {/* Approach section — each paragraph animates individually */}
+        <div className="max-w-3xl mx-auto space-y-6 mb-20">
+          <ScrollReveal animation="fade-up" delay={0}>
             <p className="text-base sm:text-lg text-warm-text leading-[1.9]">
               Sneha Agarwal focuses on understanding what lies beneath the symptom — because true healing begins by addressing the cause, not just the discomfort. Symptoms are often the body&apos;s earliest signals that something deeper is out of balance, and when ignored for long enough, they can develop into long-term health concerns that affect both physical and mental wellbeing.
             </p>
+          </ScrollReveal>
+          <ScrollReveal animation="fade-up" delay={150}>
             <p className="text-base sm:text-lg text-warm-text leading-[1.9]">
               Her work is centred on helping individuals understand these signals, uncover the deeper imbalances beneath them, and support the body through targeted nutrition and sustainable lifestyle shifts. From chronic digestive concerns and hormonal imbalances to metabolic dysfunction and inflammation, Sneha&apos;s approach is rooted in helping the body heal in a way that is practical, lasting, and deeply restorative.
             </p>
+          </ScrollReveal>
+          <ScrollReveal animation="fade-up" delay={300}>
             <p className="text-base sm:text-lg text-warm-text leading-[1.9]">
               Working with clients across a wide range of health concerns, her focus remains the same — to help people move beyond symptom management and return to a healthier, more balanced way of living.
             </p>
-          </div>
-        </ScrollReveal>
+          </ScrollReveal>
+        </div>
 
         {/* Lab Work — Pre-Consultation Blood Work */}
-        <ScrollReveal animation="fade-up">
-          <div className="mb-16">
+        <div className="mb-16">
+          <ScrollReveal animation="blur-in">
             <div className="text-center mb-10">
               <p className="text-primary-600 font-semibold text-sm uppercase tracking-[0.2em] mb-3">Lab Work</p>
               <h2 className="text-3xl sm:text-4xl font-medium text-gray-900 font-serif">Pre-Consultation &amp; Annual Blood Work</h2>
             </div>
+          </ScrollReveal>
 
             <div className="max-w-3xl mx-auto mb-10">
               <p className="text-warm-text text-base leading-relaxed mb-8 text-center">
@@ -212,6 +217,7 @@ export default async function AboutPage() {
                 ))}
               </div>
 
+              <ScrollReveal animation="scale-up">
               <div className="text-center">
                 <a
                   href="https://booking.thyrocare.com/landing-page?pageId=5648c507ffc84bda8905aaeb91769695941204737254874eed4514a3dae03c73"
@@ -222,9 +228,9 @@ export default async function AboutPage() {
                   📎 Book Your Lab Work
                 </a>
               </div>
+              </ScrollReveal>
             </div>
           </div>
-        </ScrollReveal>
 
         {/* Advanced Functional Testing */}
         <ScrollReveal animation="fade-up">
@@ -242,6 +248,7 @@ export default async function AboutPage() {
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                <ScrollReveal animation="slide-right">
                 <div className="bg-cream-dark rounded-3xl p-8 border border-primary-100/30">
                   <h3 className="text-sm font-semibold text-primary-600 uppercase tracking-[0.15em] mb-5">Functional Testing Available</h3>
                   <ul className="space-y-2.5">
@@ -264,7 +271,9 @@ export default async function AboutPage() {
                     ))}
                   </ul>
                 </div>
+                </ScrollReveal>
 
+                <ScrollReveal animation="slide-left" delay={200}>
                 <div className="bg-warm-footer rounded-3xl p-8 text-white">
                   <h3 className="text-sm font-semibold text-primary-300 uppercase tracking-[0.15em] mb-5">When deeper testing is needed</h3>
                   <ul className="space-y-2.5">
@@ -283,43 +292,54 @@ export default async function AboutPage() {
                     ))}
                   </ul>
                 </div>
+                </ScrollReveal>
               </div>
 
+              <ScrollReveal animation="fade-in" delay={400}>
               <p className="text-warm-text text-sm text-center italic">
                 Advanced testing allows for a more precise and personalised approach when routine testing alone does not explain the full picture.
               </p>
+              </ScrollReveal>
             </div>
           </div>
         </ScrollReveal>
 
         {/* Contact section */}
-        <ScrollReveal animation="fade-up">
-          <div className="max-w-3xl mx-auto mb-16">
+        <div className="max-w-3xl mx-auto mb-16">
+          <ScrollReveal animation="blur-in">
             <div className="flex items-center gap-4 mb-8">
               <div className="h-px flex-1 bg-primary-200/50" />
               <h3 className="text-sm font-semibold text-primary-600 uppercase tracking-[0.2em]">Contact</h3>
               <div className="h-px flex-1 bg-primary-200/50" />
             </div>
+          </ScrollReveal>
 
-            <div className="space-y-6">
+          <div className="space-y-6">
+            <ScrollReveal animation="fade-up" delay={0}>
               <p className="text-base sm:text-lg text-warm-text leading-[1.9]">
                 Sneha Agarwal is a Functional Nutritionist and Gut Health Practitioner based in Hyderabad, working with a root-cause approach to help individuals restore health by understanding what the body is asking for beneath the symptoms. Her work is centred on supporting the body&apos;s natural ability to heal, regulate, and function better through personalised nutrition and targeted therapeutic care.
               </p>
+            </ScrollReveal>
+            <ScrollReveal animation="fade-up" delay={150}>
               <p className="text-base sm:text-lg text-warm-text leading-[1.9]">
                 With a strong focus on digestive wellness, Sneha works closely with concerns such as IBS, bloating, acidity, constipation, gastritis, H. pylori, poor digestion, and chronic gut discomfort through structured, food-first protocols designed to support long-term healing.
               </p>
+            </ScrollReveal>
+            <ScrollReveal animation="fade-up" delay={300}>
               <p className="text-base sm:text-lg text-warm-text leading-[1.9]">
                 Her practice also extends to metabolic and lifestyle-related concerns, including weight management, insulin resistance, blood sugar imbalance, fatty liver, high cholesterol, inflammation, and hormone-related imbalances — using personalised nutrition strategies that are practical, sustainable, and built around the individual.
               </p>
+            </ScrollReveal>
+            <ScrollReveal animation="fade-up" delay={450}>
               <p className="text-base sm:text-lg text-warm-text leading-[1.9]">
                 By combining functional nutrition, root-cause assessment, and personalised healing protocols, Sneha helps individuals improve digestion, restore metabolic balance, and build long-term health in a way that feels simple, supported, and sustainable.
               </p>
-            </div>
+            </ScrollReveal>
           </div>
-        </ScrollReveal>
+        </div>
 
         {/* CTA */}
-        <ScrollReveal animation="fade-up">
+        <ScrollReveal animation="scale-up">
           <div className="max-w-3xl mx-auto mt-16 bg-warm-footer rounded-3xl p-10 sm:p-12 text-white text-center">
             <h3 className="text-3xl sm:text-4xl font-medium font-serif mb-4">Ready to start your healing journey?</h3>
             <p className="text-cream-dark/70 max-w-lg mx-auto mb-8">
