@@ -284,12 +284,38 @@ const fallbackData: Record<string, any> = {
     },
   },
   'group-program': {
-    title: 'Group Program',
-    subtitle: '4-Week PCOS Empowerment Program',
+    title: '21 Days to PCOS Wellness',
+    subtitle: 'You Don\'t Have to Do This Alone.',
     image: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=600&fit=crop',
-    description: 'Join our supportive community-based group programs led by our experts. Our flagship 4-Week PCOS Empowerment Program brings together women dealing with PCOS for guided nutrition education, meal planning, accountability, and peer support. Transform your health alongside others on the same journey.',
-    benefits: ['Community support and accountability', 'Weekly live sessions', 'Group meal planning workshops', 'Exclusive recipe collections', 'Progress tracking together', 'Lifetime access to program materials'],
-    conditions: ['PCOS Management', 'Hormonal Imbalance', 'Weight Management', 'Insulin Resistance', 'Irregular Periods', 'Hormonal Acne'],
+    description: 'Irregular periods. Hormonal chaos. Weight that won\'t budge. Exhaustion that never lifts. Mood swings that leave you confused. You\'ve been managing PCOS on your own for too long. It\'s time to try something different — a group journey designed specifically for women, by gut and hormonal health expert Sneha Agarwal.',
+    philosophy: 'Because PCOS can feel isolating. But healing doesn\'t have to be. When you join this program, you\'re not just getting a plan. You\'re getting a circle of women who truly understand. You\'ll share, learn, support each other, and grow together. There\'s power in that. Real power.',
+    benefits: [
+      'A clearer understanding of your PCOS',
+      'Daily habits that support hormonal balance',
+      'Better energy and mood',
+      'Practical nutrition strategies you can keep using',
+      'A sense of control over your health again',
+      'Genuine connections with women on the same path',
+    ],
+    conditions: ['Irregular or missing periods', 'Hormonal acne or hair changes', 'Stubborn weight gain', 'Constant fatigue', 'Mood swings or brain fog'],
+    whyGutHealth: null,
+    steps: null,
+    programStructure: [
+      'Created by a Specialist — Sneha Agarwal lives and breathes gut and hormonal health. Every recommendation is science-backed and practical',
+      'Structured for Real Life — 21 days of clear, daily guidance. No confusion. No overwhelm. Just a steady path forward',
+      'Natural & Sustainable — No harsh protocols. No extreme restrictions. Just nutrition and lifestyle changes that work with your body',
+      'Community at the Heart — Sisters on this journey who get the late-night cravings, the frustration, the wins, and the setbacks',
+    ],
+    investment: '₹9,999 only — 21 Days PCOS Wellness Program',
+    guidelines: {
+      suitable: [
+        'Women experiencing irregular periods, hormonal acne, stubborn weight gain',
+        'Those dealing with constant fatigue, mood swings, or brain fog',
+        'Anyone ready to stop struggling with PCOS alone',
+        '🎉 Registrations Are Open',
+      ],
+      notIncluded: null,
+    },
   },
 };
 

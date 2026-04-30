@@ -129,8 +129,8 @@ export default function Hero({ settings }: HeroProps) {
               <p className="text-white text-xs sm:text-lg lg:text-2xl font-serif font-semibold tracking-wide">
                 Functional Nutritionist
               </p>
-              <p className="text-white/70 text-[8px] sm:text-xs mt-0.5 tracking-[0.08em] sm:tracking-[0.15em] uppercase break-words">
-                {specializations}
+              <p className="text-white/80 text-[9px] sm:text-sm mt-0.5 tracking-wide">
+                Gut &amp; Hormonal Health
               </p>
             </div>
           </div>
