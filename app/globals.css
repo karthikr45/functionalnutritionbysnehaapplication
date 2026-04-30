@@ -74,6 +74,13 @@
 ::-webkit-scrollbar-thumb { @apply bg-gray-300 rounded-full; }
 ::-webkit-scrollbar-thumb:hover { @apply bg-gray-400; }
 
+@media (orientation: landscape) and (max-height: 500px) {
+  .hero-mobile-img {
+    object-fit: contain !important;
+    object-position: center !important;
+  }
+}
+
 @keyframes shimmer {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }

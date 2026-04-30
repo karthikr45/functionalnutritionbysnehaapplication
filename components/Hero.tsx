@@ -49,13 +49,13 @@ export default function Hero({ settings }: HeroProps) {
   return (
     <>
       {/* Hero Banner */}
-      <section className="relative w-full h-[calc(100svh-64px)] overflow-hidden bg-gray-900">
+      <section className="relative w-full h-[calc(100svh-64px)] min-h-[400px] overflow-hidden bg-gray-900">
         {/* Mobile image — portrait, cover */}
         {doctorImage && (
           <img
             src={doctorImage}
             alt={name}
-            className="lg:hidden absolute inset-0 w-full h-full object-cover object-top z-[1]"
+            className="lg:hidden absolute inset-0 w-full h-full object-cover object-top z-[1] hero-mobile-img"
           />
         )}
 
