@@ -19,7 +19,7 @@ export default function WhatsAppButton() {
       href={`https://wa.me/${waNumber}?text=Hi%2C%20I%27d%20like%20to%20know%20more%20about%20your%20nutrition%20consultations.`}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-6 z-50 bg-primary-500 hover:bg-primary-600 text-white w-14 h-14 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 group"
+      className="fixed bottom-6 right-4 sm:right-6 z-40 bg-primary-500 hover:bg-primary-600 text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 group"
       aria-label="Chat on WhatsApp"
     >
       <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
