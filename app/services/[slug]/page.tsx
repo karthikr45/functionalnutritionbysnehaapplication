@@ -178,11 +178,62 @@ const fallbackData: Record<string, any> = {
   },
   'pregnancy-nutrition': {
     title: 'Pregnancy Nutrition',
-    subtitle: 'Comprehensive nutrition support for pre-conception, pregnancy & postpartum.',
+    subtitle: 'Nourishing You, Nourishing Your Baby',
     image: 'https://images.unsplash.com/photo-1493894473891-10fc1e5dbd22?w=1200&h=600&fit=crop',
-    description: 'Our Pregnancy Nutrition program provides expert dietary guidance through every stage — from pre-conception planning to pregnancy and postpartum recovery. We ensure optimal nutrition for both mother and baby, addressing common concerns like morning sickness, gestational diabetes, and healthy weight gain.',
-    benefits: ['Optimal fetal development', 'Manage pregnancy-related conditions', 'Healthy weight gain guidance', 'Postpartum recovery nutrition', 'Lactation support', 'Energy and mood balance'],
-    conditions: ['Pre-conception Planning', 'Morning Sickness', 'Gestational Diabetes', 'Pregnancy Anemia', 'Postpartum Recovery', 'Lactation Support'],
+    description: 'Healthy pregnancy starts with healthy nutrition — let us help you make every bite count. Whether you\'re preparing for pregnancy, currently expecting, managing gestational diabetes, or breastfeeding, our program supports you with the right nutrition at the right time.',
+    philosophy: 'Backed by clinical expertise, we ensure both mother and baby receive optimal nourishment for a healthy journey — before, during, and after birth.',
+    benefits: [
+      'Personalised meal planning for each trimester',
+      'Key nutrients like iron, calcium, folate, and protein — made simple',
+      'Support for common concerns like gestational diabetes',
+      'Safe supplement recommendations, only if needed',
+      'Ongoing check-ins and WhatsApp support for all your questions',
+    ],
+    conditions: ['Obesity', 'Insulin resistance', 'Thyroid imbalances', 'PCOS', 'Constipation', 'Anemia', 'Gestational diabetes'],
+    whyGutHealth: null,
+    steps: [
+      {
+        title: 'Pre-Pregnancy Nutrition',
+        description: 'Optimise your fertility, correct nutritional deficiencies, and prepare your body for a healthy conception with a balanced, hormone-supportive diet.',
+      },
+      {
+        title: 'Pregnancy Nutrition',
+        description: 'Personalised trimester-wise meal plans to support fetal development, manage symptoms like nausea and heartburn, and promote healthy weight gain.',
+      },
+      {
+        title: 'Gestational Diabetes Management',
+        description: 'Specialised meal planning to regulate blood sugar levels, prevent complications, and support a healthy pregnancy outcome — without extreme food restrictions.',
+      },
+      {
+        title: 'Lactation Support',
+        description: 'Nutrient-rich plans to support milk production, maintain your energy, and aid postpartum recovery — with practical guidance for new mothers.',
+      },
+    ],
+    programStructure: [
+      'Onboarding Mentor Call — A detailed one-on-one conversation to understand your goals, lifestyle, and food preferences',
+      'Dedicated Clinical Dietitian — Personally guides and supports you throughout your journey',
+      'Personalised Nutrition Plans for Every Stage — Tailored to preconception, pregnancy, and postpartum',
+      'Regular Progress Review Calls — Assess progress, address challenges, and fine-tune your plan',
+      'Daily WhatsApp Support (Weekdays) — Real-time support, motivation, and answers at your fingertips',
+      'Individualised plans based on nutrition needs, blood work, and dietary preferences',
+      'Education to help you make informed, confident food choices',
+    ],
+    investment: '3 months — ₹30,000 (includes 6 review calls)',
+    guidelines: {
+      suitable: [
+        'Consultation with Sneha Agarwal',
+        'Support for every stage — from planning to postpartum',
+        'Medical conditions supported: Obesity, Insulin resistance, Thyroid, PCOS, Anemia, Gestational diabetes',
+      ],
+      notIncluded: [
+        'Irritable Bowel Syndrome (IBS)',
+        'Inflammatory Bowel Disease (IBD)',
+        'Gastroesophageal Reflux Disease (GERD)',
+        'Chronic or severe constipation',
+        'Those under strict medical supervision or on prescribed fertility/pregnancy support medication',
+        'If unsure, please speak with our team before booking — your safety and care come first',
+      ],
+    },
   },
   'personalized-nutrition-plan': {
     title: 'One-Time Personalized Nutrition Plan',
