@@ -88,13 +88,13 @@ export default function Footer({ settings: propSettings }: FooterProps) {
                 const url = socials[item.key];
                 if (url) {
                   return (
-                    <a key={item.name} href={url} target="_blank" rel="noopener noreferrer" aria-label={item.name} className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-primary-600 transition-colors">
+                    <a key={item.name} href={url} target="_blank" rel="noopener noreferrer" aria-label={item.name} className="w-10 h-10 border border-warm-footer-text/40 rounded-full flex items-center justify-center text-warm-footer-text hover:text-white hover:border-white transition-colors">
                       {item.icon}
                     </a>
                   );
                 }
                 return (
-                  <span key={item.name} className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-600 cursor-default" title={item.name}>
+                  <span key={item.name} className="w-10 h-10 border border-warm-footer-text/20 rounded-full flex items-center justify-center text-warm-footer-text/40 cursor-default" title={item.name}>
                     {item.icon}
                   </span>
                 );
