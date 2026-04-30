@@ -105,7 +105,7 @@ export default function Hero({ settings }: HeroProps) {
             <div
               className="transition-all duration-[2000ms]"
               style={{
-                transform: mounted ? 'translateX(0)' : 'translateX(-100px)',
+                transform: mounted ? 'translateY(0)' : 'translateY(80px)',
                 opacity: mounted ? 1 : 0,
                 transitionDelay: '500ms',
                 transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
@@ -120,7 +120,7 @@ export default function Hero({ settings }: HeroProps) {
             <div
               className="transition-all duration-[2500ms] sm:text-right"
               style={{
-                transform: mounted ? 'translateX(0)' : 'translateX(100px)',
+                transform: mounted ? 'translateY(0)' : 'translateY(80px)',
                 opacity: mounted ? 1 : 0,
                 transitionDelay: '1200ms',
                 transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
