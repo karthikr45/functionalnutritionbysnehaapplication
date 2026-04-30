@@ -106,10 +106,10 @@ export default function Footer({ settings: propSettings }: FooterProps) {
             <h4 className="text-white font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2.5 text-sm">
               {[
-                { href: '/about', label: 'About Us' },
+                { href: '/', label: 'Home' },
+                { href: '/about', label: 'About' },
                 { href: '/#services', label: 'Services' },
-                { href: '/#packages', label: 'Packages & Pricing' },
-                { href: '/#testimonials', label: 'Success Stories' },
+                { href: '/products', label: 'Products' },
                 { href: '/blog', label: 'Blog' },
                 { href: '/#faq', label: 'FAQ' },
                 { href: '/#contact', label: 'Contact' },
