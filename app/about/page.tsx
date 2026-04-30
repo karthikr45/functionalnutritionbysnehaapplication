@@ -341,28 +341,24 @@ export default async function AboutPage() {
 
         {/* CTA */}
         <ScrollReveal animation="scale-up">
-          <div className="max-w-3xl mx-auto mt-16 bg-warm-footer rounded-3xl p-10 sm:p-12 text-white text-center">
-            <h3 className="text-3xl sm:text-4xl font-medium font-serif mb-4">Ready to start your healing journey?</h3>
-            <p className="text-cream-dark/70 max-w-lg mx-auto mb-8">
+          <div className="max-w-3xl mx-auto mt-10 bg-warm-footer rounded-3xl p-6 sm:p-10 text-white text-center">
+            <h3 className="text-2xl sm:text-3xl font-medium font-serif mb-3">Ready to start your healing journey?</h3>
+            <p className="text-cream-dark/70 max-w-lg mx-auto mb-6 text-sm sm:text-base">
               Book a consultation and let&apos;s create a personalized nutrition plan designed specifically for your needs.
             </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <MagneticButton>
-                <Link
-                  href="/#services"
-                  className="px-8 py-4 bg-cream text-warm-footer font-bold rounded-xl hover:bg-white transition-colors text-sm shadow-lg"
-                >
-                  View Services & Book
-                </Link>
-              </MagneticButton>
-              <MagneticButton>
-                <Link
-                  href="/#contact"
-                  className="px-8 py-4 border border-cream-dark/30 text-white font-medium rounded-xl hover:bg-white/10 transition-colors text-sm"
-                >
-                  Get in Touch
-                </Link>
-              </MagneticButton>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link
+                href="/#services"
+                className="px-6 py-3 bg-cream text-warm-footer font-bold rounded-xl hover:bg-white transition-colors text-sm shadow-lg text-center"
+              >
+                View Services &amp; Book
+              </Link>
+              <Link
+                href="/#contact"
+                className="px-6 py-3 border border-cream-dark/30 text-white font-medium rounded-xl hover:bg-white/10 transition-colors text-sm text-center"
+              >
+                Get in Touch
+              </Link>
             </div>
           </div>
         </ScrollReveal>
