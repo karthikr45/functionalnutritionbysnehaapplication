@@ -169,40 +169,125 @@ export default async function AboutPage() {
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
 
-        {/* Stats row */}
+        {/* Approach section */}
         <ScrollReveal animation="fade-up">
-          <div className="flex flex-wrap justify-center gap-8 mt-16 mb-16">
-            {stats.map((stat: { number: string; label: string }) => (
-              <div key={stat.label} className="text-center px-8">
-                <p className="text-5xl sm:text-6xl font-serif font-medium text-primary-700">
-                  {/^\d+/.test(stat.number) ? (
-                    <CountUp end={parseInt(stat.number)} suffix={stat.number.replace(/^\d+/, '')} duration={2500} />
-                  ) : stat.number}
-                </p>
-                <p className="text-warm-text text-sm mt-2 uppercase tracking-wider">{stat.label}</p>
-              </div>
-            ))}
+          <div className="max-w-3xl mx-auto space-y-6 mb-20">
+            <p className="text-base sm:text-lg text-warm-text leading-[1.9]">
+              Sneha Agarwal focuses on understanding what lies beneath the symptom — because true healing begins by addressing the cause, not just the discomfort. Symptoms are often the body&apos;s earliest signals that something deeper is out of balance, and when ignored for long enough, they can develop into long-term health concerns that affect both physical and mental wellbeing.
+            </p>
+            <p className="text-base sm:text-lg text-warm-text leading-[1.9]">
+              Her work is centred on helping individuals understand these signals, uncover the deeper imbalances beneath them, and support the body through targeted nutrition and sustainable lifestyle shifts. From chronic digestive concerns and hormonal imbalances to metabolic dysfunction and inflammation, Sneha&apos;s approach is rooted in helping the body heal in a way that is practical, lasting, and deeply restorative.
+            </p>
+            <p className="text-base sm:text-lg text-warm-text leading-[1.9]">
+              Working with clients across a wide range of health concerns, her focus remains the same — to help people move beyond symptom management and return to a healthier, more balanced way of living.
+            </p>
           </div>
         </ScrollReveal>
 
-        {/* Credentials */}
+        {/* Lab Work — Pre-Consultation Blood Work */}
         <ScrollReveal animation="fade-up">
-          <div className="max-w-3xl mx-auto">
-            <div className="flex items-center gap-4 mb-8">
+          <div className="mb-16">
+            <div className="text-center mb-10">
+              <p className="text-primary-600 font-semibold text-sm uppercase tracking-[0.2em] mb-3">Lab Work</p>
+              <h2 className="text-3xl sm:text-4xl font-medium text-gray-900 font-serif">Pre-Consultation &amp; Annual Blood Work</h2>
+            </div>
+
+            <div className="max-w-3xl mx-auto mb-10">
+              <p className="text-warm-text text-base leading-relaxed mb-8 text-center">
+                Whether you&apos;re beginning your health journey or simply staying on top of your wellbeing, this panel is designed to give a more complete view of what your body may need. Instead of navigating multiple tests and still missing the full picture, this package brings together essential markers in one place.
+              </p>
+
+              <h3 className="text-sm font-semibold text-primary-600 uppercase tracking-[0.15em] mb-4">Why does this blood work matter</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+                {[
+                  'Offers a clearer picture of your overall health',
+                  'Helps identify early imbalances before they progress',
+                  'Covers key markers in one complete panel',
+                  'Reduces guesswork from scattered testing',
+                  'Gives clearer direction for nutrition and lifestyle support',
+                ].map((item) => (
+                  <div key={item} className="flex items-start gap-2.5 text-sm text-warm-text">
+                    <span className="text-primary-600 mt-0.5">✓</span> {item}
+                  </div>
+                ))}
+              </div>
+
+              <div className="text-center">
+                <a
+                  href="https://booking.thyrocare.com/landing-page?pageId=5648c507ffc84bda8905aaeb91769695941204737254874eed4514a3dae03c73"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700 transition-colors shadow-lg text-sm"
+                >
+                  📎 Book Your Lab Work
+                </a>
+              </div>
+            </div>
+          </div>
+        </ScrollReveal>
+
+        {/* Advanced Functional Testing */}
+        <ScrollReveal animation="fade-up">
+          <div className="mb-16">
+            <div className="flex items-center gap-4 mb-10">
               <div className="h-px flex-1 bg-primary-200/50" />
-              <h3 className="text-sm font-semibold text-primary-600 uppercase tracking-[0.2em]">Qualifications</h3>
+              <span className="text-xs font-semibold text-primary-500 uppercase tracking-[0.2em]">Advanced Testing</span>
               <div className="h-px flex-1 bg-primary-200/50" />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {credentials.map((label: string, i: number) => (
-                <div key={label} className="flex items-center gap-4 bg-cream-dark rounded-2xl p-4 hover:shadow-md transition-all duration-300 group">
-                  <div className="w-11 h-11 bg-gradient-to-br from-primary-700 to-primary-600 rounded-xl flex items-center justify-center text-white flex-shrink-0 group-hover:scale-110 transition-transform">
-                    {credentialIcons[i] || <LeafIcon className="w-5 h-5" />}
-                  </div>
-                  <span className="text-gray-800 font-medium text-sm">{label}</span>
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl sm:text-3xl font-medium text-gray-900 font-serif mb-4 text-center">Advanced Functional Testing</h2>
+              <p className="text-warm-text text-base leading-relaxed mb-8 text-center">
+                For cases that need deeper investigation, advanced functional testing may be recommended to explore underlying imbalances more closely. These tests are suggested only when clinically relevant and based on symptoms, health history, and case complexity.
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                <div className="bg-cream-dark rounded-3xl p-8 border border-primary-100/30">
+                  <h3 className="text-sm font-semibold text-primary-600 uppercase tracking-[0.15em] mb-5">Functional Testing Available</h3>
+                  <ul className="space-y-2.5">
+                    {[
+                      'GI-MAP (Gut Microbiome & Infections)',
+                      'H. Pylori Testing',
+                      'SIBO Breath Testing',
+                      'DUTCH Test for Hormonal Health',
+                      'Mould Toxicity Testing',
+                      'Food Allergy & Sensitivity Testing',
+                      'Heavy Metals Testing',
+                      'Neurotransmitter Testing',
+                      'Cortisol & Adrenal Function Testing',
+                      'Additional functional testing as required',
+                    ].map((item) => (
+                      <li key={item} className="flex items-start gap-2.5 text-sm text-warm-text">
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary-500 mt-2 flex-shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              ))}
+
+                <div className="bg-warm-footer rounded-3xl p-8 text-white">
+                  <h3 className="text-sm font-semibold text-primary-300 uppercase tracking-[0.15em] mb-5">When deeper testing is needed</h3>
+                  <ul className="space-y-2.5">
+                    {[
+                      'Persistent IBS or digestive concerns',
+                      'Chronic bloating, reflux, or irregular bowel patterns',
+                      'Hormonal imbalances',
+                      'Fatigue and burnout',
+                      'Skin flare-ups and inflammation',
+                      'Food sensitivities',
+                      'Suspected infections or deeper gut dysfunction',
+                    ].map((item) => (
+                      <li key={item} className="flex items-start gap-2.5 text-sm text-cream-dark/80">
+                        <span className="text-primary-300 mt-0.5">•</span> {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <p className="text-warm-text text-sm text-center italic">
+                Advanced testing allows for a more precise and personalised approach when routine testing alone does not explain the full picture.
+              </p>
             </div>
           </div>
         </ScrollReveal>
