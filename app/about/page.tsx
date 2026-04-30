@@ -292,6 +292,32 @@ export default async function AboutPage() {
           </div>
         </ScrollReveal>
 
+        {/* Contact section */}
+        <ScrollReveal animation="fade-up">
+          <div className="max-w-3xl mx-auto mb-16">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="h-px flex-1 bg-primary-200/50" />
+              <h3 className="text-sm font-semibold text-primary-600 uppercase tracking-[0.2em]">Contact</h3>
+              <div className="h-px flex-1 bg-primary-200/50" />
+            </div>
+
+            <div className="space-y-6">
+              <p className="text-base sm:text-lg text-warm-text leading-[1.9]">
+                Sneha Agarwal is a Functional Nutritionist and Gut Health Practitioner based in Hyderabad, working with a root-cause approach to help individuals restore health by understanding what the body is asking for beneath the symptoms. Her work is centred on supporting the body&apos;s natural ability to heal, regulate, and function better through personalised nutrition and targeted therapeutic care.
+              </p>
+              <p className="text-base sm:text-lg text-warm-text leading-[1.9]">
+                With a strong focus on digestive wellness, Sneha works closely with concerns such as IBS, bloating, acidity, constipation, gastritis, H. pylori, poor digestion, and chronic gut discomfort through structured, food-first protocols designed to support long-term healing.
+              </p>
+              <p className="text-base sm:text-lg text-warm-text leading-[1.9]">
+                Her practice also extends to metabolic and lifestyle-related concerns, including weight management, insulin resistance, blood sugar imbalance, fatty liver, high cholesterol, inflammation, and hormone-related imbalances — using personalised nutrition strategies that are practical, sustainable, and built around the individual.
+              </p>
+              <p className="text-base sm:text-lg text-warm-text leading-[1.9]">
+                By combining functional nutrition, root-cause assessment, and personalised healing protocols, Sneha helps individuals improve digestion, restore metabolic balance, and build long-term health in a way that feels simple, supported, and sustainable.
+              </p>
+            </div>
+          </div>
+        </ScrollReveal>
+
         {/* CTA */}
         <ScrollReveal animation="fade-up">
           <div className="max-w-3xl mx-auto mt-16 bg-warm-footer rounded-3xl p-10 sm:p-12 text-white text-center">
