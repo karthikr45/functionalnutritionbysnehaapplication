@@ -123,12 +123,58 @@ const fallbackData: Record<string, any> = {
     },
   },
   'metabolic-health-program': {
-    title: 'Metabolic Health Program',
-    subtitle: 'Diabetes / PCOS / Thyroid Imbalances / Cardiac Health (High Cholesterol)',
+    title: 'Metabolic Health Nutrition',
+    subtitle: 'Root-Cause Nutrition for Metabolic Conditions',
     image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1200&h=600&fit=crop',
-    description: 'Our Metabolic Health Program addresses the interconnected web of metabolic disorders including diabetes, PCOS, thyroid imbalances, and cardiovascular health. Through targeted nutrition interventions, we aim to reduce medication dependency and restore your body\'s natural metabolic balance.',
-    benefits: ['Better blood sugar control', 'Improved thyroid function', 'PCOS symptom management', 'Reduced cholesterol levels', 'Lower medication dependency', 'Increased energy and vitality'],
-    conditions: ['Type 2 Diabetes', 'Pre-diabetes', 'PCOS', 'Hypothyroidism', 'Hyperthyroidism', 'High Cholesterol', 'Hypertension'],
+    description: 'Your body isn\'t broken. It just needs the right support. If you\'re living with Insulin Resistance, PCOS, Type 2 Diabetes, High Cholesterol, High Blood Pressure, Uric Acid Imbalance, Obesity, or Fatty Liver — healing your metabolism isn\'t about eating less. It\'s about eating right, for your body.',
+    philosophy: 'No starvation. No extreme cutting out of food groups. Just real, evidence-based nutrition that fits your life — and stays with you for good.',
+    benefits: [
+      'Stable blood sugar, naturally',
+      'Healthier cholesterol and lipid profiles',
+      'Reduced inflammation throughout your body',
+      'Stronger liver and heart function',
+    ],
+    conditions: ['Insulin Resistance', 'PCOS', 'Type 2 Diabetes', 'High Cholesterol', 'High Blood Pressure', 'Uric Acid Imbalance', 'Obesity', 'Fatty Liver'],
+    whyGutHealth: 'This isn\'t a quick fix. It\'s a transformation — one meal, one habit, one day at a time. Whether you were just diagnosed or have been struggling for years, we give you the tools, knowledge, and steady support to take back control of your health.',
+    steps: [
+      {
+        title: 'Deep-Dive Blood Work Analysis',
+        description: 'We study your lab reports to find hidden metabolic imbalances, hormone disruptions, and nutrient gaps that could be draining your energy.',
+      },
+      {
+        title: 'Supplements Only If Needed',
+        description: 'No random recommendations. If your blood work shows a deficiency, we suggest targeted, safe supplements to help your body heal — nothing more.',
+      },
+      {
+        title: 'Your Personalised Plan + Recipe Booklet',
+        description: 'We build your nutrition plan around your medical history, your goals, and your taste buds. Plus a recipe booklet to keep things fresh and easy.',
+      },
+      {
+        title: 'Local & Affordable Ingredients',
+        description: 'We design every meal around what\'s available in your nearby market — fresh, affordable, and culturally familiar.',
+      },
+      {
+        title: 'Lifestyle Coaching That Sticks',
+        description: 'Food is just one piece. We help you fix sleep, manage stress, and build small daily habits that add up to lasting change.',
+      },
+    ],
+    programStructure: [
+      'Onboarding Mentor Call — A warm, focused conversation to understand your goals and how you like to eat',
+      'Dedicated Clinical Dietitian — One expert stays with you from start to finish',
+      'Regular Progress Review Calls — Scheduled check-ins to celebrate wins and tweak your plan',
+      'Daily WhatsApp Support (Weekdays) — Quick answers, real encouragement, someone in your corner',
+      'Follow-up Blood Work (at 3 months) — Proof on paper: better blood sugar, improved cholesterol, healthier liver markers',
+      'Maintenance Nutrition Plan — Lock in your results with a flexible long-term plan',
+    ],
+    investment: '3 months — ₹30,000 (includes 6 review calls on alternate weeks)',
+    guidelines: {
+      suitable: [
+        'Plans built for you, not a crowd — your diagnosis, lab numbers, food preferences all factored in',
+        'Real dietitians, real guidance — one-on-one with qualified clinical dietitians',
+        'Food you\'ll actually enjoy — delicious, home-friendly meals from local ingredients',
+      ],
+      notIncluded: null,
+    },
   },
   'pregnancy-nutrition': {
     title: 'Pregnancy Nutrition',
