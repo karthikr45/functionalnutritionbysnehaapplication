@@ -48,12 +48,22 @@ export default function Hero({ settings }: HeroProps) {
     <>
       {/* Hero Banner */}
       <section className="relative w-full h-[calc(100svh-64px)] overflow-hidden bg-gray-900">
-        {/* Doctor Image — cover to fill, no blur layer needed on mobile */}
+        {/* Blurred bg — desktop only to fill sides around portrait */}
+        {doctorImage && (
+          <img
+            src={doctorImage}
+            alt=""
+            aria-hidden="true"
+            className="hidden lg:block absolute inset-0 w-full h-full object-cover scale-110 blur-2xl brightness-50"
+          />
+        )}
+
+        {/* Doctor Image — cover on mobile, contain on desktop */}
         {doctorImage ? (
           <img
             src={doctorImage}
             alt={name}
-            className="absolute inset-0 w-full h-full object-cover object-top"
+            className="absolute inset-0 w-full h-full object-cover object-top lg:object-contain lg:object-center z-[1]"
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-primary-100 flex items-center justify-center z-[1]">
