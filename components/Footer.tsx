@@ -72,7 +72,7 @@ export default function Footer({ settings: propSettings }: FooterProps) {
   const mode = s.consultationMode || 'Online (Pan India & International)';
 
   return (
-    <footer className="text-warm-footer-text" style={{ backgroundColor: '#6F6E47', color: '#D8D5BC' }}>
+    <footer className="text-warm-footer-text" style={{ background: 'linear-gradient(to right, #76754F, #5C5B3A)', color: '#D8D5BC' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2 space-y-4">
