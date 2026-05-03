@@ -58,8 +58,9 @@ export default function Contact({ settings }: ContactProps) {
     <section id="contact" className="py-0">
       <div className="max-w-full">
 
-        {/* Form Card — full width */}
-        <div className="bg-cream-dark px-4 sm:px-8 md:px-16 lg:px-32 py-16 sm:py-20">
+        {/* Form Card — full-bleed bg, content aligned to max-w-7xl */}
+        <div className="bg-cream-dark py-16 sm:py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {status === 'sent' ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-4xl mb-6 shadow-sm">✅</div>
@@ -136,11 +137,12 @@ export default function Contact({ settings }: ContactProps) {
               </form>
             </>
           )}
+          </div>
         </div>
 
-        {/* WhatsApp CTA — full width */}
-        <div className="bg-warm-footer px-4 sm:px-8 md:px-16 lg:px-32 py-12 sm:py-16 text-white text-center">
-          <div className="flex flex-col items-center">
+        {/* WhatsApp CTA — full-bleed bg, content aligned to max-w-7xl */}
+        <div className="bg-warm-footer py-12 sm:py-16 text-white text-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
             <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-2xl mb-4">
               💬
             </div>
