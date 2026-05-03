@@ -183,13 +183,19 @@ export default function Services() {
         </div>
       </div>
 
-      {/* Carousel — inherits section pl, bleeds off the right */}
+      {/* Carousel — inherits section pl, bleeds off the right; extra py to fit rotated cards */}
       <div
-        className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth py-6 scrollbar-hide"
+        className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth py-10 scrollbar-hide"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {displayServices.map((service, idx) => {
           const slug = service.slug?.current || '';
+          // Per-card 2D tilt + Y translation to create the "smile arc" panoramic row.
+          // Edges rotate inward toward center; middle cards sit lower.
+          const arcTilt = [3, 1, 0, -1, -3, -3];
+          const arcDrop = [-8, 0, 10, 0, -8, -8];
+          const rot = arcTilt[idx] ?? 0;
+          const dropY = arcDrop[idx] ?? 0;
 
           return (
             <Link
@@ -198,12 +204,14 @@ export default function Services() {
               className="group snap-start shrink-0 w-[80%] sm:w-[44%] md:w-[220px]"
             >
               <div>
-                {/* Image — portrait ~4:5 with subtle shadow */}
+                {/* Image — portrait ~4:5, individually tilted to form arc row; text below stays upright */}
                 <div
                   className="h-[260px] sm:h-[280px] overflow-hidden bg-cream-dark shadow-sm"
                   style={{
                     borderRadius: '18px',
                     clipPath: idx === 0 ? 'polygon(8% 0, 100% 0, 100% 100%, 0 100%, 0 4%)' : undefined,
+                    transform: `rotate(${rot}deg) translateY(${dropY}px)`,
+                    transformOrigin: 'center center',
                   }}
                 >
                   {service.image ? (
