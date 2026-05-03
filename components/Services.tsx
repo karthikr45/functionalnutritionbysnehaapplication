@@ -155,7 +155,7 @@ export default function Services() {
           <p className="font-semibold text-[11px] uppercase tracking-[0.2em]" style={{ color: '#7A8B5C' }}>
             Our Signature Programs
           </p>
-          <h2 className="text-4xl sm:text-5xl lg:text-[60px] font-serif font-normal text-gray-900 mt-5 leading-[1.05] tracking-tight">
+          <h2 className="text-4xl sm:text-5xl font-serif font-normal text-gray-900 mt-5 leading-[1.05] tracking-tight">
             Personalized Programs.
             <br />
             Lasting Transformation.
@@ -237,7 +237,7 @@ export default function Services() {
                       <ServiceIcon slug={slug} />
                     </div>
                   </div>
-                  <h3 className="text-[22px] font-serif font-normal text-gray-900 group-hover:text-primary-700 transition-colors leading-tight">
+                  <h3 className="text-[18px] font-serif font-normal text-gray-900 leading-snug">
                     {service.title}
                   </h3>
                   {service.subtitle && (
