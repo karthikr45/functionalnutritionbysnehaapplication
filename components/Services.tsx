@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 interface Service {
@@ -129,7 +129,6 @@ function ServiceIcon({ slug }: { slug: string }) {
 
 export default function Services() {
   const [services, setServices] = useState<Service[]>([]);
-  const scrollerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch('/api/services')
@@ -148,39 +147,31 @@ export default function Services() {
 
   const displayServices = services.length > 0 ? services : fallbackServices;
 
-  const scrollByCard = (direction: 1 | -1) => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    const card = el.querySelector<HTMLElement>('[data-service-card]');
-    const step = card ? card.offsetWidth + 24 /* gap */ : el.clientWidth * 0.8;
-    el.scrollBy({ left: step * direction, behavior: 'smooth' });
-  };
-
   return (
-    <section id="services" className="py-20 bg-cream-dark overflow-hidden">
+    <section id="services" className="py-16 sm:py-20 bg-cream overflow-hidden">
       {/* Header: title left, scroll hint right */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-12">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-10 sm:mb-14">
           <div className="max-w-2xl">
-            <p className="text-primary-600 font-semibold text-xs uppercase tracking-[0.2em]">Our Signature Programs</p>
-            <h2 className="text-4xl sm:text-5xl font-medium text-gray-900 font-serif mt-4 leading-[1.1]">
+            <p className="text-primary-700/80 font-semibold text-[11px] uppercase tracking-[0.22em]">Our Signature Programs</p>
+            <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-normal text-gray-900 font-serif mt-4 leading-[1.05]">
               Personalized Programs.
               <br />
               Lasting Transformation.
             </h2>
-            <p className="text-warm-text mt-5 text-base leading-relaxed">
+            <p className="text-warm-text mt-5 text-[15px] leading-relaxed max-w-xl">
               Evidence-based functional nutrition programs designed to address your specific health concerns
               and help you achieve lasting wellness.
             </p>
           </div>
 
-          <div className="flex items-center gap-3 text-warm-text shrink-0">
-            <div className="w-10 h-10 border border-primary-300/60 rounded-full flex items-center justify-center">
-              <svg className="w-4 h-4 text-primary-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex items-center gap-3 text-gray-700 shrink-0 lg:mt-16">
+            <div className="w-9 h-9 border border-gray-400/50 rounded-full flex items-center justify-center">
+              <svg className="w-3.5 h-3.5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
             </div>
-            <p className="text-sm leading-tight">
+            <p className="text-[13px] leading-tight">
               Scroll to explore
               <br />
               our programs
@@ -189,89 +180,61 @@ export default function Services() {
         </div>
       </div>
 
-      {/* Carousel */}
-      <div className="relative">
-        <div
-          ref={scrollerRef}
-          className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 scrollbar-hide px-4 sm:px-6 lg:pl-[max(2rem,calc((100vw-80rem)/2+2rem))] lg:pr-[max(2rem,calc((100vw-80rem)/2+2rem))]"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
-          {displayServices.map((service) => {
-            const slug = service.slug?.current || '';
+      {/* Carousel — left edge aligns to header, right side bleeds off viewport */}
+      <div
+        className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 scrollbar-hide pr-4 sm:pr-6 pl-4 sm:pl-6 lg:pl-[max(2rem,calc((100vw-80rem)/2+2rem))]"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
+        {displayServices.map((service) => {
+          const slug = service.slug?.current || '';
 
-            return (
-              <Link
-                key={service._id}
-                data-service-card
-                href={`/services/${slug}`}
-                className="group snap-start shrink-0 w-[78%] sm:w-[44%] lg:w-[260px] xl:w-[280px]"
-              >
-                {/* Image */}
-                <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-cream">
-                  {service.image ? (
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-cream">
-                      <div className="w-20 h-20 border-2 border-primary-200 rounded-full flex items-center justify-center">
-                        <ServiceIcon slug={slug} />
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Content */}
-                <div className="pt-5">
-                  <div className="w-9 h-9 border border-primary-300/60 rounded-full flex items-center justify-center mb-3">
-                    <div className="scale-[0.55]">
+          return (
+            <Link
+              key={service._id}
+              href={`/services/${slug}`}
+              className="group snap-start shrink-0 w-[80%] sm:w-[44%] md:w-[32%] lg:w-[230px] xl:w-[245px]"
+            >
+              {/* Image */}
+              <div className="aspect-[5/6] rounded-2xl overflow-hidden bg-cream-dark">
+                {service.image ? (
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-20 h-20 border-2 border-primary-200 rounded-full flex items-center justify-center">
                       <ServiceIcon slug={slug} />
                     </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 font-serif group-hover:text-primary-700 transition-colors leading-tight">
-                    {service.title}
-                  </h3>
-                  {service.subtitle && (
-                    <p className="text-warm-text text-sm mt-2 leading-relaxed line-clamp-2">{service.subtitle}</p>
-                  )}
-                  <div className="mt-4 inline-flex items-center gap-1.5 text-gray-900 text-sm font-medium border-b border-gray-900/40 pb-0.5 group-hover:border-gray-900 group-hover:gap-2 transition-all">
-                    <span>Explore Program</span>
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
+                )}
+              </div>
+
+              {/* Content */}
+              <div className="pt-5">
+                <div className="w-8 h-8 border border-gray-400/50 rounded-full flex items-center justify-center mb-3">
+                  <div className="scale-[0.5]">
+                    <ServiceIcon slug={slug} />
                   </div>
                 </div>
-              </Link>
-            );
-          })}
-        </div>
-
-        {/* Arrow controls */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 flex justify-end gap-3">
-          <button
-            type="button"
-            onClick={() => scrollByCard(-1)}
-            aria-label="Previous programs"
-            className="w-11 h-11 rounded-full border border-primary-300/60 text-primary-700 hover:bg-primary-700 hover:text-white hover:border-primary-700 transition-colors flex items-center justify-center"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button
-            type="button"
-            onClick={() => scrollByCard(1)}
-            aria-label="Next programs"
-            className="w-11 h-11 rounded-full border border-primary-300/60 text-primary-700 hover:bg-primary-700 hover:text-white hover:border-primary-700 transition-colors flex items-center justify-center"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
+                <h3 className="text-[17px] font-semibold text-gray-900 font-serif group-hover:text-primary-700 transition-colors leading-snug">
+                  {service.title}
+                </h3>
+                {service.subtitle && (
+                  <p className="text-warm-text text-[13px] mt-1.5 leading-relaxed line-clamp-2">{service.subtitle}</p>
+                )}
+                <div className="mt-4 inline-flex items-center gap-1.5 text-gray-900 text-[13px] font-semibold border-b border-gray-900 pb-0.5 group-hover:gap-2 transition-all">
+                  <span>Explore Program</span>
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </section>
   );
