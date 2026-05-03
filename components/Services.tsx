@@ -239,14 +239,14 @@ export default function Services() {
             <Link
               key={service._id}
               href={`/services/${slug}`}
-              className="group snap-start shrink-0 w-[80%] sm:w-[44%] md:w-[220px]"
+              className="group snap-start shrink-0 w-[80%] sm:w-[44%] md:w-[300px]"
               style={{ transformStyle: 'preserve-3d' }}
             >
               <div style={{ transformStyle: 'preserve-3d' }}>
                 {/* Image — gets the 3D rotation dynamically based on viewport position */}
                 <div
                   data-arc-card
-                  className="h-[260px] sm:h-[280px] overflow-hidden bg-cream-dark shadow-md transition-transform duration-200 ease-out"
+                  className="h-[280px] sm:h-[360px] overflow-hidden bg-cream-dark shadow-md transition-transform duration-200 ease-out"
                   style={{
                     borderRadius: '18px',
                     transformOrigin: 'center center',
@@ -268,8 +268,8 @@ export default function Services() {
                   )}
                 </div>
 
-                {/* Content */}
-                <div className="pt-5">
+                {/* Content — internal padding so text isn't flush with the card edge */}
+                <div className="pt-5 px-4 sm:px-5">
                   <div className="w-8 h-8 border border-gray-400/50 rounded-full flex items-center justify-center mb-3">
                     <div className="scale-[0.5]">
                       <ServiceIcon slug={slug} />
