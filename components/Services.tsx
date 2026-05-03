@@ -182,11 +182,14 @@ export default function Services() {
 
       {/* Carousel — left edge aligns to header, right side bleeds off viewport */}
       <div
-        className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 scrollbar-hide pr-4 sm:pr-6 pl-4 sm:pl-6 lg:pl-[max(2rem,calc((100vw-80rem)/2+2rem))]"
+        className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth py-3 pb-4 scrollbar-hide pr-4 sm:pr-6 pl-4 sm:pl-6 lg:pl-[max(2rem,calc((100vw-80rem)/2+2rem))]"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
-        {displayServices.map((service) => {
+        {displayServices.map((service, idx) => {
           const slug = service.slug?.current || '';
+          // Subtle varied tilts per card for the hand-arranged "polaroid" look
+          const tilts = ['-rotate-[1.5deg]', 'rotate-[0.8deg]', '-rotate-[0.6deg]', 'rotate-[1.2deg]', '-rotate-[1deg]', 'rotate-[0.5deg]'];
+          const tilt = tilts[idx % tilts.length];
 
           return (
             <Link
@@ -194,13 +197,13 @@ export default function Services() {
               href={`/services/${slug}`}
               className="group snap-start shrink-0 w-[80%] sm:w-[44%] md:w-[32%] lg:w-[230px] xl:w-[245px]"
             >
-              {/* Image */}
-              <div className="aspect-[5/6] rounded-2xl overflow-hidden bg-cream-dark">
+              {/* Image — slightly tilted for organic feel */}
+              <div className={`aspect-[5/6] rounded-3xl overflow-hidden bg-cream-dark shadow-sm transform ${tilt} group-hover:rotate-0 transition-transform duration-500`}>
                 {service.image ? (
                   <img
                     src={service.image}
                     alt={service.title}
-                    className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700"
+                    className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
                     loading="lazy"
                   />
                 ) : (
