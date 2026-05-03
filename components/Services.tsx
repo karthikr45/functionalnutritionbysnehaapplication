@@ -232,18 +232,8 @@ export default function Services() {
           perspectiveOrigin: 'center center',
         }}
       >
-        {displayServices.map((service, idx) => {
+        {displayServices.map((service) => {
           const slug = service.slug?.current || '';
-          const isFirst = idx === 0;
-          const isLast = idx === displayServices.length - 1;
-          // First card: angled clips on top-left + bottom-left (symmetric).
-          // Last card: mirror — angled clips on top-right + bottom-right.
-          // These frame the row, suggesting the "panoramic" composition starts/ends here.
-          const clipPath = isFirst
-            ? 'polygon(8% 0, 100% 0, 100% 100%, 8% 100%, 0 92%, 0 8%)'
-            : isLast
-              ? 'polygon(0 0, 92% 0, 100% 8%, 100% 92%, 92% 100%, 0 100%)'
-              : undefined;
 
           return (
             <Link
@@ -253,13 +243,12 @@ export default function Services() {
               style={{ transformStyle: 'preserve-3d' }}
             >
               <div style={{ transformStyle: 'preserve-3d' }}>
-                {/* Image — gets the 3D rotation dynamically based on viewport position */}
+                {/* Image — uniform 18px rounded corners on all 4 sides; gets dynamic 3D rotation */}
                 <div
                   data-arc-card
                   className="h-[280px] sm:h-[360px] overflow-hidden bg-cream-dark shadow-md transition-transform duration-200 ease-out"
                   style={{
                     borderRadius: '18px',
-                    clipPath,
                     transformOrigin: 'center center',
                   }}
                 >
