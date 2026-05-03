@@ -195,13 +195,16 @@ export default function Services() {
             <Link
               key={service._id}
               href={`/services/${slug}`}
-              className="group snap-start shrink-0 w-[80%] sm:w-[44%] md:w-[32%] lg:w-[220px]"
+              className="group snap-start shrink-0 w-[80%] sm:w-[44%] md:w-[220px]"
             >
               <div>
-                {/* Image — clean rounded rectangle, ~1:1.1 aspect */}
+                {/* Image — portrait ~4:5 with subtle shadow */}
                 <div
-                  className="h-[220px] sm:h-[240px] overflow-hidden bg-cream-dark"
-                  style={{ borderRadius: '18px' }}
+                  className="h-[260px] sm:h-[280px] overflow-hidden bg-cream-dark shadow-sm"
+                  style={{
+                    borderRadius: '18px',
+                    clipPath: idx === 0 ? 'polygon(8% 0, 100% 0, 100% 100%, 0 100%, 0 4%)' : undefined,
+                  }}
                 >
                   {service.image ? (
                     <img
