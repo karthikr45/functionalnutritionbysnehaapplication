@@ -148,95 +148,107 @@ export default function Services() {
   const displayServices = services.length > 0 ? services : fallbackServices;
 
   return (
-    <section id="services" className="py-16 sm:py-20 bg-cream overflow-hidden">
-      {/* Header: title left, scroll hint right */}
+    <section id="services" className="py-16 sm:py-20 bg-[#FAF6EE] overflow-hidden">
+      {/* Header: title left, scroll hint right of description */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-10 sm:mb-14">
-          <div className="max-w-2xl">
-            <p className="text-primary-700/80 font-semibold text-[11px] uppercase tracking-[0.22em]">Our Signature Programs</p>
-            <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-normal text-gray-900 font-serif mt-4 leading-[1.05]">
-              Personalized Programs.
-              <br />
-              Lasting Transformation.
-            </h2>
-            <p className="text-warm-text mt-5 text-[15px] leading-relaxed max-w-xl">
+        <div className="mb-12 sm:mb-16">
+          <p className="font-semibold text-[11px] uppercase tracking-[0.2em]" style={{ color: '#7A8B5C' }}>
+            Our Signature Programs
+          </p>
+          <h2 className="text-4xl sm:text-5xl lg:text-[60px] font-serif font-normal text-gray-900 mt-5 leading-[1.05] tracking-tight">
+            Personalized Programs.
+            <br />
+            Lasting Transformation.
+          </h2>
+
+          {/* Description + scroll indicator row */}
+          <div className="mt-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            <p className="text-warm-text text-[15px] leading-relaxed max-w-xl">
               Evidence-based functional nutrition programs designed to address your specific health concerns
               and help you achieve lasting wellness.
             </p>
-          </div>
 
-          <div className="flex items-center gap-3 text-gray-700 shrink-0 lg:mt-16">
-            <div className="w-9 h-9 border border-gray-400/50 rounded-full flex items-center justify-center">
-              <svg className="w-3.5 h-3.5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
+            <div className="flex items-center gap-3 text-gray-600 shrink-0">
+              {/* Vertical pill indicator */}
+              <div className="w-[14px] h-6 rounded-full border border-gray-400/60 shrink-0" aria-hidden="true" />
+              <p className="text-[13px] leading-tight">
+                Scroll to explore
+                <br />
+                our programs
+              </p>
             </div>
-            <p className="text-[13px] leading-tight">
-              Scroll to explore
-              <br />
-              our programs
-            </p>
           </div>
         </div>
       </div>
 
       {/* Carousel — left edge aligns to header, right side bleeds off viewport */}
       <div
-        className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth py-3 pb-4 scrollbar-hide pr-4 sm:pr-6 pl-4 sm:pl-6 lg:pl-[max(2rem,calc((100vw-80rem)/2+2rem))]"
+        className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth py-6 scrollbar-hide pr-4 sm:pr-6 pl-4 sm:pl-6 lg:pl-[max(2rem,calc((100vw-80rem)/2+2rem))]"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {displayServices.map((service, idx) => {
           const slug = service.slug?.current || '';
-          // Varied tilts per card for the hand-arranged "polaroid" look
-          // Using inline style so the values aren't dependent on Tailwind JIT picking them up
-          const tiltAngles = [-2.5, 1.8, -1.2, 2.2, -1.8, 1.5];
-          const angle = tiltAngles[idx % tiltAngles.length];
+          // Editorial vertical stagger — magazine-layout rhythm (desktop only)
+          const stagger = [0, -16, 8, -12, 4, -8];
+          const offsetY = stagger[idx % stagger.length];
+          // Alternating widths: odd-indexed (2nd, 4th) are slightly wider
+          const widthCls = idx % 2 === 1 ? 'lg:w-[240px]' : 'lg:w-[220px]';
+          // Card 1 (idx 0) has an angled cut on the top-left for "torn paper" feel
+          const clipPath = idx === 0 ? 'polygon(14% 0, 100% 0, 100% 100%, 0 100%, 0 9%)' : undefined;
 
           return (
             <Link
               key={service._id}
               href={`/services/${slug}`}
-              className="group snap-start shrink-0 w-[80%] sm:w-[44%] md:w-[32%] lg:w-[230px] xl:w-[245px]"
+              className={`group snap-start shrink-0 w-[80%] sm:w-[44%] md:w-[32%] ${widthCls}`}
             >
-              {/* Image — slightly tilted for organic feel */}
               <div
-                className="aspect-[5/6] rounded-3xl overflow-hidden bg-cream-dark shadow-md transition-transform duration-500 group-hover:!rotate-0"
-                style={{ transform: `rotate(${angle}deg)` }}
+                className="transition-transform duration-[400ms] ease-out group-hover:[--card-y:0px]"
+                style={{ '--card-y': `${offsetY}px`, transform: 'translateY(var(--card-y, 0))' } as React.CSSProperties}
               >
-                {service.image ? (
-                  <img
-                    src={service.image}
-                    alt={service.title}
-                    className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <div className="w-20 h-20 border-2 border-primary-200 rounded-full flex items-center justify-center">
+                {/* Image */}
+                <div
+                  className="aspect-[5/6] overflow-hidden bg-cream-dark shadow-md"
+                  style={{
+                    borderRadius: '24px',
+                    clipPath,
+                  }}
+                >
+                  {service.image ? (
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <div className="w-20 h-20 border-2 border-primary-200 rounded-full flex items-center justify-center">
+                        <ServiceIcon slug={slug} />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="pt-5">
+                  <div className="w-8 h-8 border border-gray-400/50 rounded-full flex items-center justify-center mb-3">
+                    <div className="scale-[0.5]">
                       <ServiceIcon slug={slug} />
                     </div>
                   </div>
-                )}
-              </div>
-
-              {/* Content */}
-              <div className="pt-5">
-                <div className="w-8 h-8 border border-gray-400/50 rounded-full flex items-center justify-center mb-3">
-                  <div className="scale-[0.5]">
-                    <ServiceIcon slug={slug} />
+                  <h3 className="text-[22px] font-serif font-normal text-gray-900 group-hover:text-primary-700 transition-colors leading-tight">
+                    {service.title}
+                  </h3>
+                  {service.subtitle && (
+                    <p className="text-warm-text text-[13px] mt-1.5 leading-relaxed line-clamp-2">{service.subtitle}</p>
+                  )}
+                  <div className="mt-4 inline-flex items-center gap-1.5 text-gray-900 text-[13px] font-semibold border-b border-gray-900 pb-0.5 group-hover:gap-2 transition-all">
+                    <span>Explore Program</span>
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
                   </div>
-                </div>
-                <h3 className="text-[17px] font-semibold text-gray-900 font-serif group-hover:text-primary-700 transition-colors leading-snug">
-                  {service.title}
-                </h3>
-                {service.subtitle && (
-                  <p className="text-warm-text text-[13px] mt-1.5 leading-relaxed line-clamp-2">{service.subtitle}</p>
-                )}
-                <div className="mt-4 inline-flex items-center gap-1.5 text-gray-900 text-[13px] font-semibold border-b border-gray-900 pb-0.5 group-hover:gap-2 transition-all">
-                  <span>Explore Program</span>
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
                 </div>
               </div>
             </Link>
