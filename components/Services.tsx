@@ -183,18 +183,24 @@ export default function Services() {
         </div>
       </div>
 
-      {/* Carousel — inherits section pl, bleeds off the right; extra py to fit rotated cards */}
+      {/* Carousel — perspective container creates the 3D fan/curved-row effect */}
       <div
-        className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth py-10 scrollbar-hide"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth py-12 scrollbar-hide"
+        style={{
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+          perspective: '1400px',
+          perspectiveOrigin: 'center center',
+        }}
       >
         {displayServices.map((service, idx) => {
           const slug = service.slug?.current || '';
-          // Per-card 2D tilt + Y translation to create the "smile arc" panoramic row.
-          // Edges rotate inward toward center; middle cards sit lower.
-          const arcTilt = [3, 1, 0, -1, -3, -3];
-          const arcDrop = [-8, 0, 10, 0, -8, -8];
-          const rot = arcTilt[idx] ?? 0;
+          // 3D fan/cylinder effect — each card rotates around its vertical axis.
+          // Edges rotate inward toward center (positive on left, negative on right).
+          // Center cards drop slightly lower to complete the panoramic arc.
+          const yRotate = [22, 10, 0, -10, -22, -22];
+          const arcDrop = [-12, -4, 8, -4, -12, -12];
+          const rotY = yRotate[idx] ?? 0;
           const dropY = arcDrop[idx] ?? 0;
 
           return (
@@ -202,16 +208,19 @@ export default function Services() {
               key={service._id}
               href={`/services/${slug}`}
               className="group snap-start shrink-0 w-[80%] sm:w-[44%] md:w-[220px]"
+              style={{
+                transform: `rotateY(${rotY}deg) translateY(${dropY}px)`,
+                transformOrigin: 'center center',
+                transformStyle: 'preserve-3d',
+              }}
             >
               <div>
-                {/* Image — portrait ~4:5, individually tilted to form arc row; text below stays upright */}
+                {/* Image — portrait ~4:5; 3D rotation comes from parent Link */}
                 <div
-                  className="h-[260px] sm:h-[280px] overflow-hidden bg-cream-dark shadow-sm"
+                  className="h-[260px] sm:h-[280px] overflow-hidden bg-cream-dark shadow-md"
                   style={{
                     borderRadius: '18px',
                     clipPath: idx === 0 ? 'polygon(8% 0, 100% 0, 100% 100%, 0 100%, 0 4%)' : undefined,
-                    transform: `rotate(${rot}deg) translateY(${dropY}px)`,
-                    transformOrigin: 'center center',
                   }}
                 >
                   {service.image ? (
