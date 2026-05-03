@@ -185,7 +185,7 @@ export default function Services() {
   }, [displayServices]);
 
   return (
-    <section id="services" className="py-16 sm:py-20 bg-[#FAF6EE] overflow-hidden pl-4 sm:pl-6 lg:pl-20">
+    <section id="services" className="py-16 sm:py-20 bg-[#FAF6EE] overflow-hidden pl-4 sm:pl-6 lg:pl-20 lg:pr-[140px]">
       {/* Header: headline+description (max-w 580) on left, scroll pill on right */}
       <div className="max-w-[1240px] pr-4 sm:pr-6 lg:pr-8 mb-12 sm:mb-16">
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8">
