@@ -74,6 +74,10 @@
 ::-webkit-scrollbar-thumb { @apply bg-gray-300 rounded-full; }
 ::-webkit-scrollbar-thumb:hover { @apply bg-gray-400; }
 
+/* Hide scrollbar utility (used by horizontal carousels) */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
 @media (orientation: landscape) and (max-height: 500px) {
   .hero-mobile-img {
     object-fit: contain !important;
