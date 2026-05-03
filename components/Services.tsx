@@ -187,9 +187,10 @@ export default function Services() {
       >
         {displayServices.map((service, idx) => {
           const slug = service.slug?.current || '';
-          // Subtle varied tilts per card for the hand-arranged "polaroid" look
-          const tilts = ['-rotate-[1.5deg]', 'rotate-[0.8deg]', '-rotate-[0.6deg]', 'rotate-[1.2deg]', '-rotate-[1deg]', 'rotate-[0.5deg]'];
-          const tilt = tilts[idx % tilts.length];
+          // Varied tilts per card for the hand-arranged "polaroid" look
+          // Using inline style so the values aren't dependent on Tailwind JIT picking them up
+          const tiltAngles = [-2.5, 1.8, -1.2, 2.2, -1.8, 1.5];
+          const angle = tiltAngles[idx % tiltAngles.length];
 
           return (
             <Link
@@ -198,7 +199,10 @@ export default function Services() {
               className="group snap-start shrink-0 w-[80%] sm:w-[44%] md:w-[32%] lg:w-[230px] xl:w-[245px]"
             >
               {/* Image — slightly tilted for organic feel */}
-              <div className={`aspect-[5/6] rounded-3xl overflow-hidden bg-cream-dark shadow-sm transform ${tilt} group-hover:rotate-0 transition-transform duration-500`}>
+              <div
+                className="aspect-[5/6] rounded-3xl overflow-hidden bg-cream-dark shadow-md transition-transform duration-500 group-hover:!rotate-0"
+                style={{ transform: `rotate(${angle}deg)` }}
+              >
                 {service.image ? (
                   <img
                     src={service.image}
