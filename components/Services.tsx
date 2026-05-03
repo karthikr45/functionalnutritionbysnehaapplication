@@ -224,7 +224,7 @@ export default function Services() {
           Each card's tilt is computed dynamically on scroll (see useEffect above). */}
       <div
         ref={carouselRef}
-        className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth py-12 scrollbar-hide"
+        className="flex gap-8 overflow-x-auto snap-x snap-mandatory scroll-smooth py-12 scrollbar-hide"
         style={{
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
