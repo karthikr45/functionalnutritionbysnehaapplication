@@ -190,11 +190,6 @@ export default function Services() {
       >
         {displayServices.map((service, idx) => {
           const slug = service.slug?.current || '';
-          // Editorial vertical stagger per spec; cards 6+ fall back to 0
-          const stagger = [0, -20, 8, -16, 0];
-          const offsetY = stagger[idx] ?? 0;
-          // Card 1 (idx 0) has an angled cut on the top-left for "torn paper" feel
-          const clipPath = idx === 0 ? 'polygon(15% 0, 100% 0, 100% 100%, 0 100%, 0 8%)' : undefined;
 
           return (
             <Link
@@ -202,17 +197,11 @@ export default function Services() {
               href={`/services/${slug}`}
               className="group snap-start shrink-0 w-[80%] sm:w-[44%] md:w-[32%] lg:w-[220px]"
             >
-              <div
-                className="transition-transform duration-[400ms] ease-out group-hover:[--card-y:0px]"
-                style={{ '--card-y': `${offsetY}px`, transform: 'translateY(var(--card-y, 0))' } as React.CSSProperties}
-              >
-                {/* Image — fixed 280px height on desktop */}
+              <div>
+                {/* Image — clean rounded rectangle, ~1:1.1 aspect */}
                 <div
-                  className="h-[260px] sm:h-[280px] overflow-hidden bg-cream-dark shadow-md"
-                  style={{
-                    borderRadius: '24px',
-                    clipPath,
-                  }}
+                  className="h-[220px] sm:h-[240px] overflow-hidden bg-cream-dark"
+                  style={{ borderRadius: '18px' }}
                 >
                   {service.image ? (
                     <img
