@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 interface Service {
@@ -129,6 +129,7 @@ function ServiceIcon({ slug }: { slug: string }) {
 
 export default function Services() {
   const [services, setServices] = useState<Service[]>([]);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch('/api/services')
@@ -146,6 +147,42 @@ export default function Services() {
   }, []);
 
   const displayServices = services.length > 0 ? services : fallbackServices;
+
+  // Dynamically compute each card's tilt based on its viewport position.
+  // Cards near the left edge of the viewport tilt right (+rotateY),
+  // cards near the right edge tilt left (-rotateY), center stays upright.
+  // Updates on scroll/resize so the curve always "follows" the visible window.
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const MAX_ROT = 25;       // degrees at viewport edge
+    const ARC_DROP_MAX = 8;   // px (center cards drop)
+    const ARC_LIFT_MAX = 10;  // px (edge cards lift)
+
+    const update = () => {
+      const vw = window.innerWidth;
+      const viewportCenter = vw / 2;
+      const cards = carousel.querySelectorAll<HTMLElement>('[data-arc-card]');
+      cards.forEach((card) => {
+        const rect = card.getBoundingClientRect();
+        const cardCenter = rect.left + rect.width / 2;
+        // Normalized distance from viewport center: -1 (left edge) ... +1 (right edge)
+        const dist = Math.max(-1, Math.min(1, (cardCenter - viewportCenter) / (vw / 2)));
+        const rotY = -dist * MAX_ROT;
+        const dropY = (1 - Math.abs(dist)) * (ARC_DROP_MAX + ARC_LIFT_MAX) - ARC_LIFT_MAX;
+        card.style.transform = `rotateY(${rotY.toFixed(2)}deg) translateY(${dropY.toFixed(2)}px)`;
+      });
+    };
+
+    update();
+    carousel.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    return () => {
+      carousel.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
+  }, [displayServices]);
 
   return (
     <section id="services" className="py-16 sm:py-20 bg-[#FAF6EE] overflow-hidden pl-4 sm:pl-6 lg:pl-20">
@@ -183,8 +220,10 @@ export default function Services() {
         </div>
       </div>
 
-      {/* Carousel — perspective container creates the 3D fan/curved-row effect */}
+      {/* Carousel — perspective container creates the 3D fan/curved-row effect.
+          Each card's tilt is computed dynamically on scroll (see useEffect above). */}
       <div
+        ref={carouselRef}
         className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth py-12 scrollbar-hide"
         style={{
           scrollbarWidth: 'none',
@@ -193,14 +232,8 @@ export default function Services() {
           perspectiveOrigin: 'center center',
         }}
       >
-        {displayServices.map((service, idx) => {
+        {displayServices.map((service) => {
           const slug = service.slug?.current || '';
-          // 3D fan/cylinder effect — applied ONLY to the image so text below stays upright.
-          // Edges rotate inward toward center; middle cards drop slightly to complete the arc.
-          const yRotate = [25, 12, 0, -12, -25, -25];
-          const arcDrop = [-10, -3, 8, -3, -10, -10];
-          const rotY = yRotate[idx] ?? 0;
-          const dropY = arcDrop[idx] ?? 0;
 
           return (
             <Link
@@ -210,13 +243,12 @@ export default function Services() {
               style={{ transformStyle: 'preserve-3d' }}
             >
               <div style={{ transformStyle: 'preserve-3d' }}>
-                {/* Image — gets the 3D rotation; text below stays flat/upright */}
+                {/* Image — gets the 3D rotation dynamically based on viewport position */}
                 <div
-                  className="h-[260px] sm:h-[280px] overflow-hidden bg-cream-dark shadow-md"
+                  data-arc-card
+                  className="h-[260px] sm:h-[280px] overflow-hidden bg-cream-dark shadow-md transition-transform duration-200 ease-out"
                   style={{
                     borderRadius: '18px',
-                    clipPath: idx === 0 ? 'polygon(8% 0, 100% 0, 100% 100%, 0 100%, 0 4%)' : undefined,
-                    transform: `rotateY(${rotY}deg) translateY(${dropY}px)`,
                     transformOrigin: 'center center',
                   }}
                 >
