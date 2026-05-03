@@ -148,67 +148,67 @@ export default function Services() {
   const displayServices = services.length > 0 ? services : fallbackServices;
 
   return (
-    <section id="services" className="py-16 sm:py-20 bg-[#FAF6EE] overflow-hidden">
-      {/* Header: title left, scroll hint right of description */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-12 sm:mb-16">
-          <p className="font-semibold text-[11px] uppercase tracking-[0.2em]" style={{ color: '#7A8B5C' }}>
-            Our Signature Programs
-          </p>
-          <h2 className="text-4xl sm:text-5xl font-serif font-normal text-gray-900 mt-5 leading-[1.05] tracking-tight">
-            Personalized Programs.
-            <br />
-            Lasting Transformation.
-          </h2>
-
-          {/* Description + scroll indicator row */}
-          <div className="mt-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-            <p className="text-warm-text text-[15px] leading-relaxed max-w-xl">
+    <section id="services" className="py-16 sm:py-20 bg-[#FAF6EE] overflow-hidden pl-4 sm:pl-6 lg:pl-20">
+      {/* Header: headline+description (max-w 580) on left, scroll pill on right */}
+      <div className="max-w-[1240px] pr-4 sm:pr-6 lg:pr-8 mb-12 sm:mb-16">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8">
+          <div className="max-w-[580px]">
+            <p className="font-semibold text-[11px] uppercase tracking-[0.2em]" style={{ color: '#7A8B5C' }}>
+              Our Signature Programs
+            </p>
+            <h2 className="text-4xl sm:text-5xl font-serif font-normal text-gray-900 mt-5 leading-[1.05] tracking-tight">
+              Personalized Programs.
+              <br />
+              Lasting Transformation.
+            </h2>
+            <p className="text-warm-text text-[15px] leading-relaxed mt-6">
               Evidence-based functional nutrition programs designed to address your specific health concerns
               and help you achieve lasting wellness.
             </p>
+          </div>
 
-            <div className="flex items-center gap-3 text-gray-600 shrink-0">
-              {/* Vertical pill indicator */}
-              <div className="w-[14px] h-6 rounded-full border border-gray-400/60 shrink-0" aria-hidden="true" />
-              <p className="text-[13px] leading-tight">
-                Scroll to explore
-                <br />
-                our programs
-              </p>
-            </div>
+          <div className="flex items-center gap-3 text-gray-600 shrink-0 lg:mt-2">
+            {/* Vertical capsule indicator: 14×28px, 1px #C5BFB0, no fill, no arrow */}
+            <div
+              className="w-[14px] h-7 rounded-full shrink-0"
+              style={{ border: '1px solid #C5BFB0' }}
+              aria-hidden="true"
+            />
+            <p className="text-[13px] leading-tight">
+              Scroll to explore
+              <br />
+              our programs
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Carousel — left edge aligns to header, right side bleeds off viewport */}
+      {/* Carousel — inherits section pl, bleeds off the right */}
       <div
-        className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth py-6 scrollbar-hide pr-4 sm:pr-6 pl-4 sm:pl-6 lg:pl-[max(2rem,calc((100vw-80rem)/2+2rem))]"
+        className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth py-6 scrollbar-hide"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {displayServices.map((service, idx) => {
           const slug = service.slug?.current || '';
-          // Editorial vertical stagger — magazine-layout rhythm (desktop only)
-          const stagger = [0, -16, 8, -12, 4, -8];
-          const offsetY = stagger[idx % stagger.length];
-          // Alternating widths: odd-indexed (2nd, 4th) are slightly wider
-          const widthCls = idx % 2 === 1 ? 'lg:w-[240px]' : 'lg:w-[220px]';
+          // Editorial vertical stagger per spec; cards 6+ fall back to 0
+          const stagger = [0, -20, 8, -16, 0];
+          const offsetY = stagger[idx] ?? 0;
           // Card 1 (idx 0) has an angled cut on the top-left for "torn paper" feel
-          const clipPath = idx === 0 ? 'polygon(14% 0, 100% 0, 100% 100%, 0 100%, 0 9%)' : undefined;
+          const clipPath = idx === 0 ? 'polygon(15% 0, 100% 0, 100% 100%, 0 100%, 0 8%)' : undefined;
 
           return (
             <Link
               key={service._id}
               href={`/services/${slug}`}
-              className={`group snap-start shrink-0 w-[80%] sm:w-[44%] md:w-[32%] ${widthCls}`}
+              className="group snap-start shrink-0 w-[80%] sm:w-[44%] md:w-[32%] lg:w-[220px]"
             >
               <div
                 className="transition-transform duration-[400ms] ease-out group-hover:[--card-y:0px]"
                 style={{ '--card-y': `${offsetY}px`, transform: 'translateY(var(--card-y, 0))' } as React.CSSProperties}
               >
-                {/* Image */}
+                {/* Image — fixed 280px height on desktop */}
                 <div
-                  className="aspect-[5/6] overflow-hidden bg-cream-dark shadow-md"
+                  className="h-[260px] sm:h-[280px] overflow-hidden bg-cream-dark shadow-md"
                   style={{
                     borderRadius: '24px',
                     clipPath,
