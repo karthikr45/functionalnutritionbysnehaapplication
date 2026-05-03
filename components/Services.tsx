@@ -195,11 +195,10 @@ export default function Services() {
       >
         {displayServices.map((service, idx) => {
           const slug = service.slug?.current || '';
-          // 3D fan/cylinder effect — each card rotates around its vertical axis.
-          // Edges rotate inward toward center (positive on left, negative on right).
-          // Center cards drop slightly lower to complete the panoramic arc.
-          const yRotate = [22, 10, 0, -10, -22, -22];
-          const arcDrop = [-12, -4, 8, -4, -12, -12];
+          // 3D fan/cylinder effect — applied ONLY to the image so text below stays upright.
+          // Edges rotate inward toward center; middle cards drop slightly to complete the arc.
+          const yRotate = [25, 12, 0, -12, -25, -25];
+          const arcDrop = [-10, -3, 8, -3, -10, -10];
           const rotY = yRotate[idx] ?? 0;
           const dropY = arcDrop[idx] ?? 0;
 
@@ -208,19 +207,17 @@ export default function Services() {
               key={service._id}
               href={`/services/${slug}`}
               className="group snap-start shrink-0 w-[80%] sm:w-[44%] md:w-[220px]"
-              style={{
-                transform: `rotateY(${rotY}deg) translateY(${dropY}px)`,
-                transformOrigin: 'center center',
-                transformStyle: 'preserve-3d',
-              }}
+              style={{ transformStyle: 'preserve-3d' }}
             >
-              <div>
-                {/* Image — portrait ~4:5; 3D rotation comes from parent Link */}
+              <div style={{ transformStyle: 'preserve-3d' }}>
+                {/* Image — gets the 3D rotation; text below stays flat/upright */}
                 <div
                   className="h-[260px] sm:h-[280px] overflow-hidden bg-cream-dark shadow-md"
                   style={{
                     borderRadius: '18px',
                     clipPath: idx === 0 ? 'polygon(8% 0, 100% 0, 100% 100%, 0 100%, 0 4%)' : undefined,
+                    transform: `rotateY(${rotY}deg) translateY(${dropY}px)`,
+                    transformOrigin: 'center center',
                   }}
                 >
                   {service.image ? (
