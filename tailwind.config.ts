@@ -33,8 +33,8 @@ const config: Config = {
         },
         warm: {
           text: '#4A4A3F',
-          footer: '#6F6E47',
-          'footer-text': '#D8D5BC',
+          footer: '#2D3319',
+          'footer-text': '#A4A88C',
         },
       },
       fontFamily: {
