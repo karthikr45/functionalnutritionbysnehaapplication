@@ -72,7 +72,7 @@ export default async function HomePage() {
               <ScrollReveal animation="blur-in">
                 <div className="flex items-center justify-between mb-10">
                   <div>
-                    <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">Latest Articles</p>
+                    <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">Latest Articles &amp; Recipes</p>
                     <h2 className="text-3xl font-bold text-gray-900 font-serif mt-1">Nutrition Tips &amp; Insights</h2>
                   </div>
                   <Link href="/blog" className="text-primary-600 hover:text-primary-700 font-medium text-sm">
