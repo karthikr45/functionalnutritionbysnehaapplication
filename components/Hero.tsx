@@ -221,7 +221,7 @@ export function HeroContent() {
               </ul>
             </div>
 
-            <div className="bg-warm-footer rounded-3xl p-8 text-white">
+            <div className="bg-olive-gradient rounded-3xl p-8 text-white">
               <h3 className="text-sm font-semibold text-primary-300 uppercase tracking-[0.15em] mb-5">When deeper testing is needed</h3>
               <ul className="space-y-2.5">
                 {[

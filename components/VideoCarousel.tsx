@@ -87,7 +87,7 @@ export default function VideoCarousel() {
   };
 
   return (
-    <section className="py-20" style={{ background: 'linear-gradient(to right, #76754F, #5C5B3A)' }}>
+    <section className="py-20 bg-olive-gradient">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <p className="text-amber-400 font-semibold text-sm uppercase tracking-wide">Watch & Learn</p>

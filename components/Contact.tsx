@@ -141,10 +141,7 @@ export default function Contact({ settings }: ContactProps) {
         </div>
 
         {/* WhatsApp CTA — olive gradient matching the footer below */}
-        <div
-          className="py-12 sm:py-16 text-white text-center"
-          style={{ background: 'linear-gradient(to right, #76754F, #5C5B3A)' }}
-        >
+        <div className="bg-olive-gradient py-12 sm:py-16 text-white text-center">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
             <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-2xl mb-4">
               💬

@@ -125,7 +125,7 @@ export default async function HomePage() {
 
         {/* Final CTA */}
         <ScrollReveal animation="blur-in">
-        <section className="py-20 text-white text-center" style={{ background: 'linear-gradient(to right, #76754F, #5C5B3A)' }}>
+        <section className="py-20 bg-olive-gradient text-white text-center">
           <div className="max-w-3xl mx-auto px-4">
             <h2 className="text-3xl sm:text-4xl font-bold font-serif mb-4">
               Ready to Heal from the Root Cause?

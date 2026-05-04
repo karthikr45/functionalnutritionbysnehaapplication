@@ -78,6 +78,12 @@
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
+/* Olive gradient — used on Footer, all CTA panels, hero callouts, etc.
+   Single source so changing the brand olive only touches one place. */
+.bg-olive-gradient {
+  background: linear-gradient(to right, #76754F, #5C5B3A);
+}
+
 @media (orientation: landscape) and (max-height: 500px) {
   .hero-mobile-img {
     object-fit: contain !important;

@@ -97,7 +97,7 @@ export default async function AboutPage() {
       <Navbar />
 
       {/* Hero — image left, bio right */}
-      <section className="relative bg-warm-footer text-white overflow-hidden">
+      <section className="relative bg-olive-gradient text-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
@@ -275,7 +275,7 @@ export default async function AboutPage() {
                 </ScrollReveal>
 
                 <ScrollReveal animation="slide-left" delay={200}>
-                <div className="bg-warm-footer rounded-3xl p-8 text-white">
+                <div className="bg-olive-gradient rounded-3xl p-8 text-white">
                   <h3 className="text-sm font-semibold text-primary-300 uppercase tracking-[0.15em] mb-5">When deeper testing is needed</h3>
                   <ul className="space-y-2.5">
                     {[
@@ -341,7 +341,7 @@ export default async function AboutPage() {
 
         {/* CTA */}
         <ScrollReveal animation="scale-up">
-          <div className="max-w-3xl mx-auto mt-10 bg-warm-footer rounded-3xl p-6 sm:p-10 text-white text-center">
+          <div className="max-w-3xl mx-auto mt-10 bg-olive-gradient rounded-3xl p-6 sm:p-10 text-white text-center">
             <h3 className="text-2xl sm:text-3xl font-medium font-serif mb-3">Ready to start your healing journey?</h3>
             <p className="text-cream-dark/70 max-w-lg mx-auto mb-6 text-sm sm:text-base">
               Book a consultation and let&apos;s create a personalized nutrition plan designed specifically for your needs.

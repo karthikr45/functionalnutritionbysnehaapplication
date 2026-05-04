@@ -360,7 +360,7 @@ export default async function ServicePage({ params }: { params: { slug: string }
       <Navbar />
 
       {/* Hero */}
-      <section className="relative bg-warm-footer text-white">
+      <section className="relative bg-olive-gradient text-white">
         <div className="absolute inset-0 bg-black/20 z-10" />
         {image && (
           <img
@@ -435,7 +435,7 @@ export default async function ServicePage({ params }: { params: { slug: string }
             {/* Why Gut Health / Conditions */}
             <div className="space-y-8">
               {service.whyGutHealth && (
-                <div className="bg-warm-footer rounded-3xl p-8 text-white">
+                <div className="bg-olive-gradient rounded-3xl p-8 text-white">
                   <h2 className="text-2xl font-medium font-serif mb-4">Why Gut Health Matters</h2>
                   <p className="text-cream-dark/80 leading-relaxed">{service.whyGutHealth}</p>
                 </div>
@@ -515,7 +515,7 @@ export default async function ServicePage({ params }: { params: { slug: string }
           {/* Program Structure */}
           {service.programStructure && (
             <div className="max-w-3xl mx-auto mb-16">
-              <div className="bg-warm-footer rounded-3xl p-8 sm:p-10 text-white">
+              <div className="bg-olive-gradient rounded-3xl p-8 sm:p-10 text-white">
                 <h2 className="text-2xl font-medium font-serif mb-6">Program Structure — 3 Months of Support</h2>
                 <ul className="space-y-3">
                   {service.programStructure.map((item: string, i: number) => (
@@ -569,7 +569,7 @@ export default async function ServicePage({ params }: { params: { slug: string }
             <h2 className="text-3xl font-medium font-serif text-gray-900 mb-3">Ready to Begin Your Healing Journey?</h2>
             <p className="text-warm-text mb-6">Take the first step toward gut transformation and whole-body health.</p>
             <div className="flex flex-wrap gap-4 justify-center">
-              <a href="tel:9391675213" className="px-6 py-3 bg-warm-footer text-white font-bold rounded-xl hover:bg-primary-900 transition-colors text-sm">
+              <a href="tel:9391675213" className="px-6 py-3 bg-olive-gradient text-white font-bold rounded-xl hover:bg-primary-900 transition-colors text-sm">
                 Call 9391675213
               </a>
               <Link href="/#contact" className="px-6 py-3 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700 transition-colors text-sm">
