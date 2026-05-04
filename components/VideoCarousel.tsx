@@ -145,6 +145,16 @@ export default function VideoCarousel() {
                             className="w-full h-full object-cover"
                             loading="lazy"
                           />
+                        ) : video.videoFileUrl ? (
+                          // No thumbnail uploaded — use the video's first frame as a poster.
+                          // preload=metadata + muted lets browsers show frame 0 without playing.
+                          <video
+                            src={`${video.videoFileUrl}#t=0.1`}
+                            preload="metadata"
+                            muted
+                            playsInline
+                            className="w-full h-full object-cover pointer-events-none"
+                          />
                         ) : (
                           <div className="w-full h-full bg-gradient-to-br from-teal-800 to-gray-800" />
                         )}
