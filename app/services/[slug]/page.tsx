@@ -555,7 +555,7 @@ export default async function ServicePage({ params }: { params: { slug: string }
                 <ul className="space-y-2">
                   {service.guidelines.notIncluded.map((item: string, i: number) => (
                     <li key={i} className="text-sm text-warm-text flex items-start gap-2">
-                      <span className="text-red-400">•</span> {item}
+                      <span className="text-gray-400">•</span> {item}
                     </li>
                   ))}
                 </ul>
