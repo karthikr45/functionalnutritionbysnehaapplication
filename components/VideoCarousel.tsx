@@ -90,11 +90,11 @@ export default function VideoCarousel() {
     <section className="py-20 bg-olive-gradient">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <p className="text-amber-400 font-semibold text-sm uppercase tracking-wide">Watch & Learn</p>
+          <p className="text-cream-dark/80 font-semibold text-sm uppercase tracking-wide">Watch &amp; Learn</p>
           <h2 className="text-3xl sm:text-4xl font-medium text-white font-serif mt-2">
             Wellness Video Stories
           </h2>
-          <p className="text-primary-100/90 mt-4 max-w-2xl mx-auto text-lg">
+          <p className="text-cream-dark/80 mt-4 max-w-2xl mx-auto text-lg">
             Explore inspiring stories of transformation and growth through our wellness videos.
           </p>
         </div>
@@ -116,7 +116,7 @@ export default function VideoCarousel() {
                   key={video._id}
                   className="flex-shrink-0 w-[85vw] md:w-[600px] lg:w-[700px] snap-center"
                 >
-                  <div className="relative rounded-2xl overflow-hidden bg-primary-900 shadow-2xl group">
+                  <div className="relative rounded-2xl overflow-hidden bg-warm-footer shadow-2xl group">
                     {/* Video or Thumbnail */}
                     {isPlaying && ytId ? (
                       <div className="aspect-video">
@@ -165,7 +165,7 @@ export default function VideoCarousel() {
                         {/* Category badge */}
                         {video.category && (
                           <div className="absolute top-5 left-5 flex items-center gap-1.5">
-                            <span className="text-amber-400 text-sm">✦</span>
+                            <span className="text-cream-dark/80 text-sm">✦</span>
                             <span className="text-white text-sm font-medium">{video.category}</span>
                           </div>
                         )}
@@ -176,12 +176,12 @@ export default function VideoCarousel() {
                             {video.title}
                           </h3>
                           {video.description && (
-                            <p className="text-gray-300 text-sm md:text-base leading-relaxed line-clamp-2 max-w-lg mb-4">
+                            <p className="text-cream-dark/80 text-sm md:text-base leading-relaxed line-clamp-2 max-w-lg mb-4">
                               {video.description}
                             </p>
                           )}
                           {(video.youtubeUrl || video.videoFileUrl) && (
-                            <button className="px-5 py-2 border border-amber-400 text-amber-400 text-sm font-semibold rounded-full hover:bg-amber-400 hover:text-gray-900 transition-all">
+                            <button className="px-5 py-2 border-2 border-white/50 text-white text-sm font-semibold rounded-full hover:bg-primary-700 transition-colors">
                               Explore More
                             </button>
                           )}
@@ -190,8 +190,8 @@ export default function VideoCarousel() {
                         {/* Play button */}
                         {(video.youtubeUrl || video.videoFileUrl) && (
                           <div className="absolute top-1/2 right-8 md:right-12 -translate-y-1/2">
-                            <div className="w-16 h-16 md:w-20 md:h-20 bg-amber-400 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                              <svg className="w-7 h-7 md:w-8 md:h-8 text-gray-900 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                            <div className="w-16 h-16 md:w-20 md:h-20 bg-cream rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                              <svg className="w-7 h-7 md:w-8 md:h-8 text-warm-footer ml-1" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M8 5v14l11-7z" />
                               </svg>
                             </div>
