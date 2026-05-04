@@ -539,7 +539,7 @@ export default async function ServicePage({ params }: { params: { slug: string }
             <div className="max-w-3xl mx-auto mb-16 grid grid-cols-1 sm:grid-cols-2 gap-6">
               {service.guidelines.suitable?.length > 0 && (
               <div className="bg-cream-dark rounded-3xl p-8 border border-primary-100/30">
-                <h3 className="font-semibold text-gray-900 mb-4">✅ Suitable For</h3>
+                <h3 className="font-semibold text-gray-900 mb-4"><span className="text-gray-400">•</span> Suitable For</h3>
                 <ul className="space-y-2">
                   {service.guidelines.suitable.map((item: string, i: number) => (
                     <li key={i} className="text-sm text-warm-text flex items-start gap-2">
@@ -551,7 +551,7 @@ export default async function ServicePage({ params }: { params: { slug: string }
               )}
               {service.guidelines.notIncluded?.length > 0 && (
               <div className="bg-cream-dark rounded-3xl p-8 border border-red-100/30">
-                <h3 className="font-semibold text-gray-900 mb-4">❌ Not Included</h3>
+                <h3 className="font-semibold text-gray-900 mb-4"><span className="text-gray-400">•</span> Not Included</h3>
                 <ul className="space-y-2">
                   {service.guidelines.notIncluded.map((item: string, i: number) => (
                     <li key={i} className="text-sm text-warm-text flex items-start gap-2">
