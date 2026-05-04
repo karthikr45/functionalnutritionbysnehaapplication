@@ -129,7 +129,7 @@ export default function Contact({ settings }: ContactProps) {
                   <button
                     type="submit"
                     disabled={status === 'sending'}
-                    className="px-10 py-3.5 bg-gray-900 hover:bg-gray-800 disabled:bg-gray-600 text-white font-bold rounded-full transition-colors text-sm"
+                    className="px-10 py-3.5 bg-primary-700 hover:bg-primary-800 disabled:bg-primary-400 text-white font-bold rounded-full transition-colors text-sm"
                   >
                     {status === 'sending' ? 'Sending...' : 'Submit'}
                   </button>

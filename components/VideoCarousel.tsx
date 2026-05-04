@@ -94,7 +94,7 @@ export default function VideoCarousel() {
           <h2 className="text-3xl sm:text-4xl font-medium text-white font-serif mt-2">
             Wellness Video Stories
           </h2>
-          <p className="text-gray-400 mt-4 max-w-2xl mx-auto text-lg">
+          <p className="text-primary-100/90 mt-4 max-w-2xl mx-auto text-lg">
             Explore inspiring stories of transformation and growth through our wellness videos.
           </p>
         </div>
