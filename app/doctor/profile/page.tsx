@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import DoctorProfileCard from '@/components/DoctorProfileCard';
+import PasswordInput from '@/components/PasswordInput';
 
 interface Me {
   id: string;
@@ -268,15 +269,15 @@ export default function DoctorProfilePage() {
             <h2 className="font-bold text-gray-900">Change Password</h2>
             <div>
               <label className={labelCls}>Current Password</label>
-              <input type="password" value={pwd.currentPassword} onChange={(e) => setPwd({ ...pwd, currentPassword: e.target.value })} className={inputCls} required />
+              <PasswordInput value={pwd.currentPassword} onChange={(e) => setPwd({ ...pwd, currentPassword: e.target.value })} className={inputCls} required />
             </div>
             <div>
               <label className={labelCls}>New Password</label>
-              <input type="password" value={pwd.newPassword} onChange={(e) => setPwd({ ...pwd, newPassword: e.target.value })} minLength={8} placeholder="Min. 8 characters" className={inputCls} required />
+              <PasswordInput value={pwd.newPassword} onChange={(e) => setPwd({ ...pwd, newPassword: e.target.value })} minLength={8} placeholder="Min. 8 characters" className={inputCls} required />
             </div>
             <div>
               <label className={labelCls}>Confirm New Password</label>
-              <input type="password" value={pwd.confirmPassword} onChange={(e) => setPwd({ ...pwd, confirmPassword: e.target.value })} className={inputCls} required />
+              <PasswordInput value={pwd.confirmPassword} onChange={(e) => setPwd({ ...pwd, confirmPassword: e.target.value })} className={inputCls} required />
             </div>
             <button type="submit" disabled={saving} className="w-full px-6 py-2.5 bg-gray-900 hover:bg-gray-800 disabled:bg-gray-400 text-white font-semibold rounded-xl text-sm">
               {saving ? 'Updating...' : 'Change Password'}

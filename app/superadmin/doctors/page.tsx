@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { formatDate } from '@/lib/utils';
+import PasswordInput from '@/components/PasswordInput';
 
 interface Doctor {
   id: string;
@@ -215,7 +216,7 @@ export default function SuperAdminDoctorsPage() {
             </div>
             <div>
               <label className={labelCls}>Password {editingId ? '(leave blank to keep current)' : '*'}</label>
-              <input type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} placeholder="Min. 8 characters" minLength={editingId ? 0 : 8} className={inputCls} required={!editingId} />
+              <PasswordInput value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} placeholder="Min. 8 characters" minLength={editingId ? 0 : 8} className={inputCls} required={!editingId} />
             </div>
           </div>
 

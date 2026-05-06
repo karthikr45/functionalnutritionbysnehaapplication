@@ -4,6 +4,7 @@ import { useState, Suspense } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Logo from '@/components/Logo';
+import PasswordInput from '@/components/PasswordInput';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -169,11 +170,11 @@ function SignupContent() {
               </div>
               <div>
                 <label className="label">Password *</label>
-                <input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder="Min. 8 characters" required minLength={8} className="input" />
+                <PasswordInput value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder="Min. 8 characters" required minLength={8} className="input" />
               </div>
               <div>
                 <label className="label">Confirm Password *</label>
-                <input type="password" value={form.confirmPassword} onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })} placeholder="Repeat your password" required className="input" />
+                <PasswordInput value={form.confirmPassword} onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })} placeholder="Repeat your password" required className="input" />
               </div>
               <button type="submit" disabled={loading} className="w-full py-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-semibold rounded-xl transition-colors shadow-sm mt-2">
                 {loading ? 'Sending OTP...' : 'Send Verification Code'}

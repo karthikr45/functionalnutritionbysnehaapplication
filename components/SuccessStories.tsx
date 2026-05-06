@@ -45,13 +45,9 @@ function StoryCard({ s }: { s: Story }) {
       </div>
 
       <div className="flex items-start gap-3 mb-3">
-        {s.imageUrl ? (
+        {s.imageUrl && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={s.imageUrl} alt={s.patientName} className="w-12 h-12 rounded-full object-cover" />
-        ) : (
-          <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center text-primary-700 font-bold text-lg shrink-0">
-            {s.patientName[0]?.toUpperCase()}
-          </div>
+          <img src={s.imageUrl} alt={s.patientName} className="w-12 h-12 rounded-full object-cover shrink-0" />
         )}
         <div className="min-w-0">
           <p className="font-semibold text-gray-900 truncate">{s.patientName}</p>

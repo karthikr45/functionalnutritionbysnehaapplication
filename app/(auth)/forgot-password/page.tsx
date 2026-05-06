@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Logo from '@/components/Logo';
+import PasswordInput from '@/components/PasswordInput';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -133,11 +134,11 @@ export default function ForgotPasswordPage() {
               </div>
               <div>
                 <label className="label">New Password</label>
-                <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Min. 8 characters" required minLength={8} className="input" />
+                <PasswordInput value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Min. 8 characters" required minLength={8} className="input" />
               </div>
               <div>
                 <label className="label">Confirm New Password</label>
-                <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Repeat password" required className="input" />
+                <PasswordInput value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Repeat password" required className="input" />
               </div>
               <button type="submit" disabled={loading} className="w-full py-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-semibold rounded-xl transition-colors">
                 {loading ? 'Resetting...' : 'Reset Password'}

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import Logo from '@/components/Logo';
+import PasswordInput from '@/components/PasswordInput';
 
 export default function ResetPasswordPage() {
   return <Suspense><ResetPasswordContent /></Suspense>;
@@ -84,8 +85,7 @@ function ResetPasswordContent() {
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">New Password</label>
-                <input
-                  type="password"
+                <PasswordInput
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Min. 8 characters"
@@ -96,8 +96,7 @@ function ResetPasswordContent() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Confirm New Password</label>
-                <input
-                  type="password"
+                <PasswordInput
                   value={confirm}
                   onChange={(e) => setConfirm(e.target.value)}
                   placeholder="Repeat password"

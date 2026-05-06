@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import Logo from '@/components/Logo';
+import PasswordInput from '@/components/PasswordInput';
 
 export default function LoginPage() {
   return <Suspense><LoginContent /></Suspense>;
@@ -73,8 +74,7 @@ function LoginContent() {
                   Forgot password?
                 </Link>
               </div>
-              <input
-                type="password"
+              <PasswordInput
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
                 placeholder="Enter your password"
