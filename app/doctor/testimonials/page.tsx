@@ -40,8 +40,34 @@ export default function DoctorTestimonialsPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const inputCls = 'w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:border-primary-400 focus:ring-2 focus:ring-primary-100 outline-none transition-all';
+
+  const uploadImage = async (file: File) => {
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Max file size is 5MB');
+      return;
+    }
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch('/api/doctor/testimonials/upload', { method: 'POST', body: fd });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Upload failed');
+      }
+      const { url } = await res.json();
+      setForm((f) => ({ ...f, imageUrl: url }));
+      toast.success('Image uploaded');
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const load = () => {
     setLoading(true);
@@ -182,10 +208,39 @@ export default function DoctorTestimonialsPage() {
               <input type="number" value={form.sortOrder} onChange={(e) => setForm({ ...form, sortOrder: Number(e.target.value) })} className={inputCls} placeholder="Lower = shown earlier" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1.5">Image URL (optional)</label>
-              <input value={form.imageUrl} onChange={(e) => setForm({ ...form, imageUrl: e.target.value })} className={inputCls} placeholder="https://…" />
+              <label className="block text-xs font-medium text-gray-700 mb-1.5">Image (optional)</label>
+              <div className="flex items-center gap-2">
+                <label className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold rounded-xl cursor-pointer whitespace-nowrap transition-colors">
+                  {uploading ? 'Uploading…' : 'Upload'}
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) uploadImage(file);
+                      e.target.value = '';
+                    }}
+                    disabled={uploading}
+                    className="hidden"
+                  />
+                </label>
+                <input
+                  value={form.imageUrl}
+                  onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
+                  className={inputCls}
+                  placeholder="…or paste a URL"
+                />
+              </div>
             </div>
           </div>
+
+          {form.imageUrl && (
+            <div className="flex items-center gap-3">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={form.imageUrl} alt="preview" className="w-16 h-16 rounded-lg object-cover border border-gray-200" />
+              <button type="button" onClick={() => setForm({ ...form, imageUrl: '' })} className="text-xs text-gray-500 hover:text-red-600 underline">Remove image</button>
+            </div>
+          )}
 
           <div className="flex items-center gap-6 pt-2">
             <label className="flex items-center gap-2 text-sm text-gray-700">
