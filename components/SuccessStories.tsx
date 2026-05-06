@@ -82,7 +82,7 @@ export default function SuccessStories() {
               </div>
 
               {s.title && <p className="font-semibold text-gray-800 text-sm mb-1.5">{s.title}</p>}
-              <p className={`text-warm-text text-sm leading-relaxed ${s.type === 'CASE_STUDY' ? 'line-clamp-6' : 'line-clamp-4'}`}>
+              <p className="text-warm-text text-sm leading-relaxed whitespace-pre-line">
                 {s.content}
               </p>
             </article>
