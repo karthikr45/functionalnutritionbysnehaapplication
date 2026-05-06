@@ -64,6 +64,11 @@ enum DocumentType {
   OTHER
 }
 
+enum TestimonialType {
+  TESTIMONIAL
+  CASE_STUDY
+}
+
 // ─── Auth Models (NextAuth) ────────────────────────────────────────────────────
 
 model Account {
@@ -118,7 +123,7 @@ model OtpVerification {
   id        String   @id @default(cuid())
   email     String
   otp       String
-  purpose   String   // 'SIGNUP' | 'RESET_PASSWORD'
+  purpose   String // 'SIGNUP' | 'RESET_PASSWORD'
   attempts  Int      @default(0)
   verified  Boolean  @default(false)
   expiresAt DateTime
@@ -130,53 +135,54 @@ model OtpVerification {
 // ─── Core User Model ──────────────────────────────────────────────────────────
 
 model User {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  password  String
-  phone     String?
-  role      UserRole @default(PATIENT)
-  image     String?
-  isActive  Boolean  @default(true)
-  isEmailVerified Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String   @id @default(cuid())
+  name            String
+  email           String   @unique
+  password        String
+  phone           String?
+  role            UserRole @default(PATIENT)
+  image           String?
+  isActive        Boolean  @default(true)
+  isEmailVerified Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  accounts       Account[]
-  sessions       Session[]
+  accounts            Account[]
+  sessions            Session[]
   passwordResetTokens PasswordResetToken[]
-  doctorProfile  DoctorProfile?
-  patientProfile PatientProfile?
-  documents      Document[]
-  messages       Message[]
-  products       Product[]            @relation("ProductCreator")
-  productReviews ProductReview[]
-  orders         Order[]
-  orderStatusUpdates OrderStatusHistory[]
-  auditLogsPerformed   AuditLog[] @relation("AuditBySuperAdmin")
-  auditLogsTargeted    AuditLog[] @relation("AuditImpersonatedUser")
-  notifications        Notification[]
+  doctorProfile       DoctorProfile?
+  patientProfile      PatientProfile?
+  documents           Document[]
+  messages            Message[]
+  products            Product[]            @relation("ProductCreator")
+  productReviews      ProductReview[]
+  orders              Order[]
+  orderStatusUpdates  OrderStatusHistory[]
+  auditLogsPerformed  AuditLog[]           @relation("AuditBySuperAdmin")
+  auditLogsTargeted   AuditLog[]           @relation("AuditImpersonatedUser")
+  notifications       Notification[]
+  testimonials        Testimonial[]
 }
 
 // ─── Doctor Profile ───────────────────────────────────────────────────────────
 
 model DoctorProfile {
-  id                 String  @id @default(cuid())
-  userId             String  @unique
-  bio                String? @db.Text
-  shortBio           String?
-  specialization     String?
-  qualifications     String?
-  experience         Int?    // years
-  consultationFee    Float   @default(500)
-  followUpFee        Float   @default(300)
-  profileImage       String?
+  id                  String  @id @default(cuid())
+  userId              String  @unique
+  bio                 String? @db.Text
+  shortBio            String?
+  specialization      String?
+  qualifications      String?
+  experience          Int? // years
+  consultationFee     Float   @default(500)
+  followUpFee         Float   @default(300)
+  profileImage        String?
   isAcceptingPatients Boolean @default(true)
 
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   availability Availability[]
   blockedDates BlockedDate[]
-  appointments Appointment[] @relation("DoctorAppointments")
+  appointments Appointment[]  @relation("DoctorAppointments")
 }
 
 // ─── Patient Profile ──────────────────────────────────────────────────────────
@@ -206,9 +212,9 @@ model PatientProfile {
 model Availability {
   id           String  @id @default(cuid())
   doctorId     String
-  dayOfWeek    Int     // 0=Sun, 1=Mon ... 6=Sat
-  startTime    String  // "09:00"
-  endTime      String  // "17:00"
+  dayOfWeek    Int // 0=Sun, 1=Mon ... 6=Sat
+  startTime    String // "09:00"
+  endTime      String // "17:00"
   slotDuration Int     @default(45) // minutes
   isActive     Boolean @default(true)
 
@@ -273,8 +279,8 @@ model Package {
   description String  @db.Text
   price       Float
   sessions    Int
-  validity    Int     // days
-  features    Json    // string[]
+  validity    Int // days
+  features    Json // string[]
   serviceSlug String? // link to service/program slug (e.g. 'gut-reset-program')
   isActive    Boolean @default(true)
   isPopular   Boolean @default(false)
@@ -304,13 +310,13 @@ model PackageBooking {
 // ─── Products & E-Commerce ──────────────────────────────────────────────────
 
 model ProductCategory {
-  id          String  @id @default(cuid())
+  id          String   @id @default(cuid())
   name        String
-  slug        String  @unique
-  description String? @db.Text
+  slug        String   @unique
+  description String?  @db.Text
   image       String?
-  sortOrder   Int     @default(0)
-  isActive    Boolean @default(true)
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -318,29 +324,29 @@ model ProductCategory {
 }
 
 model Product {
-  id                String  @id @default(cuid())
+  id                String   @id @default(cuid())
   name              String
-  slug              String  @unique
-  description       String  @db.Text
+  slug              String   @unique
+  description       String   @db.Text
   shortDescription  String?
   price             Float
   salePrice         Float?
-  sku               String? @unique
-  stock             Int     @default(0)
-  lowStockThreshold Int     @default(5)
+  sku               String?  @unique
+  stock             Int      @default(0)
+  lowStockThreshold Int      @default(5)
   categoryId        String
-  tags              Json    @default("[]") // ["POPULAR", "BEST_SELLER", "NEW_ARRIVAL"]
-  images            Json    @default("[]") // [{ url, publicId }]
-  benefits          Json    @default("[]") // string[]
-  ingredients       String? @db.Text
-  howToUse          String? @db.Text
+  tags              Json     @default("[]") // ["POPULAR", "BEST_SELLER", "NEW_ARRIVAL"]
+  images            Json     @default("[]") // [{ url, publicId }]
+  benefits          Json     @default("[]") // string[]
+  ingredients       String?  @db.Text
+  howToUse          String?  @db.Text
   weight            String?
-  isActive          Boolean @default(true)
-  isFeatured        Boolean @default(false)
-  sortOrder         Int     @default(0)
-  avgRating         Float   @default(0)
-  totalReviews      Int     @default(0)
-  totalSold         Int     @default(0)
+  isActive          Boolean  @default(true)
+  isFeatured        Boolean  @default(false)
+  sortOrder         Int      @default(0)
+  avgRating         Float    @default(0)
+  totalReviews      Int      @default(0)
+  totalSold         Int      @default(0)
   createdById       String
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
@@ -355,14 +361,14 @@ model Product {
 }
 
 model ProductReview {
-  id         String  @id @default(cuid())
+  id         String   @id @default(cuid())
   productId  String
   userId     String
   orderId    String
-  rating     Int     // 1-5
+  rating     Int // 1-5
   title      String?
-  comment    String? @db.Text
-  isApproved Boolean @default(true)
+  comment    String?  @db.Text
+  isApproved Boolean  @default(true)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -396,7 +402,7 @@ model Order {
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 
-  user          User                @relation(fields: [userId], references: [id])
+  user          User                 @relation(fields: [userId], references: [id])
   items         OrderItem[]
   payment       Payment?
   statusHistory OrderStatusHistory[]
@@ -404,7 +410,7 @@ model Order {
 }
 
 model OrderItem {
-  id           String @id @default(cuid())
+  id           String  @id @default(cuid())
   orderId      String
   productId    String
   productName  String
@@ -432,18 +438,18 @@ model OrderStatusHistory {
 // ─── Payments ─────────────────────────────────────────────────────────────────
 
 model Payment {
-  id                  String        @id @default(cuid())
-  razorpayOrderId     String        @unique
-  razorpayPaymentId   String?
-  razorpaySignature   String?
-  amount              Float
-  currency            String        @default("INR")
-  status              PaymentStatus @default(PENDING)
-  appointmentId       String?       @unique
-  packageBookingId    String?       @unique
-  orderId             String?       @unique
-  createdAt           DateTime      @default(now())
-  updatedAt           DateTime      @updatedAt
+  id                String        @id @default(cuid())
+  razorpayOrderId   String        @unique
+  razorpayPaymentId String?
+  razorpaySignature String?
+  amount            Float
+  currency          String        @default("INR")
+  status            PaymentStatus @default(PENDING)
+  appointmentId     String?       @unique
+  packageBookingId  String?       @unique
+  orderId           String?       @unique
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 
   appointment    Appointment?    @relation(fields: [appointmentId], references: [id])
   packageBooking PackageBooking? @relation(fields: [packageBookingId], references: [id])
@@ -455,7 +461,7 @@ model Payment {
 model Notification {
   id        String   @id @default(cuid())
   userId    String
-  type      String   // APPOINTMENT_CONFIRMED, APPOINTMENT_CANCELLED, APPOINTMENT_REMINDER, MESSAGE, DOCUMENT, AI_INSIGHT, PAYMENT, PACKAGE_EXPIRY
+  type      String // APPOINTMENT_CONFIRMED, APPOINTMENT_CANCELLED, APPOINTMENT_REMINDER, MESSAGE, DOCUMENT, AI_INSIGHT, PAYMENT, PACKAGE_EXPIRY
   title     String
   message   String
   link      String?
@@ -463,6 +469,7 @@ model Notification {
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId, isRead])
   @@index([userId, createdAt])
 }
@@ -470,25 +477,25 @@ model Notification {
 // ─── Audit Logs ──────────────────────────────────────────────────────────────
 
 model AuditLog {
-  id                String   @id @default(cuid())
-  superAdminId      String
+  id                 String   @id @default(cuid())
+  superAdminId       String
   impersonatedUserId String
-  action            String   // e.g. "VIEW_DASHBOARD", "UPDATE_APPOINTMENT", "CREATE_PACKAGE"
-  entity            String?  // e.g. "Appointment", "Package"
-  entityId          String?
-  details           String?  @db.Text
-  ipAddress         String?
-  createdAt         DateTime @default(now())
+  action             String // e.g. "VIEW_DASHBOARD", "UPDATE_APPOINTMENT", "CREATE_PACKAGE"
+  entity             String? // e.g. "Appointment", "Package"
+  entityId           String?
+  details            String?  @db.Text
+  ipAddress          String?
+  createdAt          DateTime @default(now())
 
-  superAdmin        User @relation("AuditBySuperAdmin", fields: [superAdminId], references: [id])
-  impersonatedUser  User @relation("AuditImpersonatedUser", fields: [impersonatedUserId], references: [id])
+  superAdmin       User @relation("AuditBySuperAdmin", fields: [superAdminId], references: [id])
+  impersonatedUser User @relation("AuditImpersonatedUser", fields: [impersonatedUserId], references: [id])
 }
 
 // ─── Theme Settings ──────────────────────────────────────────────────────────
 
 model ThemeSettings {
-  id           String @id @default("global")
-  primaryColor String @default("#16a34a") // green-600
+  id           String   @id @default("global")
+  primaryColor String   @default("#16a34a") // green-600
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
@@ -501,16 +508,42 @@ model Document {
   title         String
   type          DocumentType
   fileUrl       String
-  filePublicId  String?      // Cloudinary public_id for deletion
-  fileType      String       // mime type
+  filePublicId  String? // Cloudinary public_id for deletion
+  fileType      String // mime type
   fileSize      Int?
   notes         String?
   appointmentId String?
   isShared      Boolean      @default(false) // shared between doctor and patient
-  aiAnalysis    String?      @db.Text        // Cached Claude analysis
+  aiAnalysis    String?      @db.Text // Cached Claude analysis
   aiAnalyzedAt  DateTime?
   createdAt     DateTime     @default(now())
 
   uploadedBy  User         @relation(fields: [uploadedById], references: [id])
   appointment Appointment? @relation(fields: [appointmentId], references: [id])
+}
+
+// ─── Testimonials & Case Studies ──────────────────────────────────────────────
+// Doctor-curated success stories shown on the public homepage. Same model
+// supports both short testimonials and longer case studies (distinguished
+// by `type`). Authored by the doctor (User with role DOCTOR).
+
+model Testimonial {
+  id          String          @id @default(cuid())
+  authorId    String // doctor user.id who created the entry
+  patientName String // patient name shown publicly (or anonymized)
+  type        TestimonialType @default(TESTIMONIAL)
+  title       String?
+  content     String          @db.Text
+  rating      Int             @default(5) // 1-5
+  imageUrl    String? // optional patient photo / outcome chart
+  isPublished Boolean         @default(true)
+  isFeatured  Boolean         @default(false)
+  sortOrder   Int             @default(0)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([authorId])
+  @@index([isPublished, sortOrder])
 }

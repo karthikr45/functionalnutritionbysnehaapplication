@@ -7,6 +7,7 @@ import Hero, { HeroContent } from '@/components/Hero';
 import Services from '@/components/Services';
 import HowItWorks from '@/components/HowItWorks';
 import Testimonials from '@/components/Testimonials';
+import SuccessStories from '@/components/SuccessStories';
 import VideoCarousel from '@/components/VideoCarousel';
 import FAQ from '@/components/FAQ';
 import Contact from '@/components/Contact';
@@ -59,6 +60,10 @@ export default async function HomePage() {
 
         <ScrollReveal animation="slide-left">
           <Testimonials />
+        </ScrollReveal>
+
+        <ScrollReveal animation="fade-up">
+          <SuccessStories />
         </ScrollReveal>
 
         <ScrollReveal animation="blur-in">
