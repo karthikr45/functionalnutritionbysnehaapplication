@@ -20,6 +20,7 @@ export async function GET() {
         patientName: true,
         type: true,
         title: true,
+        quote: true,
         content: true,
         rating: true,
         imageUrl: true,

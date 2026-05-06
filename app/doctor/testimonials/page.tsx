@@ -11,6 +11,7 @@ interface Testimonial {
   patientName: string;
   type: Type;
   title: string | null;
+  quote: string | null;
   content: string;
   rating: number;
   imageUrl: string | null;
@@ -25,6 +26,7 @@ const emptyForm = {
   patientName: '',
   type: 'TESTIMONIAL' as Type,
   title: '',
+  quote: '',
   content: '',
   rating: 5,
   imageUrl: '',
@@ -89,6 +91,7 @@ export default function DoctorTestimonialsPage() {
       patientName: t.patientName,
       type: t.type,
       title: t.title ?? '',
+      quote: t.quote ?? '',
       content: t.content,
       rating: t.rating,
       imageUrl: t.imageUrl ?? '',
@@ -191,6 +194,18 @@ export default function DoctorTestimonialsPage() {
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1.5">Title (optional)</label>
             <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className={inputCls} placeholder="e.g. From bloated to balanced in 12 weeks" />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-gray-700 mb-1.5">Pull-quote (optional)</label>
+            <textarea
+              value={form.quote}
+              onChange={(e) => setForm({ ...form, quote: e.target.value })}
+              rows={2}
+              className={inputCls}
+              placeholder='A short standout line from the patient. e.g. "I finally feel like myself again."'
+            />
+            <p className="text-[11px] text-gray-400 mt-1">Shown larger and italic at the top of the card.</p>
           </div>
 
           <div>

@@ -19,6 +19,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   const data: Record<string, unknown> = {};
   if (body.patientName !== undefined) data.patientName = String(body.patientName).trim();
   if (body.title !== undefined) data.title = body.title ? String(body.title).trim() : null;
+  if (body.quote !== undefined) data.quote = body.quote ? String(body.quote).trim() : null;
   if (body.content !== undefined) data.content = String(body.content);
   if (body.rating !== undefined) {
     const r = Number(body.rating);
