@@ -98,14 +98,6 @@ function LoginContent() {
               Create one free
             </Link>
           </div>
-
-          {/* Demo credentials */}
-          <div className="mt-6 p-4 bg-cream-dark rounded-xl text-xs text-gray-500 space-y-1">
-            <p className="font-semibold text-gray-700 mb-2">Demo Credentials:</p>
-            <p>Patient: patient@example.com / Patient@123</p>
-            <p>Doctor: sneha@functionalnutrition.com / Doctor@123</p>
-            <p>Super Admin: superadmin@admin.com / Maruthi@2013</p>
-          </div>
         </div>
 
         <p className="text-center text-xs text-gray-400 mt-6">
