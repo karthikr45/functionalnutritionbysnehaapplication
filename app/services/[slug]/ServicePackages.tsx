@@ -33,7 +33,7 @@ export default function ServicePackages({ serviceSlug, serviceTitle }: { service
           (d.packages || []).map((p: any) => ({
             ...p,
             features: Array.isArray(p.features) ? p.features : JSON.parse(p.features || '[]'),
-          }))
+          })),
         );
         setLoading(false);
       })
@@ -60,20 +60,18 @@ export default function ServicePackages({ serviceSlug, serviceTitle }: { service
   const selected = packages.find((p) => p.id === selectedId);
 
   if (loading) {
-    return (
-      <div className="text-center py-12 text-gray-400 text-sm">Loading packages...</div>
-    );
+    return <div className="text-center py-12 text-gray-400 text-sm">Loading packages...</div>;
   }
 
   if (packages.length === 0) {
-    return null; // Don't show the section if no packages
+    return null;
   }
 
   return (
     <section className="mt-16 pt-16 border-t border-gray-200">
       <div className="text-center mb-10">
         <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">Pricing</p>
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-serif mt-2">
+        <h2 className="text-2xl sm:text-3xl font-medium text-gray-900 font-serif mt-2">
           {serviceTitle} Packages
         </h2>
         <p className="text-gray-600 mt-3 max-w-xl mx-auto">
@@ -81,59 +79,54 @@ export default function ServicePackages({ serviceSlug, serviceTitle }: { service
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className={`grid gap-6 ${packages.length === 1 ? 'max-w-2xl mx-auto' : 'md:grid-cols-2'}`}>
         {packages.map((pkg) => (
-          <div
-            key={pkg.id}
-            className={`relative rounded-2xl p-6 flex flex-col ${
-              pkg.isPopular
-                ? 'bg-primary-600 text-white shadow-2xl lg:scale-105'
-                : 'bg-white text-gray-800 shadow-md border border-gray-100'
-            }`}
-          >
+          <article key={pkg.id} className="relative rounded-3xl bg-olive-gradient text-white p-8 sm:p-10 flex flex-col">
             {pkg.isPopular && (
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                MOST POPULAR
+              <div className="absolute -top-3 right-6 bg-amber-400 text-amber-900 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                Most Popular
               </div>
             )}
-            <h3 className={`text-lg font-bold font-serif ${pkg.isPopular ? 'text-white' : 'text-gray-900'}`}>
-              {pkg.name}
-            </h3>
-            <p className={`mt-2 text-xs leading-relaxed ${pkg.isPopular ? 'text-primary-100' : 'text-gray-500'}`}>
-              {pkg.description}
-            </p>
-            <div className="mt-4 mb-3">
-              <span className={`text-3xl font-bold ${pkg.isPopular ? 'text-white' : 'text-primary-600'}`}>
+
+            <h3 className="text-2xl font-medium font-serif mb-2">{pkg.name}</h3>
+            {pkg.description && (
+              <p className="text-cream-dark/70 text-sm leading-relaxed mb-6">{pkg.description}</p>
+            )}
+
+            {pkg.features.length > 0 && (
+              <ul className="space-y-3 mb-6 flex-1">
+                {pkg.features.map((feature: string, i: number) => (
+                  <li key={i} className="flex items-start gap-3 text-cream-dark/85 text-sm leading-relaxed">
+                    <span className="text-primary-300 mt-0.5 shrink-0">✓</span>
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <div className="mt-auto p-5 bg-white/10 backdrop-blur-sm rounded-2xl">
+              <p className="text-[11px] text-primary-200 uppercase tracking-wider mb-1">Investment</p>
+              <p className="text-2xl font-serif font-medium text-white">
                 {formatCurrency(pkg.price)}
-              </span>
+                <span className="text-sm text-cream-dark/70 font-sans font-normal ml-2">
+                  · {pkg.sessions} sessions · {pkg.validity} days
+                </span>
+              </p>
             </div>
-            <div className={`flex gap-3 text-xs mb-4 ${pkg.isPopular ? 'text-primary-100' : 'text-gray-500'}`}>
-              <span>🗓 {pkg.sessions} Sessions</span>
-              <span>⏳ {pkg.validity} days</span>
-            </div>
-            <ul className="space-y-2 flex-1 mb-5 text-sm">
-              {pkg.features.map((feature: string) => (
-                <li key={feature} className="flex items-start gap-2">
-                  <svg className={`w-4 h-4 flex-shrink-0 mt-0.5 ${pkg.isPopular ? 'text-primary-300' : 'text-primary-500'}`} fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span className={`text-xs ${pkg.isPopular ? 'text-primary-50' : 'text-gray-600'}`}>{feature}</span>
-                </li>
-              ))}
-            </ul>
+
             <button
               onClick={() => handleSelect(pkg.id)}
-              className={`w-full py-3 rounded-xl font-semibold text-sm transition-colors ${
-                pkg.isPopular
-                  ? 'bg-white text-primary-600 hover:bg-primary-50'
-                  : 'bg-primary-600 text-white hover:bg-primary-700'
-              }`}
+              className="mt-5 w-full py-3 rounded-xl font-semibold text-sm bg-cream text-warm-footer hover:bg-white transition-colors"
             >
               {session?.user?.role === 'PATIENT'
-                ? selectedId === pkg.id ? 'Close' : 'Buy Now'
-                : session ? 'Login as Patient' : 'Sign Up to Buy'}
+                ? selectedId === pkg.id
+                  ? 'Close'
+                  : 'Buy Now'
+                : session
+                  ? 'Login as Patient'
+                  : 'Sign Up to Buy'}
             </button>
-          </div>
+          </article>
         ))}
       </div>
 

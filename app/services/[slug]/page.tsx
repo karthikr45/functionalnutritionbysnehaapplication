@@ -322,12 +322,18 @@ const fallbackData: Record<string, any> = {
 export default async function ServicePage({ params }: { params: { slug: string } }) {
   let service: any = null;
   let siteSettings: any = null;
+  let hasPackages = false;
 
   try {
-    [service, siteSettings] = await Promise.all([
+    const { prisma } = await import('@/lib/prisma');
+    const [s, ss, pkgCount] = await Promise.all([
       client.fetch(SERVICE_BY_SLUG_QUERY, { slug: params.slug }),
       client.fetch(SITE_SETTINGS_QUERY),
+      prisma.package.count({ where: { serviceSlug: params.slug, isActive: true } }),
     ]);
+    service = s;
+    siteSettings = ss;
+    hasPackages = pkgCount > 0;
   } catch {}
 
   // Use fallback if Sanity data not available, or merge fallback for missing fields
@@ -512,8 +518,10 @@ export default async function ServicePage({ params }: { params: { slug: string }
             </div>
           )}
 
-          {/* Program Structure */}
-          {service.programStructure && (
+          {/* Program Structure (legacy) — only shown when no packages have been
+              created for this service. Once packages exist, ServicePackages renders
+              dynamic 3-month / 6-month / etc. cards instead. */}
+          {!hasPackages && service.programStructure && (
             <div className="max-w-3xl mx-auto mb-16">
               <div className="bg-olive-gradient rounded-3xl p-8 sm:p-10 text-white">
                 <h2 className="text-2xl font-medium font-serif mb-6">Program Structure — 3 Months of Support</h2>

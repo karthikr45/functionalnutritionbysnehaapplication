@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { formatCurrency } from '@/lib/utils';
+import { SERVICE_OPTIONS } from '@/lib/services';
 
 interface Package {
   id: string;
@@ -17,16 +18,6 @@ interface Package {
   sortOrder: number;
   serviceSlug?: string | null;
 }
-
-const SERVICE_OPTIONS = [
-  { value: '', label: '— General (not tied to a program) —' },
-  { value: 'gut-reset-program', label: 'Gut Reset Program' },
-  { value: 'weight-management', label: 'Weight Management' },
-  { value: 'metabolic-health-program', label: 'Metabolic Health Program' },
-  { value: 'pregnancy-nutrition', label: 'Pregnancy Nutrition' },
-  { value: 'personalized-nutrition-plan', label: 'One-Time Personalized Nutrition Plan' },
-  { value: 'group-program', label: 'Group Program' },
-];
 
 const emptyForm = {
   name: '',
