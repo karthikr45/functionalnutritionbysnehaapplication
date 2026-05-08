@@ -41,9 +41,25 @@ export default function BookAppointmentPage() {
   const [creating, setCreating] = useState(false);
 
   useEffect(() => {
-    fetch('/api/doctor/profile').then((r) => r.json()).then((d) => setDoctor(d.doctor));
-    fetch('/api/patient/packages').then((r) => r.json()).then((d) =>
-      setPackageBookings((d.bookings || []).filter((b: any) => b.status === 'ACTIVE' && b.usedSessions < b.totalSessions))
+    const safeJson = async (url: string) => {
+      try {
+        const r = await fetch(url);
+        if (!r.ok) {
+          console.error(`${url} responded ${r.status}`);
+          return null;
+        }
+        const ct = r.headers.get('content-type') || '';
+        if (!ct.includes('application/json')) return null;
+        return await r.json();
+      } catch (e) {
+        console.error(`${url} failed:`, e);
+        return null;
+      }
+    };
+
+    safeJson('/api/doctor/profile').then((d) => setDoctor(d?.doctor ?? null));
+    safeJson('/api/patient/packages').then((d) =>
+      setPackageBookings(((d?.bookings) || []).filter((b: any) => b.status === 'ACTIVE' && b.usedSessions < b.totalSessions)),
     );
   }, []);
 

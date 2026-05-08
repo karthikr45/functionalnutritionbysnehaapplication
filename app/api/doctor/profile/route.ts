@@ -5,12 +5,17 @@ import { getAuthSession } from '@/lib/auth';
 
 // GET public doctor profile (any user can view)
 export async function GET() {
-  const doctor = await prisma.doctorProfile.findFirst({
-    include: {
-      user: { select: { name: true, email: true, image: true } },
-    },
-  });
-  return NextResponse.json({ doctor });
+  try {
+    const doctor = await prisma.doctorProfile.findFirst({
+      include: {
+        user: { select: { name: true, email: true, image: true } },
+      },
+    });
+    return NextResponse.json({ doctor });
+  } catch (e) {
+    console.error('GET /api/doctor/profile failed:', e);
+    return NextResponse.json({ doctor: null, error: 'Failed to load doctor profile' }, { status: 200 });
+  }
 }
 
 // PATCH - update own doctor profile (doctor only)
