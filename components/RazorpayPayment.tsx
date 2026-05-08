@@ -49,7 +49,15 @@ export default function RazorpayPayment({
         }),
       });
 
-      if (!orderRes.ok) { toast.error('Could not initiate payment. Please try again.'); setLoading(false); return; }
+      if (!orderRes.ok) {
+        const err = await orderRes.json().catch(() => ({}));
+        toast.error(err?.error || 'Could not initiate payment. Please try again.');
+        if (err?.redirect) {
+          setTimeout(() => { window.location.href = err.redirect; }, 800);
+        }
+        setLoading(false);
+        return;
+      }
 
       const { orderId, currency } = await orderRes.json();
 

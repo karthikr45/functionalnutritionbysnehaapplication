@@ -28,6 +28,30 @@ export async function POST(req: NextRequest) {
       const pkg = await prisma.package.findUnique({ where: { id: packageId } });
       if (!pkg) return NextResponse.json({ error: 'Package not found' }, { status: 404 });
 
+      // Require patient profile to have at least the basic contact fields
+      // before they can purchase a program package. Prevents anonymous /
+      // half-onboarded buyers from completing checkout.
+      const patient = await prisma.patientProfile.findUnique({
+        where: { userId: session.user.id },
+        include: { user: { select: { name: true, email: true, phone: true } } },
+      });
+      const phone = patient?.user?.phone || patient?.phone;
+      const missing: string[] = [];
+      if (!patient?.user?.name?.trim()) missing.push('name');
+      if (!phone?.trim()) missing.push('phone');
+      if (!patient?.dateOfBirth) missing.push('date of birth');
+      if (!patient?.address?.trim() || !patient?.city?.trim() || !patient?.pincode?.trim()) missing.push('address');
+      if (missing.length > 0) {
+        return NextResponse.json(
+          {
+            error: `Please complete your profile before purchasing. Missing: ${missing.join(', ')}.`,
+            missingFields: missing,
+            redirect: '/patient/profile',
+          },
+          { status: 400 },
+        );
+      }
+
       amount = pkg.price;
       receipt = `pkg-${packageId.slice(-8)}`;
     } else if (type === 'order' && orderId) {
