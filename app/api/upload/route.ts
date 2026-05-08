@@ -46,20 +46,46 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  // Notify the doctor if patient uploads to an appointment
-  if (appointmentId && session.user.role === 'PATIENT') {
-    const appt = await prisma.appointment.findUnique({
-      where: { id: appointmentId },
-      include: { doctor: { select: { userId: true } } },
-    });
-    if (appt) {
-      createNotification({
-        userId: appt.doctor.userId,
-        type: 'DOCUMENT',
-        title: 'New document uploaded',
-        message: `${session.user.name} uploaded "${title}" for your review.`,
-        link: `/appointment/${appointmentId}`,
-      }).catch(() => {});
+  // Notify doctor(s) when a patient uploads a document
+  if (session.user.role === 'PATIENT') {
+    if (appointmentId) {
+      // Linked to a specific appointment — notify that appointment's doctor
+      const appt = await prisma.appointment.findUnique({
+        where: { id: appointmentId },
+        include: { doctor: { select: { userId: true } } },
+      });
+      if (appt) {
+        createNotification({
+          userId: appt.doctor.userId,
+          type: 'DOCUMENT',
+          title: 'New document uploaded',
+          message: `${session.user.name} uploaded "${title}" for your review.`,
+          link: `/appointment/${appointmentId}`,
+        }).catch(() => {});
+      }
+    } else {
+      // Standalone upload — notify each doctor the patient has had an
+      // appointment with so they can review it from /doctor/documents.
+      const patientProfile = await prisma.patientProfile.findUnique({
+        where: { userId: session.user.id },
+        select: { id: true },
+      });
+      if (patientProfile) {
+        const doctors = await prisma.appointment.findMany({
+          where: { patientId: patientProfile.id },
+          select: { doctor: { select: { userId: true } } },
+          distinct: ['doctorId'],
+        });
+        for (const a of doctors) {
+          createNotification({
+            userId: a.doctor.userId,
+            type: 'DOCUMENT',
+            title: 'New patient document',
+            message: `${session.user.name} uploaded "${title}".`,
+            link: '/doctor/documents',
+          }).catch(() => {});
+        }
+      }
     }
   }
 
@@ -78,18 +104,29 @@ export async function GET(req: NextRequest) {
   if (session.user.role === 'PATIENT') {
     where.uploadedById = session.user.id;
   } else if (session.user.role === 'DOCTOR') {
-    // Doctor sees all documents shared or linked to their appointments
+    // Doctor sees:
+    //   1. Their own uploads
+    //   2. Documents tied to any of their appointments
+    //   3. Standalone documents uploaded by any patient who has had at
+    //      least one appointment with them (covers patient-side uploads
+    //      from /patient/documents that aren't linked to an appointment)
     const doctorProfile = await prisma.doctorProfile.findUnique({
       where: { userId: session.user.id },
     });
     if (doctorProfile) {
+      const patientLinks = await prisma.appointment.findMany({
+        where: { doctorId: doctorProfile.id },
+        select: { patient: { select: { userId: true } } },
+        distinct: ['patientId'],
+      });
+      const patientUserIds = patientLinks.map((a) => a.patient.userId);
+
       where.OR = [
         { uploadedById: session.user.id },
-        {
-          appointment: {
-            doctorId: doctorProfile.id,
-          },
-        },
+        { appointment: { doctorId: doctorProfile.id } },
+        ...(patientUserIds.length > 0
+          ? [{ uploadedById: { in: patientUserIds }, appointmentId: null }]
+          : []),
       ];
     }
   }
