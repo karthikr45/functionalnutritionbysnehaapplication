@@ -11,7 +11,6 @@ export interface DoctorProfileCardData {
   qualifications?: string | null;
   experience?: number | null;
   consultationFee?: number;
-  followUpFee?: number;
   profileImage?: string | null;
   isAcceptingPatients?: boolean;
 }
@@ -84,20 +83,12 @@ export default function DoctorProfileCard({ doctor, variant = 'full', showFees =
         </div>
       )}
 
-      {showFees && (doctor.consultationFee !== undefined || doctor.followUpFee !== undefined) && (
-        <div className="mt-4 pt-4 border-t border-gray-100 grid grid-cols-2 gap-3">
-          {doctor.consultationFee !== undefined && (
-            <div className="bg-primary-50 rounded-xl p-3 text-center">
-              <p className="text-[11px] text-primary-700 uppercase tracking-wide font-medium">Consultation</p>
-              <p className="font-bold text-primary-700 mt-0.5">{formatCurrency(doctor.consultationFee)}</p>
-            </div>
-          )}
-          {doctor.followUpFee !== undefined && (
-            <div className="bg-gray-50 rounded-xl p-3 text-center">
-              <p className="text-[11px] text-gray-600 uppercase tracking-wide font-medium">Follow-up</p>
-              <p className="font-bold text-gray-700 mt-0.5">{formatCurrency(doctor.followUpFee)}</p>
-            </div>
-          )}
+      {showFees && doctor.consultationFee !== undefined && (
+        <div className="mt-4 pt-4 border-t border-gray-100">
+          <div className="bg-primary-50 rounded-xl p-3 text-center">
+            <p className="text-[11px] text-primary-700 uppercase tracking-wide font-medium">Consultation</p>
+            <p className="font-bold text-primary-700 mt-0.5">{formatCurrency(doctor.consultationFee)}</p>
+          </div>
         </div>
       )}
     </div>

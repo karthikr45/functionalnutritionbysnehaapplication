@@ -29,7 +29,6 @@ Has helped over 500 clients achieve their health goals through personalized nutr
           qualifications: 'Certified Gut Shell Consultant, Advanced Clinical Nutrition & Dietetics, Functional Medicine Approach, Gut Microbiome & Hormonal Health Specialist',
           experience: 8,
           consultationFee: 1499,
-          followUpFee: 799,
           isAcceptingPatients: true,
         },
       },

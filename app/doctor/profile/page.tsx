@@ -17,7 +17,6 @@ interface Me {
     qualifications: string | null;
     experience: number | null;
     consultationFee: number;
-    followUpFee: number;
     profileImage: string | null;
     isAcceptingPatients: boolean;
   } | null;
@@ -38,7 +37,6 @@ export default function DoctorProfilePage() {
     qualifications: '',
     experience: 0,
     consultationFee: 500,
-    followUpFee: 300,
     profileImage: '',
     isAcceptingPatients: true,
   });
@@ -61,7 +59,6 @@ export default function DoctorProfilePage() {
         qualifications: p?.qualifications || '',
         experience: p?.experience || 0,
         consultationFee: p?.consultationFee || 500,
-        followUpFee: p?.followUpFee || 300,
         profileImage: p?.profileImage || '',
         isAcceptingPatients: p?.isAcceptingPatients ?? true,
       });
@@ -153,7 +150,6 @@ export default function DoctorProfilePage() {
     qualifications: form.qualifications,
     experience: form.experience,
     consultationFee: form.consultationFee,
-    followUpFee: form.followUpFee,
     profileImage: form.profileImage,
     isAcceptingPatients: form.isAcceptingPatients,
   };
@@ -231,7 +227,7 @@ export default function DoctorProfilePage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className={labelCls}>Experience (years)</label>
               <input type="number" value={form.experience} onChange={(e) => setForm({ ...form, experience: Number(e.target.value) })} min={0} className={inputCls} />
@@ -239,10 +235,6 @@ export default function DoctorProfilePage() {
             <div>
               <label className={labelCls}>Consultation Fee (₹)</label>
               <input type="number" value={form.consultationFee} onChange={(e) => setForm({ ...form, consultationFee: Number(e.target.value) })} min={0} className={inputCls} />
-            </div>
-            <div>
-              <label className={labelCls}>Follow-up Fee (₹)</label>
-              <input type="number" value={form.followUpFee} onChange={(e) => setForm({ ...form, followUpFee: Number(e.target.value) })} min={0} className={inputCls} />
             </div>
           </div>
 

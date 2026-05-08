@@ -175,7 +175,6 @@ model DoctorProfile {
   qualifications      String?
   experience          Int? // years
   consultationFee     Float   @default(500)
-  followUpFee         Float   @default(300)
   profileImage        String?
   isAcceptingPatients Boolean @default(true)
 

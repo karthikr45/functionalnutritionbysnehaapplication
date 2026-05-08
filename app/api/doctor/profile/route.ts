@@ -24,7 +24,7 @@ export async function PATCH(req: NextRequest) {
   const {
     name, phone,
     bio, shortBio, specialization, qualifications, experience,
-    consultationFee, followUpFee, profileImage, isAcceptingPatients,
+    consultationFee, profileImage, isAcceptingPatients,
     currentPassword, newPassword,
   } = body;
 
@@ -58,7 +58,6 @@ export async function PATCH(req: NextRequest) {
   if (qualifications !== undefined) profileUpdateData.qualifications = qualifications || null;
   if (experience !== undefined) profileUpdateData.experience = Number(experience) || 0;
   if (consultationFee !== undefined) profileUpdateData.consultationFee = Number(consultationFee);
-  if (followUpFee !== undefined) profileUpdateData.followUpFee = Number(followUpFee);
   if (profileImage !== undefined) profileUpdateData.profileImage = profileImage || null;
   if (isAcceptingPatients !== undefined) profileUpdateData.isAcceptingPatients = !!isAcceptingPatients;
 

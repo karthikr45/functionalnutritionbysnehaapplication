@@ -22,9 +22,7 @@ export async function POST(req: NextRequest) {
       });
       if (!appointment) return NextResponse.json({ error: 'Appointment not found' }, { status: 404 });
 
-      amount = appointment.type === 'FOLLOW_UP'
-        ? appointment.doctor.followUpFee
-        : appointment.doctor.consultationFee;
+      amount = appointment.doctor.consultationFee;
       receipt = `appt-${appointmentId.slice(-8)}`;
     } else if (type === 'package' && packageId) {
       const pkg = await prisma.package.findUnique({ where: { id: packageId } });

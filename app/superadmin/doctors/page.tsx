@@ -19,7 +19,6 @@ interface Doctor {
     qualifications: string | null;
     experience: number | null;
     consultationFee: number;
-    followUpFee: number;
     profileImage: string | null;
     isAcceptingPatients: boolean;
   } | null;
@@ -36,7 +35,6 @@ const emptyForm = {
   qualifications: '',
   experience: 0,
   consultationFee: 500,
-  followUpFee: 300,
   profileImage: '',
   isAcceptingPatients: true,
   isActive: true,
@@ -100,7 +98,6 @@ export default function SuperAdminDoctorsPage() {
       qualifications: doc.doctorProfile?.qualifications || '',
       experience: doc.doctorProfile?.experience || 0,
       consultationFee: doc.doctorProfile?.consultationFee || 500,
-      followUpFee: doc.doctorProfile?.followUpFee || 300,
       profileImage: doc.doctorProfile?.profileImage || '',
       isAcceptingPatients: doc.doctorProfile?.isAcceptingPatients ?? true,
       isActive: doc.isActive,
@@ -240,7 +237,7 @@ export default function SuperAdminDoctorsPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className={labelCls}>Experience (years)</label>
               <input type="number" value={form.experience} onChange={e => setForm({ ...form, experience: Number(e.target.value) })} min={0} className={inputCls} />
@@ -248,10 +245,6 @@ export default function SuperAdminDoctorsPage() {
             <div>
               <label className={labelCls}>Consultation Fee (₹)</label>
               <input type="number" value={form.consultationFee} onChange={e => setForm({ ...form, consultationFee: Number(e.target.value) })} min={0} className={inputCls} />
-            </div>
-            <div>
-              <label className={labelCls}>Follow-up Fee (₹)</label>
-              <input type="number" value={form.followUpFee} onChange={e => setForm({ ...form, followUpFee: Number(e.target.value) })} min={0} className={inputCls} />
             </div>
           </div>
 

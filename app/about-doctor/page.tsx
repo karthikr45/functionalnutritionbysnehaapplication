@@ -47,7 +47,6 @@ export default async function AboutDoctorPage() {
                   qualifications: profile.qualifications,
                   experience: profile.experience,
                   consultationFee: profile.consultationFee,
-                  followUpFee: profile.followUpFee,
                   profileImage: profile.profileImage,
                   isAcceptingPatients: profile.isAcceptingPatients,
                 }}

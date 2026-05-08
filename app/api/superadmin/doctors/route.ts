@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const { name, email, phone, password, bio, shortBio, specialization, qualifications, experience, consultationFee, followUpFee, profileImage } = await req.json();
+  const { name, email, phone, password, bio, shortBio, specialization, qualifications, experience, consultationFee, profileImage } = await req.json();
 
   if (!name || !email || !password) {
     return NextResponse.json({ error: 'Name, email, and password required' }, { status: 400 });
@@ -60,7 +60,6 @@ export async function POST(req: NextRequest) {
           qualifications: qualifications || null,
           experience: experience || 0,
           consultationFee: consultationFee || 500,
-          followUpFee: followUpFee || 300,
           profileImage: profileImage || null,
           isAcceptingPatients: true,
         },

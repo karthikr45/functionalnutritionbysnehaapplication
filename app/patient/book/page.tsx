@@ -12,7 +12,6 @@ interface TimeSlot { startTime: string; endTime: string; isAvailable: boolean; }
 interface Doctor {
   id: string;
   consultationFee: number;
-  followUpFee: number;
   bio: string | null;
   shortBio: string | null;
   specialization: string | null;
@@ -24,7 +23,7 @@ interface Doctor {
 }
 interface PackageBooking { id: string; totalSessions: number; usedSessions: number; package: { name: string }; }
 
-type BookingType = 'consultation' | 'follow_up' | 'package_session';
+type BookingType = 'consultation' | 'package_session';
 
 const STEPS = ['Select Type', 'Pick Date & Time', 'Your Details', 'Payment'];
 
@@ -50,7 +49,6 @@ export default function BookAppointmentPage() {
 
   const amount =
     selectedType === 'consultation' ? doctor?.consultationFee || 0
-    : selectedType === 'follow_up' ? doctor?.followUpFee || 0
     : 0; // package sessions are pre-paid
 
   const handleCalendarSelect = (date: string, slot: TimeSlot) => {
@@ -70,7 +68,7 @@ export default function BookAppointmentPage() {
           date: selectedDate,
           startTime: selectedSlot.startTime,
           endTime: selectedSlot.endTime,
-          type: selectedType === 'package_session' ? 'PACKAGE_SESSION' : selectedType === 'follow_up' ? 'FOLLOW_UP' : 'CONSULTATION',
+          type: selectedType === 'package_session' ? 'PACKAGE_SESSION' : 'CONSULTATION',
           healthConcerns,
           packageBookingId: selectedType === 'package_session' ? selectedPackageBookingId : undefined,
         }),
@@ -151,7 +149,6 @@ export default function BookAppointmentPage() {
 
             {[
               { type: 'consultation' as BookingType, label: 'Initial Consultation', desc: 'First time? Start with a comprehensive assessment.', price: doctor.consultationFee, icon: '🩺' },
-              { type: 'follow_up' as BookingType, label: 'Follow-up Consultation', desc: 'Continue your progress with a follow-up session.', price: doctor.followUpFee, icon: '🔄' },
             ].map((opt) => (
               <button
                 key={opt.type}

@@ -10,7 +10,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   }
 
   const body = await req.json();
-  const { name, email, phone, password, isActive, bio, shortBio, specialization, qualifications, experience, consultationFee, followUpFee, profileImage, isAcceptingPatients } = body;
+  const { name, email, phone, password, isActive, bio, shortBio, specialization, qualifications, experience, consultationFee, profileImage, isAcceptingPatients } = body;
 
   const doctor = await prisma.user.findUnique({
     where: { id: params.id },
@@ -43,7 +43,6 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   if (qualifications !== undefined) profileUpdateData.qualifications = qualifications || null;
   if (experience !== undefined) profileUpdateData.experience = experience;
   if (consultationFee !== undefined) profileUpdateData.consultationFee = consultationFee;
-  if (followUpFee !== undefined) profileUpdateData.followUpFee = followUpFee;
   if (profileImage !== undefined) profileUpdateData.profileImage = profileImage || null;
   if (isAcceptingPatients !== undefined) profileUpdateData.isAcceptingPatients = isAcceptingPatients;
 
