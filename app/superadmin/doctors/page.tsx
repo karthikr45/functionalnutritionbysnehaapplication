@@ -314,7 +314,6 @@ export default function SuperAdminDoctorsPage() {
                   {doc.phone && <p className="text-xs text-gray-400">{doc.phone}</p>}
                   {doc.doctorProfile?.shortBio && <p className="text-sm text-gray-600 mt-2">{doc.doctorProfile.shortBio}</p>}
                   <div className="flex flex-wrap gap-3 text-xs text-gray-500 mt-2">
-                    {doc.doctorProfile?.experience !== null && <span>👨‍⚕️ {doc.doctorProfile?.experience} years exp.</span>}
                     <span>💰 ₹{doc.doctorProfile?.consultationFee} consultation</span>
                     <span>📅 Joined {formatDate(doc.createdAt)}</span>
                   </div>

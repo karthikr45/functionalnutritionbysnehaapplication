@@ -30,9 +30,7 @@ const defaultCredentials = [
   'Clinical Nutrition & Therapeutic Healing',
 ];
 
-const defaultStats = [
-  { number: '8+', label: 'Years Experience' },
-];
+const defaultStats: { number: string; label: string }[] = [];
 
 const credentialIcons = [
   <GraduationIcon key="g" className="w-5 h-5" />,
@@ -88,7 +86,8 @@ export default async function AboutPage() {
   const title = settings?.aboutTitle || `Hi, I'm Sneha`;
   const description = settings?.aboutDescription?.length ? settings.aboutDescription : defaultDescription;
   const credentials = settings?.aboutCredentials?.length ? settings.aboutCredentials : defaultCredentials;
-  const stats = settings?.aboutStats?.length ? settings.aboutStats : defaultStats;
+  const stats = (settings?.aboutStats?.length ? settings.aboutStats : defaultStats)
+    .filter((s: { label: string }) => !/experience/i.test(s.label));
   const image = settings?.aboutImage || settings?.doctorImage;
   const specializations = settings?.aboutSpecializations || 'Gut Health | Hormonal Balance | Inflammation | Therapeutic Nutrition';
 

@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Meet Your Doctor — Gut Shell',
-  description: 'Learn about the functional nutritionist behind your consultation — credentials, specialization, experience, and approach.',
+  description: 'Learn about the functional nutritionist behind your consultation — credentials, specialization, and approach.',
 };
 
 export default async function AboutDoctorPage() {

@@ -61,11 +61,6 @@ export default function DoctorProfileCard({ doctor, variant = 'full', showFees =
           )}
 
           <div className="flex flex-wrap gap-2 mt-3 justify-center sm:justify-start">
-            {typeof doctor.experience === 'number' && doctor.experience > 0 && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-50 border border-gray-100 text-gray-700 text-xs rounded-full">
-                <span>👨‍⚕️</span> {doctor.experience}+ years experience
-              </span>
-            )}
             {quals.map((q) => (
               <span key={q} className="inline-flex items-center px-3 py-1 bg-primary-50 border border-primary-100 text-primary-700 text-xs rounded-full">
                 {q}

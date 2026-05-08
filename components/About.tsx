@@ -15,7 +15,7 @@ interface AboutProps {
 }
 
 const defaultDescription = [
-  "I'm Sneha, a certified Gut Shell Consultant passionate about helping people heal from the root cause — not just manage symptoms. With over 8 years of experience, I combine the principles of functional medicine with personalized nutrition to create lasting health transformations.",
+  "I'm Sneha, a certified Gut Shell Consultant passionate about helping people heal from the root cause — not just manage symptoms. I combine the principles of functional medicine with personalized nutrition to create lasting health transformations.",
   'I specialize in hormonal imbalances (PCOS, thyroid), gut health issues (IBS, bloating, acid reflux), diabetes management, weight loss, and autoimmune conditions. My approach goes beyond calorie counting — I look at your complete health picture including lab work, lifestyle, stress, sleep, and gut health.',
   'My philosophy is simple: food is medicine. When you give your body the right nutrition, it has an incredible ability to heal itself. Every plan I create is rooted in science, customized to Indian food habits, and designed for real life — not just theory.',
 ];
@@ -28,9 +28,7 @@ const defaultCredentials = [
   'Sports & Performance Nutrition Certified',
 ];
 
-const defaultStats = [
-  { number: '8+', label: 'Years Experience' },
-];
+const defaultStats: { number: string; label: string }[] = [];
 
 const credentialIcons = [
   <GraduationIcon key="g" className="w-5 h-5" />,
@@ -49,7 +47,8 @@ export default function About({ settings }: AboutProps) {
   const title = settings?.aboutTitle || `Hi, I'm Sneha`;
   const description = settings?.aboutDescription?.length ? settings.aboutDescription : defaultDescription;
   const credentials = settings?.aboutCredentials?.length ? settings.aboutCredentials : defaultCredentials;
-  const stats = settings?.aboutStats?.length ? settings.aboutStats : defaultStats;
+  const stats = (settings?.aboutStats?.length ? settings.aboutStats : defaultStats)
+    .filter((s: { label: string }) => !/experience/i.test(s.label));
 
   return (
     <section id="about" className="py-20 bg-cream">

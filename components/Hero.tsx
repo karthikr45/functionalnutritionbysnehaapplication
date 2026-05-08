@@ -20,9 +20,7 @@ interface HeroProps {
 }
 
 const defaultHighlights = ['Functional Medicine Approach', 'Root Cause Analysis', 'Personalized Diet Plans'];
-const defaultStats = [
-  { number: '8+', label: 'Years Experience' },
-];
+const defaultStats: { number: string; label: string }[] = [];
 const defaultIcons = [
   <LeafIcon key="leaf" className="w-5 h-5 text-primary-600" />,
   <MicroscopeIcon key="mic" className="w-5 h-5 text-primary-600" />,
@@ -34,7 +32,8 @@ export default function Hero({ settings }: HeroProps) {
   const title = settings?.heroTitle || 'Heal Your Body with Gut Shell';
   const subtitle = settings?.heroSubtitle || 'Discover the root cause of your health issues through personalized, science-backed nutrition plans. No fad diets, no quick fixes — just sustainable healing through the power of real food.';
   const highlights = settings?.heroHighlights?.length ? settings.heroHighlights : defaultHighlights;
-  const stats = settings?.heroStats?.length ? settings.heroStats : defaultStats;
+  const stats = (settings?.heroStats?.length ? settings.heroStats : defaultStats)
+    .filter((s: { label: string }) => !/experience/i.test(s.label));
   const doctorImage = settings?.doctorImage;
   const desktopImage = settings?.heroDesktopImage;
   const name = settings?.aboutName || 'Sneha Agarwal';
