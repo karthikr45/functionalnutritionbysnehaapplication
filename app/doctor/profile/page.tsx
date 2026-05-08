@@ -271,7 +271,7 @@ export default function DoctorProfilePage() {
               <label className={labelCls}>Confirm New Password</label>
               <PasswordInput value={pwd.confirmPassword} onChange={(e) => setPwd({ ...pwd, confirmPassword: e.target.value })} className={inputCls} required />
             </div>
-            <button type="submit" disabled={saving} className="w-full px-6 py-2.5 bg-gray-900 hover:bg-gray-800 disabled:bg-gray-400 text-white font-semibold rounded-xl text-sm">
+            <button type="submit" disabled={saving} className="w-full px-6 py-2.5 bg-primary-700 hover:bg-primary-800 disabled:bg-primary-400 text-white font-semibold rounded-xl text-sm">
               {saving ? 'Updating...' : 'Change Password'}
             </button>
           </form>
