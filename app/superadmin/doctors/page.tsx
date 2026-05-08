@@ -204,7 +204,7 @@ export default function SuperAdminDoctorsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className={labelCls}>Full Name *</label>
-              <input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Dr. Full Name" className={inputCls} required />
+              <input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Dt. Full Name" className={inputCls} required />
             </div>
             <div>
               <label className={labelCls}>Email *</label>

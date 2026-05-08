@@ -64,7 +64,7 @@ export async function generateAppointmentReminders(userId: string) {
 
     if (existing) continue;
 
-    const otherPerson = isDoctor ? appt.patient.user.name : `Dr. ${appt.doctor.user.name}`;
+    const otherPerson = isDoctor ? appt.patient.user.name : `Dt. ${appt.doctor.user.name}`;
     await createNotification({
       userId,
       type: 'APPOINTMENT_REMINDER',

@@ -45,7 +45,7 @@ export default function DoctorProfileCard({ doctor, variant = 'full', showFees =
 
         <div className="flex-1 min-w-0 text-center sm:text-left">
           <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-start">
-            <h3 className="font-bold text-gray-900 text-lg font-serif">Dr. {doctor.user.name}</h3>
+            <h3 className="font-bold text-gray-900 text-lg font-serif">Dt. {doctor.user.name}</h3>
             {doctor.isAcceptingPatients !== false && (
               <span className="px-2 py-0.5 bg-primary-50 text-primary-700 text-[11px] font-medium rounded-full">
                 Accepting patients

@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
         const doctorUserId = await prisma.doctorProfile.findUnique({ where: { id: appt.doctorId }, select: { userId: true } });
         if (patientUserId && doctorUserId) {
           createNotifications([
-            { userId: patientUserId.userId, type: 'APPOINTMENT_CONFIRMED', title: 'Appointment Confirmed', message: `Your appointment with Dr. ${appt.doctor.user.name} on ${formatDate(appt.date)} is confirmed.`, link: `/appointment/${appt.id}` },
+            { userId: patientUserId.userId, type: 'APPOINTMENT_CONFIRMED', title: 'Appointment Confirmed', message: `Your appointment with Dt. ${appt.doctor.user.name} on ${formatDate(appt.date)} is confirmed.`, link: `/appointment/${appt.id}` },
             { userId: doctorUserId.userId, type: 'APPOINTMENT_CONFIRMED', title: 'New Appointment', message: `${appt.patient.user.name} booked a ${appt.type.replace('_', ' ').toLowerCase()} on ${formatDate(appt.date)}.`, link: `/appointment/${appt.id}` },
             { userId: doctorUserId.userId, type: 'PAYMENT', title: 'Payment Received', message: `₹${payment.amount} received from ${appt.patient.user.name}.`, link: '/doctor/revenue' },
           ]).catch(() => {});

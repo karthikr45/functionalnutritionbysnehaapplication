@@ -171,7 +171,7 @@ export function appointmentConfirmationEmail(data: AppointmentEmailData) {
         </div>
         <div style="padding:40px 30px;">
           <p style="color:#555;line-height:1.6;font-size:15px;">Hi ${data.patientName},</p>
-          <p style="color:#555;line-height:1.6;font-size:15px;">Your appointment with <strong>Dr. ${data.doctorName}</strong> is confirmed. We look forward to seeing you.</p>
+          <p style="color:#555;line-height:1.6;font-size:15px;">Your appointment with <strong>Dt. ${data.doctorName}</strong> is confirmed. We look forward to seeing you.</p>
           <table style="width:100%;border-collapse:collapse;margin-top:20px;background:#F5F7EC;border-radius:12px;">
             <tr><td style="padding:14px 16px;color:#888;font-size:13px;width:120px;">Date</td><td style="padding:14px 16px;color:#3D4127;font-weight:600;">${data.date}</td></tr>
             <tr><td style="padding:10px 16px;color:#888;font-size:13px;border-top:1px solid #eee;">Time</td><td style="padding:10px 16px;color:#3D4127;font-weight:600;border-top:1px solid #eee;">${data.time}</td></tr>
@@ -201,7 +201,7 @@ export function doctorAppointmentNotifyEmail(data: AppointmentEmailData & { heal
           <h1 style="color:white;margin:0;font-size:20px;">📅 New Appointment Booked</h1>
         </div>
         <div style="padding:30px;">
-          <p style="color:#555;line-height:1.6;font-size:15px;">Hi Dr. ${data.doctorName},</p>
+          <p style="color:#555;line-height:1.6;font-size:15px;">Hi Dt. ${data.doctorName},</p>
           <p style="color:#555;line-height:1.6;font-size:15px;">${data.patientName} has booked a ${data.type.toLowerCase()} with you.</p>
           <table style="width:100%;border-collapse:collapse;margin-top:16px;">
             <tr><td style="padding:10px 0;color:#888;font-size:13px;width:120px;">Patient</td><td style="padding:10px 0;color:#333;font-weight:600;">${data.patientName}</td></tr>
@@ -230,7 +230,7 @@ export function appointmentRescheduledEmail(data: AppointmentEmailData & { oldDa
         </div>
         <div style="padding:40px 30px;">
           <p style="color:#555;line-height:1.6;font-size:15px;">Hi ${data.patientName},</p>
-          <p style="color:#555;line-height:1.6;font-size:15px;">Your appointment with Dr. ${data.doctorName} has been rescheduled.</p>
+          <p style="color:#555;line-height:1.6;font-size:15px;">Your appointment with Dt. ${data.doctorName} has been rescheduled.</p>
           ${data.oldDate ? `<p style="color:#aaa;line-height:1.6;font-size:14px;text-decoration:line-through;">${data.oldDate} at ${data.oldTime}</p>` : ''}
           <div style="background:#F5F7EC;border-radius:12px;padding:20px;margin:16px 0;">
             <p style="margin:0 0 8px;color:#888;font-size:13px;">New Time</p>
@@ -256,7 +256,7 @@ export function appointmentCancelledEmail(data: AppointmentEmailData & { refundA
         </div>
         <div style="padding:40px 30px;">
           <p style="color:#555;line-height:1.6;font-size:15px;">Hi ${data.patientName},</p>
-          <p style="color:#555;line-height:1.6;font-size:15px;">Your appointment with Dr. ${data.doctorName} on <strong>${data.date} at ${data.time}</strong> has been cancelled.</p>
+          <p style="color:#555;line-height:1.6;font-size:15px;">Your appointment with Dt. ${data.doctorName} on <strong>${data.date} at ${data.time}</strong> has been cancelled.</p>
           ${data.refundAmount && data.refundAmount > 0 ? `<div style="background:#F5F7EC;border-radius:12px;padding:16px;margin:16px 0;"><p style="margin:0;color:#3D4127;font-size:14px;">💳 A refund of <strong>₹${data.refundAmount.toLocaleString('en-IN')}</strong> has been initiated and will reflect in your original payment method within 5-7 business days.</p></div>` : ''}
           <p style="color:#888;line-height:1.6;font-size:13px;margin-top:20px;">You can book a new appointment anytime from your dashboard.</p>
         </div>

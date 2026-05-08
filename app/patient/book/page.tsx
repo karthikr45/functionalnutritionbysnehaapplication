@@ -301,7 +301,7 @@ export default function BookAppointmentPage() {
             {/* Order summary */}
             <div className="bg-primary-50 border border-primary-100 rounded-xl p-5 mb-6 space-y-3 text-sm">
               <h3 className="font-semibold text-gray-800">Booking Summary</h3>
-              <div className="flex justify-between"><span className="text-gray-500">Doctor</span><span>Dr. {doctor.user.name}</span></div>
+              <div className="flex justify-between"><span className="text-gray-500">Doctor</span><span>Dt. {doctor.user.name}</span></div>
               <div className="flex justify-between"><span className="text-gray-500">Date</span><span>{formatDate(selectedDate)}</span></div>
               <div className="flex justify-between"><span className="text-gray-500">Time</span><span>{selectedSlot ? formatTime(selectedSlot.startTime) : ''}</span></div>
               <div className="flex justify-between"><span className="text-gray-500">Type</span><span className="capitalize">{selectedType.replace('_', ' ')}</span></div>

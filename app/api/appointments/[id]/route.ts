@@ -217,13 +217,13 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     const notifs = [];
     if (isCancel) {
       notifs.push(
-        { userId: patientUserId.userId, type: 'APPOINTMENT_CANCELLED', title: 'Appointment Cancelled', message: `Your appointment with Dr. ${doctorName} has been cancelled.${refundAmount > 0 ? ` Refund of ₹${refundAmount} initiated.` : ''}`, link: '/patient/appointments' },
+        { userId: patientUserId.userId, type: 'APPOINTMENT_CANCELLED', title: 'Appointment Cancelled', message: `Your appointment with Dt. ${doctorName} has been cancelled.${refundAmount > 0 ? ` Refund of ₹${refundAmount} initiated.` : ''}`, link: '/patient/appointments' },
         { userId: doctorUserId.userId, type: 'APPOINTMENT_CANCELLED', title: 'Appointment Cancelled', message: `${patientName} cancelled their appointment.`, link: '/doctor/appointments' },
       );
     }
     if (isReschedule) {
       notifs.push(
-        { userId: patientUserId.userId, type: 'APPOINTMENT_RESCHEDULED', title: 'Appointment Rescheduled', message: `Your appointment with Dr. ${doctorName} has been rescheduled to ${formatDate(body._newDate)}.`, link: `/appointment/${appointment.id}` },
+        { userId: patientUserId.userId, type: 'APPOINTMENT_RESCHEDULED', title: 'Appointment Rescheduled', message: `Your appointment with Dt. ${doctorName} has been rescheduled to ${formatDate(body._newDate)}.`, link: `/appointment/${appointment.id}` },
         { userId: doctorUserId.userId, type: 'APPOINTMENT_RESCHEDULED', title: 'Appointment Rescheduled', message: `${patientName} rescheduled to ${formatDate(body._newDate)}.`, link: `/appointment/${appointment.id}` },
       );
     }

@@ -24,7 +24,7 @@ export default async function AboutDoctorPage() {
           <div className="text-center mb-10">
             <p className="text-primary-600 text-sm font-medium uppercase tracking-wider mb-2">Meet Your Doctor</p>
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 font-serif">
-              {profile ? `Dr. ${profile.user.name}` : 'Your Nutritionist'}
+              {profile ? `Dt. ${profile.user.name}` : 'Your Nutritionist'}
             </h1>
             {profile?.specialization && (
               <p className="text-gray-600 mt-2">{profile.specialization}</p>
