@@ -40,7 +40,7 @@ export default function ServicePackages({ serviceSlug, serviceTitle }: { service
       .catch(() => setLoading(false));
   }, [serviceSlug]);
 
-  const handleSelect = async (pkgId: string) => {
+  const handleSelect = (pkgId: string) => {
     if (!session) {
       router.push(`/signup?package=${pkgId}&redirect=/services/${serviceSlug}`);
       return;
@@ -48,29 +48,6 @@ export default function ServicePackages({ serviceSlug, serviceTitle }: { service
     if (session.user.role !== 'PATIENT') {
       toast.error('Only patients can purchase packages.');
       return;
-    }
-    // Pre-flight: confirm patient profile has the basic fields before
-    // showing the payment block. Server enforces this too as a backstop.
-    try {
-      const r = await fetch('/api/patient/profile');
-      if (r.ok) {
-        const { profile } = await r.json();
-        const phone = profile?.user?.phone || profile?.phone;
-        const incomplete =
-          !profile?.user?.name?.trim() ||
-          !phone?.trim() ||
-          !profile?.dateOfBirth ||
-          !profile?.address?.trim() ||
-          !profile?.city?.trim() ||
-          !profile?.pincode?.trim();
-        if (incomplete) {
-          toast.error('Please complete your profile (phone, DOB, address) before buying a package.');
-          router.push(`/patient/profile?redirect=/services/${serviceSlug}`);
-          return;
-        }
-      }
-    } catch {
-      /* fall through; server will block if truly incomplete */
     }
     setSelectedId(selectedId === pkgId ? null : pkgId);
   };
