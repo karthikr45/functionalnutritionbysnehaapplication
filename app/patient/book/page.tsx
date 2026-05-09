@@ -334,13 +334,18 @@ export default function BookAppointmentPage() {
                 ✅ Confirm Booking (Included in Package)
               </button>
             ) : (
-              <RazorpayPayment
-                type="appointment"
-                itemId={appointmentId}
-                amount={amount}
-                onSuccess={handlePaymentSuccess}
-                label={`Pay ${formatCurrency(amount)} & Confirm`}
-              />
+              <>
+                <div className="mb-4 px-4 py-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800">
+                  ⏱ Your slot is held for <strong>15 minutes</strong>. If payment isn't completed in time, the slot will be released. You can also resume payment from <strong>My Appointments</strong> any time within the window.
+                </div>
+                <RazorpayPayment
+                  type="appointment"
+                  itemId={appointmentId}
+                  amount={amount}
+                  onSuccess={handlePaymentSuccess}
+                  label={`Pay ${formatCurrency(amount)} & Confirm`}
+                />
+              </>
             )}
 
             <button onClick={() => setStep(2)} className="w-full mt-3 py-3 text-gray-500 text-sm hover:underline">

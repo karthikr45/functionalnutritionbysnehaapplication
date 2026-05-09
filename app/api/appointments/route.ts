@@ -27,6 +27,21 @@ export async function GET(req: NextRequest) {
 
   if (status) where.status = status;
 
+  // Hide expired PENDING appointments from the patient view (they've abandoned
+  // checkout and the slot has been freed). Doctor still sees them so they
+  // know what was attempted.
+  const PENDING_TTL_MS = 15 * 60 * 1000;
+  const staleThreshold = new Date(Date.now() - PENDING_TTL_MS);
+  if (session.user.role === 'PATIENT') {
+    where.OR = [
+      { status: { not: 'PENDING' } },
+      { status: 'PENDING', createdAt: { gte: staleThreshold } },
+      // Package-session bookings are pre-paid; they stay PENDING until doctor
+      // confirms but should not be hidden by the TTL.
+      { status: 'PENDING', packageBookingId: { not: null } },
+    ];
+  }
+
   const [appointments, total] = await Promise.all([
     prisma.appointment.findMany({
       where,

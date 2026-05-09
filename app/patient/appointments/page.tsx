@@ -6,7 +6,55 @@ import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import { STATUS_COLORS, formatTime, formatDate } from '@/lib/utils';
 import BookingCalendar from '@/components/BookingCalendar';
+import RazorpayPayment from '@/components/RazorpayPayment';
 import toast from 'react-hot-toast';
+
+const PENDING_TTL_MS = 15 * 60 * 1000;
+
+function PendingPaymentCard({ appt, onPaid }: { appt: any; onPaid: () => void }) {
+  const expiresAt = new Date(appt.createdAt).getTime() + PENDING_TTL_MS;
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  const remainingMs = Math.max(0, expiresAt - now);
+  const mins = Math.floor(remainingMs / 60000);
+  const secs = Math.floor((remainingMs % 60000) / 1000);
+  const expired = remainingMs <= 0;
+
+  // Auto-refresh the list once the timer hits zero so the row is removed.
+  useEffect(() => {
+    if (expired) onPaid();
+  }, [expired, onPaid]);
+
+  if (expired) return null;
+
+  // Compute price: package sessions don't need payment, regular consultations do.
+  const amount = appt.doctor?.consultationFee ?? 0;
+
+  return (
+    <div className="mt-3 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+      <div className="flex items-start justify-between gap-3 flex-wrap mb-3">
+        <div>
+          <p className="font-semibold text-amber-900 text-sm">⏱ Payment pending</p>
+          <p className="text-xs text-amber-800 mt-0.5">
+            Complete your payment in <strong>{mins}:{String(secs).padStart(2, '0')}</strong> or this slot will be released.
+          </p>
+        </div>
+      </div>
+      <RazorpayPayment
+        type="appointment"
+        itemId={appt.id}
+        amount={amount}
+        onSuccess={onPaid}
+        label={`Pay ₹${amount} to confirm`}
+      />
+    </div>
+  );
+}
 
 interface TimeSlot { startTime: string; endTime: string; isAvailable: boolean; }
 
@@ -200,6 +248,12 @@ export default function PatientAppointmentsPage() {
                   <p className="text-sm text-gray-700">{appt.doctorNotes}</p>
                 </div>
               )}
+
+              {appt.status === 'PENDING' &&
+                !appt.packageBookingId &&
+                appt.payment?.status !== 'SUCCESS' && (
+                  <PendingPaymentCard appt={appt} onPaid={fetchAppointments} />
+                )}
             </div>
           ))}
         </div>
