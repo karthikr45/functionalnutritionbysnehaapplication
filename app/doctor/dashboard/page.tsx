@@ -40,14 +40,29 @@ export default async function DoctorDashboard() {
       _count: true,
     }),
     prisma.appointment.count({ where: { doctorId: doctorProfile.id, status: 'COMPLETED' } }),
-    prisma.payment.aggregate({
-      where: {
-        status: 'SUCCESS',
-        mode: 'LIVE', // exclude test payments from dashboard revenue tile
-        appointment: { doctorId: doctorProfile.id },
-      },
-      _sum: { amount: true },
-    }),
+    // Revenue aggregate: try with mode='LIVE' filter (post-migration);
+    // fall back to no-mode filter if the Payment.mode column doesn't exist
+    // yet so the dashboard never errors out.
+    (async () => {
+      try {
+        return await prisma.payment.aggregate({
+          where: {
+            status: 'SUCCESS',
+            mode: 'LIVE',
+            appointment: { doctorId: doctorProfile.id },
+          },
+          _sum: { amount: true },
+        });
+      } catch {
+        return prisma.payment.aggregate({
+          where: {
+            status: 'SUCCESS',
+            appointment: { doctorId: doctorProfile.id },
+          },
+          _sum: { amount: true },
+        });
+      }
+    })(),
   ]);
 
   // Fetch blog posts from Sanity
