@@ -71,8 +71,8 @@ export default function DoctorDocumentsPage() {
     [documents, session?.user?.id],
   );
   const fromPatients = useMemo(
-    () => documents.filter((d) => d.uploadedBy?.role === 'PATIENT'),
-    [documents],
+    () => documents.filter((d) => session?.user?.id && d.uploadedById !== session.user.id),
+    [documents, session?.user?.id],
   );
 
   const baseList = tab === 'mine' ? myUploads : fromPatients;

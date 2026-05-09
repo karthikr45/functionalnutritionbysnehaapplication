@@ -157,21 +157,10 @@ export async function GET(req: NextRequest) {
         { recipientId: session.user.id },
       ];
     } else if (session.user.role === 'DOCTOR') {
-      // Single-doctor practice: every patient is implicitly this doctor's patient.
-      // The doctor sees:
-      //   1. Their own uploads
-      //   2. Documents tied to any of their appointments
-      //   3. Any document uploaded by any user with role=PATIENT (covers
-      //      pre-appointment patient uploads that would otherwise be invisible)
-      const doctorProfile = await prisma.doctorProfile.findUnique({
-        where: { userId: session.user.id },
-        select: { id: true },
-      });
-      where.OR = [
-        { uploadedById: session.user.id },
-        ...(doctorProfile ? [{ appointment: { doctorId: doctorProfile.id } }] : []),
-        { uploadedBy: { role: 'PATIENT' }, appointmentId: null },
-      ];
+      // Single-doctor practice: doctor has visibility into every document
+      // in the system. The client splits them into 'My Uploads'
+      // (uploadedById = me) and 'From Patients' (everything else).
+      // No WHERE clause for the doctor — just show all.
     }
 
     if (appointmentId) where.appointmentId = appointmentId;
