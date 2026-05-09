@@ -189,15 +189,21 @@ export default function DoctorPackagesPage() {
         </button>
       </div>
 
-      {/* Create / Edit Form — overlay modal so the editor stays visible
-          regardless of where the user clicked Edit in a long list. */}
+      {/* Create / Edit Form — overlay modal: sticky header + scrollable body
+          + sticky footer so the entire dialog always fits the viewport
+          (laptop, tablet, phone) without the action buttons getting cut off. */}
       {showForm && (
         <div
-          className="fixed inset-0 bg-black/50 z-50 flex items-start sm:items-center justify-center p-4 overflow-y-auto"
+          className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-2 sm:p-4"
           onClick={(e) => { if (e.target === e.currentTarget) resetForm(); }}
         >
-          <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-100 shadow-2xl p-6 space-y-5 w-full max-w-3xl my-4">
-            <div className="flex items-center justify-between">
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl flex flex-col"
+            style={{ maxHeight: 'calc(100dvh - 1rem)' }}
+          >
+            {/* Sticky header */}
+            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-shrink-0">
               <h2 className="font-bold text-gray-900 text-lg">
                 {editingId ? 'Edit Package' : 'Create New Package'}
               </h2>
@@ -210,6 +216,9 @@ export default function DoctorPackagesPage() {
                 ✕
               </button>
             </div>
+
+            {/* Scrollable body */}
+            <div className="overflow-y-auto px-6 py-5 space-y-5 flex-1">
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -352,23 +361,24 @@ export default function DoctorPackagesPage() {
               <span className="text-sm text-gray-700">Mark as Popular</span>
             </label>
           </div>
-
-          <div className="flex gap-3">
-            <button
-              type="submit"
-              disabled={saving}
-              className="px-6 py-2.5 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-semibold rounded-xl text-sm transition-colors"
-            >
-              {saving ? 'Saving...' : editingId ? 'Update Package' : 'Create Package'}
-            </button>
-            <button
-              type="button"
-              onClick={resetForm}
-              className="px-6 py-2.5 bg-gray-100 text-gray-600 font-semibold rounded-xl text-sm hover:bg-gray-200 transition-colors"
-            >
-              Cancel
-            </button>
-          </div>
+            </div>
+            {/* Sticky footer */}
+            <div className="px-6 py-4 border-t border-gray-100 flex gap-3 flex-shrink-0 bg-white rounded-b-2xl">
+              <button
+                type="submit"
+                disabled={saving}
+                className="px-6 py-2.5 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-semibold rounded-xl text-sm transition-colors"
+              >
+                {saving ? 'Saving...' : editingId ? 'Update Package' : 'Create Package'}
+              </button>
+              <button
+                type="button"
+                onClick={resetForm}
+                className="px-6 py-2.5 bg-gray-100 text-gray-600 font-semibold rounded-xl text-sm hover:bg-gray-200 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
           </form>
         </div>
       )}
