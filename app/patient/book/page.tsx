@@ -125,7 +125,7 @@ export default function BookAppointmentPage() {
       <div className="flex items-center justify-center h-64">
         <div className="text-center text-gray-400">
           <div className="text-4xl mb-2">⏳</div>
-          <p>Loading doctor information...</p>
+          <p>Loading…</p>
         </div>
       </div>
     );
@@ -135,7 +135,7 @@ export default function BookAppointmentPage() {
     <div className="max-w-3xl mx-auto">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900 font-serif">Book an Appointment</h1>
-        <p className="text-gray-500 mt-1 text-sm">Review your doctor&apos;s profile below and pick a time that works.</p>
+        <p className="text-gray-500 mt-1 text-sm">Review the profile below and pick a time that works.</p>
       </div>
 
       <div className="mb-6">
