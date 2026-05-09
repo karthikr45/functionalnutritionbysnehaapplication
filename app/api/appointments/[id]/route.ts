@@ -82,13 +82,20 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     const newStart = body.startTime || appointment.startTime;
     const newEnd = body.endTime || appointment.endTime;
 
+    // PENDING appointments older than 15 min are treated as abandoned (see
+    // /api/appointments POST + /api/availability for matching logic).
+    const PENDING_TTL_MS = 15 * 60 * 1000;
+    const staleThreshold = new Date(Date.now() - PENDING_TTL_MS);
     const conflict = await prisma.appointment.findFirst({
       where: {
         doctorId: appointment.doctorId,
         date: newDate,
         startTime: newStart,
         id: { not: appointment.id },
-        status: { notIn: ['CANCELLED'] },
+        OR: [
+          { status: { in: ['CONFIRMED', 'COMPLETED', 'NO_SHOW'] } },
+          { status: 'PENDING', createdAt: { gte: staleThreshold } },
+        ],
       },
     });
     if (conflict) return NextResponse.json({ error: 'Slot already booked' }, { status: 409 });

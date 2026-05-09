@@ -77,13 +77,36 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // Check slot not already booked
+  // PENDING appointments older than this window are treated as abandoned —
+  // their slot becomes bookable again. 15 minutes is generous for any
+  // Razorpay checkout to complete.
+  const PENDING_TTL_MS = 15 * 60 * 1000;
+  const staleThreshold = new Date(Date.now() - PENDING_TTL_MS);
+
+  // Clean up any stale PENDING appointments for this slot before the
+  // conflict check, so abandoned-checkout rows don't permanently block
+  // the slot.
+  await prisma.appointment.deleteMany({
+    where: {
+      doctorId,
+      date: new Date(date),
+      startTime,
+      status: 'PENDING',
+      createdAt: { lt: staleThreshold },
+    },
+  });
+
+  // Check slot not already booked. PENDING counts as blocking only if
+  // it's within the TTL (active checkout).
   const conflict = await prisma.appointment.findFirst({
     where: {
       doctorId,
       date: new Date(date),
       startTime,
-      status: { notIn: ['CANCELLED'] },
+      OR: [
+        { status: { in: ['CONFIRMED', 'COMPLETED', 'NO_SHOW'] } },
+        { status: 'PENDING', createdAt: { gte: staleThreshold } },
+      ],
     },
   });
   if (conflict) return NextResponse.json({ error: 'Slot already booked' }, { status: 409 });

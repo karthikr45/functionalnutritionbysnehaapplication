@@ -37,12 +37,19 @@ export async function GET(req: NextRequest) {
     );
     if (isBlocked) return NextResponse.json({ slots: [] });
 
-    // Get existing appointments for that date
+    // Get existing appointments for that date.
+    // PENDING appointments older than 15 minutes are treated as abandoned
+    // checkout flows — their slot is shown as available again.
+    const PENDING_TTL_MS = 15 * 60 * 1000;
+    const staleThreshold = new Date(Date.now() - PENDING_TTL_MS);
     const existingAppointments = await prisma.appointment.findMany({
       where: {
         doctorId,
         date: parsedDate,
-        status: { notIn: ['CANCELLED'] },
+        OR: [
+          { status: { in: ['CONFIRMED', 'COMPLETED', 'NO_SHOW'] } },
+          { status: 'PENDING', createdAt: { gte: staleThreshold } },
+        ],
       },
       select: { startTime: true },
     });
