@@ -44,13 +44,18 @@ export default async function DoctorDashboard() {
     // hasn't been applied, return zero rather than fall back to the
     // unfiltered total — showing test payments as revenue would mislead
     // the doctor. Run `npx prisma migrate deploy` to enable.
+    // Includes BOTH appointment-tied payments and package purchases
+    // (packageBookingId IS NOT NULL).
     (async () => {
       try {
         return await prisma.payment.aggregate({
           where: {
             status: 'SUCCESS',
             mode: 'LIVE',
-            appointment: { doctorId: doctorProfile.id },
+            OR: [
+              { appointment: { doctorId: doctorProfile.id } },
+              { packageBookingId: { not: null } },
+            ],
           },
           _sum: { amount: true },
         });

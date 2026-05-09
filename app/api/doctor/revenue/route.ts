@@ -47,7 +47,14 @@ export async function GET(req: NextRequest) {
   }
 
   const buildScope = (withMode: boolean): any => ({
-    appointment: { doctorId: doctorProfile.id },
+    // Revenue includes BOTH appointment-tied payments AND package
+    // purchases. Package payments have no appointment link — they're
+    // tied via packageBooking. Single-doctor practice, so any package
+    // payment in the system counts toward this doctor's revenue.
+    OR: [
+      { appointment: { doctorId: doctorProfile.id } },
+      { packageBookingId: { not: null } },
+    ],
     ...(withMode && modeFilter && { mode: modeFilter }),
   });
 
