@@ -152,6 +152,8 @@ export async function GET(req: NextRequest) {
 
     if (session.user.role === 'PATIENT') {
       // Patient sees their own uploads OR documents addressed to them.
+      // 'recipientId' clause requires the 20260508000000 migration to be
+      // applied. If it's missing, we'll fall back below.
       where.OR = [
         { uploadedById: session.user.id },
         { recipientId: session.user.id },
@@ -165,28 +167,58 @@ export async function GET(req: NextRequest) {
 
     if (appointmentId) where.appointmentId = appointmentId;
 
-    const documents = await prisma.document.findMany({
-      where,
-      orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        title: true,
-        type: true,
-        fileUrl: true,
-        filePublicId: true,
-        fileType: true,
-        fileSize: true,
-        notes: true,
-        appointmentId: true,
-        isShared: true,
-        aiAnalyzedAt: true,
-        createdAt: true,
-        uploadedById: true,
-        recipientId: true,
-        uploadedBy: { select: { name: true, role: true } },
-        recipient: { select: { name: true } },
-      },
-    });
+    const baseSelect = {
+      id: true,
+      title: true,
+      type: true,
+      fileUrl: true,
+      filePublicId: true,
+      fileType: true,
+      fileSize: true,
+      notes: true,
+      appointmentId: true,
+      isShared: true,
+      aiAnalyzedAt: true,
+      createdAt: true,
+      uploadedById: true,
+      uploadedBy: { select: { name: true, role: true } },
+    } as const;
+
+    let documents: any[];
+    try {
+      // Preferred: include the new recipient fields (requires the
+      // 20260508000000_add_document_recipient migration to be applied).
+      documents = await prisma.document.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        select: {
+          ...baseSelect,
+          recipientId: true,
+          recipient: { select: { name: true } },
+        },
+      });
+    } catch (e) {
+      // Migration not yet applied — fall back to legacy select AND legacy
+      // WHERE so the documents page keeps working. The new fields will be
+      // undefined on each row; clients gracefully degrade.
+      console.warn('[/api/upload] recipientId column missing — falling back to legacy query. Run prisma migrate deploy to enable bidirectional documents.');
+
+      // Strip any recipientId reference from the where clause for the fallback query.
+      let legacyWhere: any = {};
+      if (session.user.role === 'PATIENT') {
+        legacyWhere = { uploadedById: session.user.id };
+      } else if (session.user.role === 'DOCTOR') {
+        legacyWhere = {}; // doctor sees all in single-doctor practice
+      }
+      if (appointmentId) legacyWhere.appointmentId = appointmentId;
+
+      documents = await prisma.document.findMany({
+        where: legacyWhere,
+        orderBy: { createdAt: 'desc' },
+        select: baseSelect,
+      });
+      documents = documents.map((d) => ({ ...d, recipientId: null, recipient: null }));
+    }
 
     const docsWithFlag = documents.map((d) => ({ ...d, hasAiAnalysis: !!d.aiAnalyzedAt }));
     return NextResponse.json({ documents: docsWithFlag });
