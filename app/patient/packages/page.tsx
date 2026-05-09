@@ -115,6 +115,7 @@ function PackagesContent() {
                   packages={pkgs}
                   selectedId={selectedPackageId}
                   onSelect={(id) => setSelectedPackageId(selectedPackageId === id ? null : id)}
+                  showProgramBadge
                   allPackages={packages}
                 />
               </section>
