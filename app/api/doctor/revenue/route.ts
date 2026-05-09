@@ -15,6 +15,9 @@ export async function GET(req: NextRequest) {
 
   const { searchParams } = new URL(req.url);
   const period = searchParams.get('period') || 'all';
+  // Default: only LIVE payments count as revenue. ?include=test shows everything.
+  const includeTest = searchParams.get('include') === 'test';
+  const modeFilter = includeTest ? undefined : 'LIVE';
 
   let dateFilter: any = {};
   const now = new Date();
@@ -32,11 +35,14 @@ export async function GET(req: NextRequest) {
     dateFilter = { gte: start };
   }
 
+  const baseScope: any = {
+    appointment: { doctorId: doctorProfile.id },
+    ...(modeFilter && { mode: modeFilter }),
+  };
+
   const where: any = {
+    ...baseScope,
     status: { in: ['SUCCESS', 'REFUNDED'] },
-    OR: [
-      { appointment: { doctorId: doctorProfile.id } },
-    ],
     ...(Object.keys(dateFilter).length > 0 && { createdAt: dateFilter }),
   };
 
@@ -73,26 +79,28 @@ export async function GET(req: NextRequest) {
 
   const [monthlyRevenue, weeklyRevenue, refundedTotal] = await Promise.all([
     prisma.payment.aggregate({
-      where: { status: 'SUCCESS', createdAt: { gte: thisMonth }, appointment: { doctorId: doctorProfile.id } },
+      where: { ...baseScope, status: 'SUCCESS', createdAt: { gte: thisMonth } },
       _sum: { amount: true },
       _count: true,
     }),
     prisma.payment.aggregate({
-      where: { status: 'SUCCESS', createdAt: { gte: thisWeek }, appointment: { doctorId: doctorProfile.id } },
+      where: { ...baseScope, status: 'SUCCESS', createdAt: { gte: thisWeek } },
       _sum: { amount: true },
     }),
     prisma.payment.aggregate({
-      where: { status: 'REFUNDED', appointment: { doctorId: doctorProfile.id } },
+      where: { ...baseScope, status: 'REFUNDED' },
       _sum: { amount: true },
       _count: true,
     }),
   ]);
 
   return NextResponse.json({
+    includeTest,
     payments: payments.map((p) => ({
       id: p.id,
       amount: p.amount,
       status: p.status,
+      mode: p.mode,
       razorpayPaymentId: p.razorpayPaymentId,
       createdAt: p.createdAt,
       type: p.appointment?.type || (p.packageBookingId ? 'PACKAGE' : 'OTHER'),

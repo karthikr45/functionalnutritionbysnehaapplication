@@ -43,6 +43,7 @@ export default async function DoctorDashboard() {
     prisma.payment.aggregate({
       where: {
         status: 'SUCCESS',
+        mode: 'LIVE', // exclude test payments from dashboard revenue tile
         appointment: { doctorId: doctorProfile.id },
       },
       _sum: { amount: true },

@@ -7,6 +7,7 @@ interface Payment {
   id: string;
   amount: number;
   status: string;
+  mode: 'TEST' | 'LIVE';
   razorpayPaymentId: string | null;
   createdAt: string;
   type: string;
@@ -53,25 +54,38 @@ export default function RevenuePage() {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [period, setPeriod] = useState('all');
+  const [includeTest, setIncludeTest] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     setLoading(true);
-    const res = await fetch(`/api/doctor/revenue?period=${period}`);
+    const url = `/api/doctor/revenue?period=${period}${includeTest ? '&include=test' : ''}`;
+    const res = await fetch(url);
     const data = await res.json();
     setPayments(data.payments || []);
     setStats(data.stats || null);
     setLoading(false);
   };
 
-  useEffect(() => { fetchData(); }, [period]);
+  useEffect(() => { fetchData(); }, [period, includeTest]);
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 font-serif">Revenue & Transactions</h1>
-          <p className="text-sm text-gray-500 mt-1">Complete payment history from Razorpay.</p>
+          <h1 className="text-2xl font-bold text-gray-900 font-serif">Revenue &amp; Transactions</h1>
+          <p className="text-sm text-gray-500 mt-1">
+            {includeTest ? 'Showing live + test payments.' : 'Showing live payments only.'}
+          </p>
+          <label className="inline-flex items-center gap-2 mt-2 text-xs text-gray-600 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={includeTest}
+              onChange={(e) => setIncludeTest(e.target.checked)}
+              className="w-3.5 h-3.5"
+            />
+            Include test payments
+          </label>
         </div>
         <div className="flex gap-2 overflow-x-auto pb-1">
           {PERIODS.map((p) => (
@@ -171,9 +185,16 @@ export default function RevenuePage() {
                         </p>
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${STATUS_STYLES[p.status] || STATUS_STYLES.PENDING}`}>
-                          {p.status}
-                        </span>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${STATUS_STYLES[p.status] || STATUS_STYLES.PENDING}`}>
+                            {p.status}
+                          </span>
+                          {p.mode === 'TEST' && (
+                            <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 uppercase tracking-wider">
+                              Test
+                            </span>
+                          )}
+                        </div>
                       </td>
                       <td className="px-6 py-4">
                         <p className="font-mono text-xs text-gray-500 truncate max-w-[140px]">

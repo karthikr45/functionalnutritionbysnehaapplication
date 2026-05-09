@@ -47,6 +47,13 @@ export async function POST(req: NextRequest) {
 
     const razorpayOrder = await createRazorpayOrder(amount, receipt);
 
+    // Detect mode from the Razorpay key prefix. rzp_test_* -> TEST,
+    // rzp_live_* -> LIVE. Defaults to TEST if the env var is missing or
+    // doesn't have the expected prefix, so we never accidentally count
+    // questionable transactions as live revenue.
+    const keyId = process.env.RAZORPAY_KEY_ID || '';
+    const mode: 'LIVE' | 'TEST' = keyId.startsWith('rzp_live_') ? 'LIVE' : 'TEST';
+
     // Store pending payment
     await prisma.payment.create({
       data: {
@@ -54,6 +61,7 @@ export async function POST(req: NextRequest) {
         amount,
         currency: 'INR',
         status: 'PENDING',
+        mode,
         ...(type === 'appointment' && appointmentId && { appointmentId }),
         ...(type === 'order' && orderId && { orderId }),
       },

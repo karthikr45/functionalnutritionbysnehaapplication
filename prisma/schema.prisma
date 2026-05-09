@@ -69,6 +69,11 @@ enum TestimonialType {
   CASE_STUDY
 }
 
+enum PaymentMode {
+  TEST
+  LIVE
+}
+
 // ─── Auth Models (NextAuth) ────────────────────────────────────────────────────
 
 model Account {
@@ -445,6 +450,7 @@ model Payment {
   amount            Float
   currency          String        @default("INR")
   status            PaymentStatus @default(PENDING)
+  mode              PaymentMode   @default(TEST) // detected from RAZORPAY_KEY_ID prefix at order creation
   appointmentId     String?       @unique
   packageBookingId  String?       @unique
   orderId           String?       @unique
