@@ -29,8 +29,21 @@ export default async function PatientDashboard() {
     },
   });
 
+  // Count 'real' consultations only — exclude CANCELLED, NO_SHOW, and
+  // expired PENDING ghosts (abandoned checkouts older than 15 min).
+  // Mirrors the filter used by /patient/appointments so dashboard numbers
+  // match what the patient sees on the list page.
+  const PENDING_TTL_MS = 15 * 60 * 1000;
+  const staleThreshold = new Date(Date.now() - PENDING_TTL_MS);
   const totalAppointments = await prisma.appointment.count({
-    where: { patient: { userId: session.user.id } },
+    where: {
+      patient: { userId: session.user.id },
+      OR: [
+        { status: { in: ['CONFIRMED', 'COMPLETED'] } },
+        { status: 'PENDING', createdAt: { gte: staleThreshold } },
+        { status: 'PENDING', packageBookingId: { not: null } },
+      ],
+    },
   });
 
   const completedAppointments = await prisma.appointment.count({
