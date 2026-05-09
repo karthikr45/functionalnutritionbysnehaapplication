@@ -502,6 +502,29 @@ model ThemeSettings {
 
 // ─── Documents ────────────────────────────────────────────────────────────────
 
+// ─── Webhook Events ───────────────────────────────────────────────────────────
+// Audit log of inbound webhook deliveries (Razorpay etc.). Used for:
+//  - Idempotency: skip already-processed eventId
+//  - Debugging: full payload retained
+//  - Audit: signature pass/fail, error messages, processed timestamp
+
+model WebhookEvent {
+  id           String    @id @default(cuid())
+  source       String // 'razorpay'
+  eventId      String    @unique // payload.id — Razorpay's event identifier (idempotency key)
+  eventType    String // 'payment.captured', 'refund.processed', etc.
+  rawPayload   Json
+  signatureOk  Boolean   @default(false)
+  processed    Boolean   @default(false)
+  errorMessage String?   @db.Text
+  receivedAt   DateTime  @default(now())
+  processedAt  DateTime?
+
+  @@index([source, eventType])
+  @@index([processed])
+  @@index([receivedAt])
+}
+
 model Document {
   id            String       @id @default(cuid())
   uploadedById  String

@@ -9,6 +9,7 @@ const navItems = [
   { href: '/superadmin/doctors', label: 'Doctors', icon: '👨‍⚕️' },
   { href: '/superadmin/theme', label: 'Theme', icon: '🎨' },
   { href: '/superadmin/logs', label: 'Audit Logs', icon: '📋' },
+  { href: '/superadmin/webhooks', label: 'Webhooks', icon: '🔔' },
 ];
 
 export default function SuperAdminSidebar() {
