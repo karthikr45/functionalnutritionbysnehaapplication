@@ -40,9 +40,10 @@ export default async function DoctorDashboard() {
       _count: true,
     }),
     prisma.appointment.count({ where: { doctorId: doctorProfile.id, status: 'COMPLETED' } }),
-    // Revenue aggregate: try with mode='LIVE' filter (post-migration);
-    // fall back to no-mode filter if the Payment.mode column doesn't exist
-    // yet so the dashboard never errors out.
+    // Revenue aggregate: requires Payment.mode column. If the migration
+    // hasn't been applied, return zero rather than fall back to the
+    // unfiltered total — showing test payments as revenue would mislead
+    // the doctor. Run `npx prisma migrate deploy` to enable.
     (async () => {
       try {
         return await prisma.payment.aggregate({
@@ -54,13 +55,8 @@ export default async function DoctorDashboard() {
           _sum: { amount: true },
         });
       } catch {
-        return prisma.payment.aggregate({
-          where: {
-            status: 'SUCCESS',
-            appointment: { doctorId: doctorProfile.id },
-          },
-          _sum: { amount: true },
-        });
+        console.warn('[doctor/dashboard] Payment.mode column missing — revenue tile shows 0. Run prisma migrate deploy.');
+        return { _sum: { amount: 0 } };
       }
     })(),
   ]);

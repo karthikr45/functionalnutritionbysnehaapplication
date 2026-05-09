@@ -56,6 +56,7 @@ export default function RevenuePage() {
   const [period, setPeriod] = useState('all');
   const [includeTest, setIncludeTest] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [migrationPending, setMigrationPending] = useState(false);
 
   const fetchData = async () => {
     setLoading(true);
@@ -78,6 +79,7 @@ export default function RevenuePage() {
       const data = await res.json();
       setPayments(data.payments || []);
       setStats(data.stats || null);
+      setMigrationPending(!!data.migrationPending);
     } catch (e) {
       console.error('GET /api/doctor/revenue failed:', e);
       setPayments([]);
@@ -91,6 +93,15 @@ export default function RevenuePage() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
+      {migrationPending && (
+        <div className="px-4 py-3 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-900">
+          <p className="font-semibold mb-1">⚠️ Revenue tracking pending</p>
+          <p className="text-xs">
+            The Payment.mode column hasn&apos;t been added to the database yet, so test and live payments can&apos;t be separated. Showing zero until you run <code className="px-1.5 py-0.5 bg-amber-100 rounded text-[11px]">npx prisma migrate deploy</code> on your production database.
+          </p>
+        </div>
+      )}
+
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 font-serif">Revenue &amp; Transactions</h1>

@@ -110,17 +110,27 @@ export async function GET(req: NextRequest) {
   let monthlyRevenue: any;
   let weeklyRevenue: any;
   let refundedTotal: any;
+  let migrationPending = false;
   try {
     [payments, totals, monthlyRevenue, weeklyRevenue, refundedTotal] = await runQueries(true);
   } catch (e) {
     // If the Payment.mode column / PaymentMode enum hasn't been migrated
-    // yet, retry without the mode filter so revenue keeps working.
-    console.warn('[revenue] mode column missing — falling back to legacy query. Run prisma migrate deploy.');
-    [payments, totals, monthlyRevenue, weeklyRevenue, refundedTotal] = await runQueries(false);
+    // yet, return ZERO revenue rather than fall back to all payments
+    // (which would show test transactions as live revenue and mislead
+    // the doctor). Set a flag so the UI can surface a clear admin notice.
+    console.warn('[revenue] mode column missing — returning zero revenue. Run prisma migrate deploy.');
+    migrationPending = true;
+    payments = [];
+    const empty = { _sum: { amount: 0 }, _count: 0 };
+    totals = empty;
+    monthlyRevenue = empty;
+    weeklyRevenue = empty;
+    refundedTotal = empty;
   }
 
   return NextResponse.json({
     includeTest,
+    migrationPending,
     payments: payments.map((p) => ({
       id: p.id,
       amount: p.amount,
