@@ -2,11 +2,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getAuthSession } from '@/lib/auth';
 
+const EMPTY_STATS = {
+  totalRevenue: 0,
+  totalTransactions: 0,
+  monthlyRevenue: 0,
+  monthlyTransactions: 0,
+  weeklyRevenue: 0,
+  totalRefunded: 0,
+  refundCount: 0,
+};
+
 export async function GET(req: NextRequest) {
   const session = await getAuthSession();
   if (!session || session.user.role !== 'DOCTOR') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+  try {
 
   const doctorProfile = await prisma.doctorProfile.findUnique({
     where: { userId: session.user.id },
@@ -35,64 +46,78 @@ export async function GET(req: NextRequest) {
     dateFilter = { gte: start };
   }
 
-  const baseScope: any = {
+  const buildScope = (withMode: boolean): any => ({
     appointment: { doctorId: doctorProfile.id },
-    ...(modeFilter && { mode: modeFilter }),
-  };
+    ...(withMode && modeFilter && { mode: modeFilter }),
+  });
 
-  const where: any = {
-    ...baseScope,
+  const buildWhere = (withMode: boolean): any => ({
+    ...buildScope(withMode),
     status: { in: ['SUCCESS', 'REFUNDED'] },
     ...(Object.keys(dateFilter).length > 0 && { createdAt: dateFilter }),
-  };
+  });
 
-  const [payments, totals] = await Promise.all([
-    prisma.payment.findMany({
-      where,
-      orderBy: { createdAt: 'desc' },
-      include: {
-        appointment: {
-          select: {
-            type: true,
-            date: true,
-            patient: { include: { user: { select: { name: true, email: true } } } },
-          },
-        },
-        packageBooking: {
-          select: {
-            package: { select: { name: true } },
-            patient: { include: { user: { select: { name: true } } } },
-          },
-        },
-      },
-    }),
-    prisma.payment.aggregate({
-      where: { ...where, status: 'SUCCESS' },
-      _sum: { amount: true },
-      _count: true,
-    }),
-  ]);
-
-  // Stats for cards
   const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   const thisWeek = new Date(now); thisWeek.setDate(thisWeek.getDate() - 7);
 
-  const [monthlyRevenue, weeklyRevenue, refundedTotal] = await Promise.all([
-    prisma.payment.aggregate({
-      where: { ...baseScope, status: 'SUCCESS', createdAt: { gte: thisMonth } },
-      _sum: { amount: true },
-      _count: true,
-    }),
-    prisma.payment.aggregate({
-      where: { ...baseScope, status: 'SUCCESS', createdAt: { gte: thisWeek } },
-      _sum: { amount: true },
-    }),
-    prisma.payment.aggregate({
-      where: { ...baseScope, status: 'REFUNDED' },
-      _sum: { amount: true },
-      _count: true,
-    }),
-  ]);
+  const runQueries = (withMode: boolean) => {
+    const where = buildWhere(withMode);
+    const baseScope = buildScope(withMode);
+    return Promise.all([
+      prisma.payment.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          appointment: {
+            select: {
+              type: true,
+              date: true,
+              patient: { include: { user: { select: { name: true, email: true } } } },
+            },
+          },
+          packageBooking: {
+            select: {
+              package: { select: { name: true } },
+              patient: { include: { user: { select: { name: true } } } },
+            },
+          },
+        },
+      }),
+      prisma.payment.aggregate({
+        where: { ...where, status: 'SUCCESS' },
+        _sum: { amount: true },
+        _count: true,
+      }),
+      prisma.payment.aggregate({
+        where: { ...baseScope, status: 'SUCCESS', createdAt: { gte: thisMonth } },
+        _sum: { amount: true },
+        _count: true,
+      }),
+      prisma.payment.aggregate({
+        where: { ...baseScope, status: 'SUCCESS', createdAt: { gte: thisWeek } },
+        _sum: { amount: true },
+      }),
+      prisma.payment.aggregate({
+        where: { ...baseScope, status: 'REFUNDED' },
+        _sum: { amount: true },
+        _count: true,
+      }),
+    ]);
+  };
+
+  let payments: any[];
+  let totals: any;
+  let monthlyRevenue: any;
+  let weeklyRevenue: any;
+  let refundedTotal: any;
+  try {
+    [payments, totals, monthlyRevenue, weeklyRevenue, refundedTotal] = await runQueries(true);
+  } catch (e) {
+    // If the Payment.mode column / PaymentMode enum hasn't been migrated
+    // yet, retry without the mode filter so revenue keeps working.
+    console.warn('[revenue] mode column missing — falling back to legacy query. Run prisma migrate deploy.');
+    [payments, totals, monthlyRevenue, weeklyRevenue, refundedTotal] = await runQueries(false);
+  }
 
   return NextResponse.json({
     includeTest,
@@ -100,7 +125,7 @@ export async function GET(req: NextRequest) {
       id: p.id,
       amount: p.amount,
       status: p.status,
-      mode: p.mode,
+      mode: p.mode ?? null,
       razorpayPaymentId: p.razorpayPaymentId,
       createdAt: p.createdAt,
       type: p.appointment?.type || (p.packageBookingId ? 'PACKAGE' : 'OTHER'),
@@ -119,4 +144,8 @@ export async function GET(req: NextRequest) {
       refundCount: refundedTotal._count,
     },
   });
+  } catch (e) {
+    console.error('GET /api/doctor/revenue failed:', e);
+    return NextResponse.json({ payments: [], stats: EMPTY_STATS, includeTest: false, error: 'Failed to load revenue' }, { status: 200 });
+  }
 }

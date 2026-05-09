@@ -59,12 +59,32 @@ export default function RevenuePage() {
 
   const fetchData = async () => {
     setLoading(true);
-    const url = `/api/doctor/revenue?period=${period}${includeTest ? '&include=test' : ''}`;
-    const res = await fetch(url);
-    const data = await res.json();
-    setPayments(data.payments || []);
-    setStats(data.stats || null);
-    setLoading(false);
+    try {
+      const url = `/api/doctor/revenue?period=${period}${includeTest ? '&include=test' : ''}`;
+      const res = await fetch(url);
+      if (!res.ok) {
+        console.error('GET /api/doctor/revenue responded', res.status);
+        setPayments([]);
+        setStats(null);
+        return;
+      }
+      const ct = res.headers.get('content-type') || '';
+      if (!ct.includes('application/json')) {
+        console.error('GET /api/doctor/revenue returned non-JSON');
+        setPayments([]);
+        setStats(null);
+        return;
+      }
+      const data = await res.json();
+      setPayments(data.payments || []);
+      setStats(data.stats || null);
+    } catch (e) {
+      console.error('GET /api/doctor/revenue failed:', e);
+      setPayments([]);
+      setStats(null);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => { fetchData(); }, [period, includeTest]);
