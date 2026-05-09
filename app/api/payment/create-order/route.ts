@@ -54,18 +54,23 @@ export async function POST(req: NextRequest) {
     const keyId = process.env.RAZORPAY_KEY_ID || '';
     const mode: 'LIVE' | 'TEST' = keyId.startsWith('rzp_live_') ? 'LIVE' : 'TEST';
 
-    // Store pending payment
-    await prisma.payment.create({
-      data: {
-        razorpayOrderId: razorpayOrder.id,
-        amount,
-        currency: 'INR',
-        status: 'PENDING',
-        mode,
-        ...(type === 'appointment' && appointmentId && { appointmentId }),
-        ...(type === 'order' && orderId && { orderId }),
-      },
-    });
+    // Store pending payment. If the Payment.mode column doesn't exist yet
+    // (migration 20260510000000_add_payment_mode not applied), retry without
+    // it so the checkout flow keeps working.
+    const baseData: any = {
+      razorpayOrderId: razorpayOrder.id,
+      amount,
+      currency: 'INR',
+      status: 'PENDING',
+      ...(type === 'appointment' && appointmentId && { appointmentId }),
+      ...(type === 'order' && orderId && { orderId }),
+    };
+    try {
+      await prisma.payment.create({ data: { ...baseData, mode } });
+    } catch (e: any) {
+      console.warn('[create-order] Payment.mode column missing — falling back to legacy insert. Run prisma migrate deploy.', e?.message);
+      await prisma.payment.create({ data: baseData });
+    }
 
     return NextResponse.json({
       orderId: razorpayOrder.id,
@@ -75,6 +80,12 @@ export async function POST(req: NextRequest) {
     });
   } catch (err: any) {
     console.error('[create-order] Error:', err);
-    return NextResponse.json({ error: 'Failed to create payment order' }, { status: 500 });
+    // Surface the underlying error message in non-prod, or a generic one
+    // in prod, so the client can show something useful instead of 500 HTML.
+    const message =
+      process.env.NODE_ENV === 'production'
+        ? 'Failed to create payment order. Please try again.'
+        : err?.message || 'Failed to create payment order';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
