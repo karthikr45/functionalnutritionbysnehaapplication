@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import RazorpayPayment from '@/components/RazorpayPayment';
 import DoctorProfileCard, { DoctorProfileCardData } from '@/components/DoctorProfileCard';
 import { formatCurrency, formatDate, STATUS_COLORS } from '@/lib/utils';
+import { getServiceLabel } from '@/lib/services';
 
-interface Package { id: string; name: string; description: string; price: number; sessions: number; validity: number; features: string[]; isPopular: boolean; }
+interface Package { id: string; name: string; description: string; price: number; sessions: number; validity: number; features: string[]; isPopular: boolean; serviceSlug: string | null; }
 interface PackageBooking { id: string; status: string; usedSessions: number; totalSessions: number; expiryDate: string; package: Package; payment: any; }
 
 export default function PackagesPage() {
@@ -39,6 +40,18 @@ function PackagesContent() {
 
   const selectedPkg = packages.find((p) => p.id === selectedPackageId);
 
+  // Group packages by serviceSlug (program). 'general' = no slug set.
+  const popular = useMemo(() => packages.filter((p) => p.isPopular), [packages]);
+  const grouped = useMemo(() => {
+    const map = new Map<string, Package[]>();
+    for (const p of packages) {
+      const key = p.serviceSlug || '__general__';
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(p);
+    }
+    return map;
+  }, [packages]);
+
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <h1 className="text-2xl font-bold text-gray-900 font-serif">Consultation Packages</h1>
@@ -47,7 +60,6 @@ function PackagesContent() {
         <DoctorProfileCard doctor={doctor} showFees={false} />
       )}
 
-      {/* Tabs */}
       <div className="flex gap-2 border-b border-gray-200">
         {(['buy', 'my'] as const).map((t) => (
           <button
@@ -62,51 +74,38 @@ function PackagesContent() {
         ))}
       </div>
 
-      {/* Buy a Package */}
+      {/* Buy a Package — segmented by Most Popular + program groups */}
       {tab === 'buy' && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {packages.map((pkg) => (
-            <div
-              key={pkg.id}
-              className={`rounded-2xl border-2 p-6 flex flex-col transition-all ${
-                selectedPackageId === pkg.id
-                  ? 'border-primary-500 bg-primary-50'
-                  : pkg.isPopular
-                  ? 'border-primary-300 bg-white shadow-md'
-                  : 'border-gray-200 bg-white hover:border-primary-200'
-              }`}
-            >
-              {pkg.isPopular && (
-                <span className="inline-block px-3 py-1 bg-accent-500 text-white text-xs font-bold rounded-full mb-3 self-start">
-                  MOST POPULAR
-                </span>
-              )}
-              <h3 className="font-bold text-gray-900 text-lg font-serif">{pkg.name}</h3>
-              <p className="text-gray-500 text-sm mt-1 mb-4">{pkg.description}</p>
-              <p className="text-3xl font-bold text-primary-600 mb-1">{formatCurrency(pkg.price)}</p>
-              <div className="flex gap-3 text-xs text-gray-500 mb-4">
-                <span>🗓 {pkg.sessions} sessions</span>
-                <span>⏳ {pkg.validity} days</span>
+        <div className="space-y-10">
+          {popular.length > 0 && (
+            <section>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-amber-500 text-lg">★</span>
+                <h2 className="text-lg font-bold text-gray-900 font-serif">Most Popular</h2>
+                <span className="text-xs text-gray-400">— our most-purchased programs</span>
               </div>
-              <ul className="space-y-2 flex-1 mb-5">
-                {pkg.features.map((f: string) => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
-                    <span className="text-primary-500 mt-0.5">✓</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <button
-                onClick={() => setSelectedPackageId(selectedPackageId === pkg.id ? null : pkg.id)}
-                className={`w-full py-3 rounded-xl font-semibold text-sm transition-colors ${
-                  selectedPackageId === pkg.id
-                    ? 'bg-gray-100 text-gray-600'
-                    : 'bg-primary-600 text-white hover:bg-primary-700'
-                }`}
-              >
-                {selectedPackageId === pkg.id ? 'Deselect' : 'Select Package'}
-              </button>
-            </div>
+              <PackageGrid
+                packages={popular}
+                selectedId={selectedPackageId}
+                onSelect={(id) => setSelectedPackageId(selectedPackageId === id ? null : id)}
+              />
+            </section>
+          )}
+
+          {Array.from(grouped.entries()).map(([slug, pkgs]) => (
+            <section key={slug}>
+              <div className="flex items-end justify-between gap-3 mb-4 flex-wrap">
+                <h2 className="text-lg font-bold text-gray-900 font-serif">
+                  {slug === '__general__' ? 'General Packages' : getServiceLabel(slug)}
+                </h2>
+                <span className="text-xs text-gray-400">{pkgs.length} option{pkgs.length === 1 ? '' : 's'}</span>
+              </div>
+              <PackageGrid
+                packages={pkgs}
+                selectedId={selectedPackageId}
+                onSelect={(id) => setSelectedPackageId(selectedPackageId === id ? null : id)}
+              />
+            </section>
           ))}
         </div>
       )}
@@ -173,6 +172,56 @@ function PackagesContent() {
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+function PackageGrid({ packages, selectedId, onSelect }: { packages: Package[]; selectedId: string | null; onSelect: (id: string) => void }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {packages.map((pkg) => (
+        <div
+          key={pkg.id}
+          className={`rounded-2xl border-2 p-6 flex flex-col transition-all ${
+            selectedId === pkg.id
+              ? 'border-primary-500 bg-primary-50'
+              : pkg.isPopular
+              ? 'border-primary-300 bg-white shadow-md'
+              : 'border-gray-200 bg-white hover:border-primary-200'
+          }`}
+        >
+          {pkg.isPopular && (
+            <span className="inline-block px-3 py-1 bg-amber-500 text-white text-xs font-bold rounded-full mb-3 self-start">
+              MOST POPULAR
+            </span>
+          )}
+          <h3 className="font-bold text-gray-900 text-lg font-serif">{pkg.name}</h3>
+          <p className="text-gray-500 text-sm mt-1 mb-4">{pkg.description}</p>
+          <p className="text-3xl font-bold text-primary-600 mb-1">{formatCurrency(pkg.price)}</p>
+          <div className="flex gap-3 text-xs text-gray-500 mb-4">
+            <span>🗓 {pkg.sessions} sessions</span>
+            <span>⏳ {pkg.validity} days</span>
+          </div>
+          <ul className="space-y-2 flex-1 mb-5">
+            {pkg.features.map((f: string) => (
+              <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
+                <span className="text-primary-500 mt-0.5">✓</span>
+                {f}
+              </li>
+            ))}
+          </ul>
+          <button
+            onClick={() => onSelect(pkg.id)}
+            className={`w-full py-3 rounded-xl font-semibold text-sm transition-colors ${
+              selectedId === pkg.id
+                ? 'bg-gray-100 text-gray-600'
+                : 'bg-primary-600 text-white hover:bg-primary-700'
+            }`}
+          >
+            {selectedId === pkg.id ? 'Deselect' : 'Select Package'}
+          </button>
+        </div>
+      ))}
     </div>
   );
 }
