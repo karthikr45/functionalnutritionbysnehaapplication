@@ -22,7 +22,6 @@ export default function ServicePackages({ serviceSlug, serviceTitle }: { service
   const { data: session } = useSession();
   const router = useRouter();
   const [packages, setPackages] = useState<Package[]>([]);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -40,24 +39,22 @@ export default function ServicePackages({ serviceSlug, serviceTitle }: { service
       .catch(() => setLoading(false));
   }, [serviceSlug]);
 
-  const handleSelect = (pkgId: string) => {
+  const handlePaymentSuccess = () => {
+    toast.success('Package purchased successfully!');
+    router.push('/patient/packages');
+  };
+
+  // For non-patient users, the card's CTA is a regular button that
+  // routes them to signup (anonymous) or shows a toast (wrong role).
+  const handleNonPatientClick = (pkgId: string) => {
     if (!session) {
       router.push(`/signup?package=${pkgId}&redirect=/services/${serviceSlug}`);
       return;
     }
     if (session.user.role !== 'PATIENT') {
       toast.error('Only patients can purchase packages.');
-      return;
     }
-    setSelectedId(selectedId === pkgId ? null : pkgId);
   };
-
-  const handlePaymentSuccess = () => {
-    toast.success('Package purchased successfully!');
-    router.push('/patient/packages');
-  };
-
-  const selected = packages.find((p) => p.id === selectedId);
 
   if (loading) {
     return <div className="text-center py-12 text-gray-400 text-sm">Loading packages...</div>;
@@ -66,6 +63,8 @@ export default function ServicePackages({ serviceSlug, serviceTitle }: { service
   if (packages.length === 0) {
     return null;
   }
+
+  const isPatient = session?.user?.role === 'PATIENT';
 
   return (
     <section className="mt-16 pt-16 border-t border-gray-200">
@@ -114,44 +113,28 @@ export default function ServicePackages({ serviceSlug, serviceTitle }: { service
               </p>
             </div>
 
-            <button
-              onClick={() => handleSelect(pkg.id)}
-              className="mt-5 w-full py-3 rounded-xl font-semibold text-sm bg-cream text-warm-footer hover:bg-white transition-colors"
-            >
-              {session?.user?.role === 'PATIENT'
-                ? selectedId === pkg.id
-                  ? 'Close'
-                  : 'Buy Now'
-                : session
-                  ? 'Login as Patient'
-                  : 'Sign Up to Buy'}
-            </button>
+            <div className="mt-5">
+              {isPatient ? (
+                <RazorpayPayment
+                  type="package"
+                  itemId={pkg.id}
+                  amount={pkg.price}
+                  packageId={pkg.id}
+                  onSuccess={handlePaymentSuccess}
+                  label={`Buy Now · ${formatCurrency(pkg.price)}`}
+                />
+              ) : (
+                <button
+                  onClick={() => handleNonPatientClick(pkg.id)}
+                  className="w-full py-3 rounded-xl font-semibold text-sm bg-cream text-warm-footer hover:bg-white transition-colors"
+                >
+                  {session ? 'Login as Patient to Buy' : `Sign Up to Buy · ${formatCurrency(pkg.price)}`}
+                </button>
+              )}
+            </div>
           </article>
         ))}
       </div>
-
-      {/* Payment section */}
-      {selected && session?.user?.role === 'PATIENT' && (
-        <div className="max-w-md mx-auto mt-10 bg-white rounded-2xl border border-primary-200 shadow-lg p-6">
-          <h3 className="font-bold text-gray-900 mb-4">Complete Purchase</h3>
-          <div className="space-y-2 text-sm bg-primary-50 p-4 rounded-xl mb-5">
-            <div className="flex justify-between"><span className="text-gray-500">Package</span><span className="font-medium">{selected.name}</span></div>
-            <div className="flex justify-between"><span className="text-gray-500">Sessions</span><span>{selected.sessions}</span></div>
-            <div className="flex justify-between"><span className="text-gray-500">Validity</span><span>{selected.validity} days</span></div>
-            <div className="flex justify-between font-bold border-t border-primary-200 pt-2">
-              <span>Total</span><span className="text-primary-600">{formatCurrency(selected.price)}</span>
-            </div>
-          </div>
-          <RazorpayPayment
-            type="package"
-            itemId={selected.id}
-            amount={selected.price}
-            packageId={selected.id}
-            onSuccess={handlePaymentSuccess}
-            label={`Pay ${formatCurrency(selected.price)} via Razorpay`}
-          />
-        </div>
-      )}
     </section>
   );
 }

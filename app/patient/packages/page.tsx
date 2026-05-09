@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useMemo, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
 import RazorpayPayment from '@/components/RazorpayPayment';
 import DoctorProfileCard, { DoctorProfileCardData } from '@/components/DoctorProfileCard';
 import { formatCurrency, formatDate, STATUS_COLORS } from '@/lib/utils';
@@ -15,13 +14,9 @@ export default function PackagesPage() {
 }
 
 function PackagesContent() {
-  const searchParams = useSearchParams();
-  const highlight = searchParams.get('highlight');
-
   const [packages, setPackages] = useState<Package[]>([]);
   const [bookings, setBookings] = useState<PackageBooking[]>([]);
   const [doctor, setDoctor] = useState<DoctorProfileCardData | null>(null);
-  const [selectedPackageId, setSelectedPackageId] = useState<string | null>(highlight);
   const [tab, setTab] = useState<'buy' | 'my'>('buy');
 
   useEffect(() => {
@@ -33,12 +28,9 @@ function PackagesContent() {
   }, []);
 
   const handlePaymentSuccess = () => {
-    setSelectedPackageId(null);
     setTab('my');
     fetch('/api/patient/packages').then((r) => r.json()).then((d) => setBookings(d.bookings || []));
   };
-
-  const selectedPkg = packages.find((p) => p.id === selectedPackageId);
 
   // Group packages by serviceSlug (program). 'general' = no slug set.
   const popular = useMemo(() => packages.filter((p) => p.isPopular), [packages]);
@@ -90,8 +82,7 @@ function PackagesContent() {
               </div>
               <PackageGrid
                 packages={popular}
-                selectedId={selectedPackageId}
-                onSelect={(id) => setSelectedPackageId(selectedPackageId === id ? null : id)}
+                onPaymentSuccess={handlePaymentSuccess}
                 showProgramBadge
                 allPackages={packages}
               />
@@ -113,8 +104,7 @@ function PackagesContent() {
                 </div>
                 <PackageGrid
                   packages={pkgs}
-                  selectedId={selectedPackageId}
-                  onSelect={(id) => setSelectedPackageId(selectedPackageId === id ? null : id)}
+                  onPaymentSuccess={handlePaymentSuccess}
                   showProgramBadge
                   allPackages={packages}
                 />
@@ -125,28 +115,6 @@ function PackagesContent() {
       )}
 
       {/* Payment section */}
-      {tab === 'buy' && selectedPkg && (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 max-w-md">
-          <h3 className="font-bold text-gray-800 mb-4">Complete Purchase</h3>
-          <div className="space-y-2 text-sm mb-5 bg-primary-50 p-4 rounded-xl">
-            <div className="flex justify-between"><span className="text-gray-500">Package</span><span className="font-medium">{selectedPkg.name}</span></div>
-            <div className="flex justify-between"><span className="text-gray-500">Sessions</span><span>{selectedPkg.sessions}</span></div>
-            <div className="flex justify-between"><span className="text-gray-500">Validity</span><span>{selectedPkg.validity} days</span></div>
-            <div className="flex justify-between font-bold border-t border-primary-200 pt-2">
-              <span>Total</span><span className="text-primary-600">{formatCurrency(selectedPkg.price)}</span>
-            </div>
-          </div>
-          <RazorpayPayment
-            type="package"
-            itemId={selectedPkg.id}
-            amount={selectedPkg.price}
-            packageId={selectedPkg.id}
-            onSuccess={handlePaymentSuccess}
-            label={`Buy ${selectedPkg.name} — ${formatCurrency(selectedPkg.price)}`}
-          />
-        </div>
-      )}
-
       {/* My Packages */}
       {tab === 'my' && (
         <div className="space-y-4">
@@ -192,14 +160,12 @@ function PackagesContent() {
 
 function PackageGrid({
   packages,
-  selectedId,
-  onSelect,
+  onPaymentSuccess,
   showProgramBadge = false,
   allPackages,
 }: {
   packages: Package[];
-  selectedId: string | null;
-  onSelect: (id: string) => void;
+  onPaymentSuccess: () => void;
   showProgramBadge?: boolean;
   allPackages: Package[];
 }) {
@@ -223,16 +189,13 @@ function PackageGrid({
             ? Math.round(((peerMaxPerSession - perSession) / peerMaxPerSession) * 100)
             : 0;
 
-        const isSelected = selectedId === pkg.id;
         return (
           <div
             key={pkg.id}
             className={`relative rounded-2xl p-6 flex flex-col transition-all ${
-              isSelected
-                ? 'border-2 border-primary-500 bg-primary-50 shadow-lg'
-                : pkg.isPopular
-                  ? 'border-2 border-amber-300 bg-white shadow-md hover:shadow-lg'
-                  : 'border border-gray-200 bg-white hover:border-primary-300 hover:shadow-md'
+              pkg.isPopular
+                ? 'border-2 border-amber-300 bg-white shadow-md hover:shadow-lg'
+                : 'border border-gray-200 bg-white hover:border-primary-300 hover:shadow-md'
             }`}
           >
             {savePct >= 5 && (
@@ -280,16 +243,14 @@ function PackageGrid({
               ))}
             </ul>
 
-            <button
-              onClick={() => onSelect(pkg.id)}
-              className={`w-full py-3 rounded-xl font-semibold text-sm transition-colors ${
-                isSelected
-                  ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  : 'bg-primary-600 text-white hover:bg-primary-700'
-              }`}
-            >
-              {isSelected ? '✓ Selected' : 'Select Package'}
-            </button>
+            <RazorpayPayment
+              type="package"
+              itemId={pkg.id}
+              amount={pkg.price}
+              packageId={pkg.id}
+              onSuccess={onPaymentSuccess}
+              label={`Buy Now · ${formatCurrency(pkg.price)}`}
+            />
           </div>
         );
       })}
