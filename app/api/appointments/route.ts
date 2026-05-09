@@ -27,17 +27,17 @@ export async function GET(req: NextRequest) {
 
   if (status) where.status = status;
 
-  // Hide expired PENDING appointments from the patient view (they've abandoned
-  // checkout and the slot has been freed). Doctor still sees them so they
-  // know what was attempted.
+  // Hide expired PENDING appointments from BOTH patient and doctor views —
+  // they're abandoned-checkout ghosts. The slot has been freed by the TTL
+  // logic in /api/availability and the conflict check on POST.
+  // Package-session bookings (pre-paid) legitimately stay PENDING until the
+  // doctor confirms, so they're never filtered.
   const PENDING_TTL_MS = 15 * 60 * 1000;
   const staleThreshold = new Date(Date.now() - PENDING_TTL_MS);
-  if (session.user.role === 'PATIENT') {
+  if (session.user.role === 'PATIENT' || session.user.role === 'DOCTOR') {
     where.OR = [
       { status: { not: 'PENDING' } },
       { status: 'PENDING', createdAt: { gte: staleThreshold } },
-      // Package-session bookings are pre-paid; they stay PENDING until doctor
-      // confirms but should not be hidden by the TTL.
       { status: 'PENDING', packageBookingId: { not: null } },
     ];
   }
