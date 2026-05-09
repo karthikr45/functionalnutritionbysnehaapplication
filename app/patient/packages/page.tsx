@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import RazorpayPayment from '@/components/RazorpayPayment';
 import DoctorProfileCard, { DoctorProfileCardData } from '@/components/DoctorProfileCard';
 import { formatCurrency, formatDate, STATUS_COLORS } from '@/lib/utils';
-import { getServiceLabel } from '@/lib/services';
+import { getServiceMeta } from '@/lib/services';
 
 interface Package { id: string; name: string; description: string; price: number; sessions: number; validity: number; features: string[]; isPopular: boolean; serviceSlug: string | null; }
 interface PackageBooking { id: string; status: string; usedSessions: number; totalSessions: number; expiryDate: string; package: Package; payment: any; }
@@ -76,37 +76,55 @@ function PackagesContent() {
 
       {/* Buy a Package — segmented by Most Popular + program groups */}
       {tab === 'buy' && (
-        <div className="space-y-10">
+        <div className="space-y-12">
           {popular.length > 0 && (
-            <section>
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-amber-500 text-lg">★</span>
-                <h2 className="text-lg font-bold text-gray-900 font-serif">Most Popular</h2>
-                <span className="text-xs text-gray-400">— our most-purchased programs</span>
+            <section className="rounded-3xl bg-gradient-to-br from-amber-50 via-amber-50 to-white border border-amber-200/60 p-6 sm:p-8">
+              <div className="flex items-end justify-between gap-3 mb-5 flex-wrap">
+                <div>
+                  <div className="flex items-center gap-2 text-amber-700 text-xs font-bold uppercase tracking-[0.2em] mb-1">
+                    <span>★</span> Most Popular
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-serif font-medium text-gray-900">Patient favourites</h2>
+                  <p className="text-sm text-gray-600 mt-1">The programs our patients pick most often.</p>
+                </div>
               </div>
               <PackageGrid
                 packages={popular}
                 selectedId={selectedPackageId}
                 onSelect={(id) => setSelectedPackageId(selectedPackageId === id ? null : id)}
+                showProgramBadge
+                allPackages={packages}
               />
             </section>
           )}
 
-          {Array.from(grouped.entries()).map(([slug, pkgs]) => (
-            <section key={slug}>
-              <div className="flex items-end justify-between gap-3 mb-4 flex-wrap">
-                <h2 className="text-lg font-bold text-gray-900 font-serif">
-                  {slug === '__general__' ? 'General Packages' : getServiceLabel(slug)}
-                </h2>
-                <span className="text-xs text-gray-400">{pkgs.length} option{pkgs.length === 1 ? '' : 's'}</span>
-              </div>
-              <PackageGrid
-                packages={pkgs}
-                selectedId={selectedPackageId}
-                onSelect={(id) => setSelectedPackageId(selectedPackageId === id ? null : id)}
-              />
-            </section>
-          ))}
+          {Array.from(grouped.entries()).map(([slug, pkgs]) => {
+            const meta = getServiceMeta(slug === '__general__' ? null : slug);
+            return (
+              <section key={slug}>
+                <div className="flex items-end justify-between gap-4 mb-5 pb-4 border-b border-gray-200 flex-wrap">
+                  <div className="flex items-start gap-3">
+                    <span className={`shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-2xl text-2xl ${meta.accentBg}`}>
+                      {meta.emoji}
+                    </span>
+                    <div>
+                      <h2 className="text-2xl sm:text-3xl font-serif font-medium text-gray-900">{meta.label}</h2>
+                      <p className={`text-sm italic mt-0.5 ${meta.accentText}`}>{meta.tagline}</p>
+                    </div>
+                  </div>
+                  <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">
+                    {pkgs.length} option{pkgs.length === 1 ? '' : 's'}
+                  </span>
+                </div>
+                <PackageGrid
+                  packages={pkgs}
+                  selectedId={selectedPackageId}
+                  onSelect={(id) => setSelectedPackageId(selectedPackageId === id ? null : id)}
+                  allPackages={packages}
+                />
+              </section>
+            );
+          })}
         </div>
       )}
 
@@ -176,52 +194,110 @@ function PackagesContent() {
   );
 }
 
-function PackageGrid({ packages, selectedId, onSelect }: { packages: Package[]; selectedId: string | null; onSelect: (id: string) => void }) {
+function PackageGrid({
+  packages,
+  selectedId,
+  onSelect,
+  showProgramBadge = false,
+  allPackages,
+}: {
+  packages: Package[];
+  selectedId: string | null;
+  onSelect: (id: string) => void;
+  showProgramBadge?: boolean;
+  allPackages: Package[];
+}) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      {packages.map((pkg) => (
-        <div
-          key={pkg.id}
-          className={`rounded-2xl border-2 p-6 flex flex-col transition-all ${
-            selectedId === pkg.id
-              ? 'border-primary-500 bg-primary-50'
-              : pkg.isPopular
-              ? 'border-primary-300 bg-white shadow-md'
-              : 'border-gray-200 bg-white hover:border-primary-200'
-          }`}
-        >
-          {pkg.isPopular && (
-            <span className="inline-block px-3 py-1 bg-amber-500 text-white text-xs font-bold rounded-full mb-3 self-start">
-              MOST POPULAR
-            </span>
-          )}
-          <h3 className="font-bold text-gray-900 text-lg font-serif">{pkg.name}</h3>
-          <p className="text-gray-500 text-sm mt-1 mb-4">{pkg.description}</p>
-          <p className="text-3xl font-bold text-primary-600 mb-1">{formatCurrency(pkg.price)}</p>
-          <div className="flex gap-3 text-xs text-gray-500 mb-4">
-            <span>🗓 {pkg.sessions} sessions</span>
-            <span>⏳ {pkg.validity} days</span>
-          </div>
-          <ul className="space-y-2 flex-1 mb-5">
-            {pkg.features.map((f: string) => (
-              <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
-                <span className="text-primary-500 mt-0.5">✓</span>
-                {f}
-              </li>
-            ))}
-          </ul>
-          <button
-            onClick={() => onSelect(pkg.id)}
-            className={`w-full py-3 rounded-xl font-semibold text-sm transition-colors ${
-              selectedId === pkg.id
-                ? 'bg-gray-100 text-gray-600'
-                : 'bg-primary-600 text-white hover:bg-primary-700'
+      {packages.map((pkg) => {
+        const meta = getServiceMeta(pkg.serviceSlug);
+        const perSession = pkg.sessions > 0 ? pkg.price / pkg.sessions : pkg.price;
+
+        // Compute "Save X%" relative to the most expensive per-session option
+        // in the same program. Only shown when there's actually savings vs an
+        // alternative in the group.
+        const peers = allPackages.filter(
+          (p) => p.id !== pkg.id && p.serviceSlug === pkg.serviceSlug && p.sessions > 0,
+        );
+        const peerMaxPerSession = peers.length
+          ? Math.max(...peers.map((p) => p.price / p.sessions))
+          : 0;
+        const savePct =
+          peerMaxPerSession > 0 && perSession < peerMaxPerSession
+            ? Math.round(((peerMaxPerSession - perSession) / peerMaxPerSession) * 100)
+            : 0;
+
+        const isSelected = selectedId === pkg.id;
+        return (
+          <div
+            key={pkg.id}
+            className={`relative rounded-2xl p-6 flex flex-col transition-all ${
+              isSelected
+                ? 'border-2 border-primary-500 bg-primary-50 shadow-lg'
+                : pkg.isPopular
+                  ? 'border-2 border-amber-300 bg-white shadow-md hover:shadow-lg'
+                  : 'border border-gray-200 bg-white hover:border-primary-300 hover:shadow-md'
             }`}
           >
-            {selectedId === pkg.id ? 'Deselect' : 'Select Package'}
-          </button>
-        </div>
-      ))}
+            {savePct >= 5 && (
+              <div className="absolute -top-3 right-4 bg-emerald-500 text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                Save {savePct}%
+              </div>
+            )}
+
+            <div className="flex items-center gap-2 mb-3 flex-wrap">
+              {pkg.isPopular && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-500 text-white text-[10px] font-bold rounded-full uppercase tracking-wider">
+                  ★ Popular
+                </span>
+              )}
+              {showProgramBadge && (
+                <span className={`inline-flex items-center gap-1 px-2.5 py-1 ${meta.accentBg} ${meta.accentText} text-[11px] font-semibold rounded-full`}>
+                  <span>{meta.emoji}</span>
+                  <span className="truncate max-w-[140px]">{meta.label}</span>
+                </span>
+              )}
+            </div>
+
+            <h3 className="font-medium text-gray-900 text-xl font-serif leading-tight">{pkg.name}</h3>
+            <p className="text-gray-500 text-sm mt-1.5 mb-5 leading-relaxed">{pkg.description}</p>
+
+            <div className="mb-4 pb-4 border-b border-gray-100">
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-bold text-primary-700">{formatCurrency(pkg.price)}</span>
+                {pkg.sessions > 1 && (
+                  <span className="text-xs text-gray-400">≈ {formatCurrency(Math.round(perSession))}/session</span>
+                )}
+              </div>
+              <div className="flex gap-3 text-xs text-gray-500 mt-2">
+                <span className="inline-flex items-center gap-1">🗓 {pkg.sessions} sessions</span>
+                <span className="text-gray-300">|</span>
+                <span className="inline-flex items-center gap-1">⏳ {pkg.validity} days validity</span>
+              </div>
+            </div>
+
+            <ul className="space-y-2 flex-1 mb-5">
+              {pkg.features.map((f: string) => (
+                <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
+                  <span className="text-primary-500 mt-0.5 shrink-0">✓</span>
+                  <span>{f}</span>
+                </li>
+              ))}
+            </ul>
+
+            <button
+              onClick={() => onSelect(pkg.id)}
+              className={`w-full py-3 rounded-xl font-semibold text-sm transition-colors ${
+                isSelected
+                  ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  : 'bg-primary-600 text-white hover:bg-primary-700'
+              }`}
+            >
+              {isSelected ? '✓ Selected' : 'Select Package'}
+            </button>
+          </div>
+        );
+      })}
     </div>
   );
 }
