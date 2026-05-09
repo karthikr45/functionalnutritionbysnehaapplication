@@ -41,10 +41,27 @@ export default function DoctorDocumentsPage() {
 
   const fetchDocs = async () => {
     setLoading(true);
-    const res = await fetch('/api/upload');
-    const data = await res.json();
-    setDocuments(data.documents || []);
-    setLoading(false);
+    try {
+      const res = await fetch('/api/upload');
+      if (!res.ok) {
+        console.error('GET /api/upload responded', res.status);
+        setDocuments([]);
+        return;
+      }
+      const ct = res.headers.get('content-type') || '';
+      if (!ct.includes('application/json')) {
+        console.error('GET /api/upload returned non-JSON');
+        setDocuments([]);
+        return;
+      }
+      const data = await res.json();
+      setDocuments(data.documents || []);
+    } catch (e) {
+      console.error('GET /api/upload failed:', e);
+      setDocuments([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => { fetchDocs(); }, []);

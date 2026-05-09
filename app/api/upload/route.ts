@@ -144,72 +144,69 @@ export async function GET(req: NextRequest) {
   const session = await getAuthSession();
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const { searchParams } = new URL(req.url);
-  const appointmentId = searchParams.get('appointmentId');
+  try {
+    const { searchParams } = new URL(req.url);
+    const appointmentId = searchParams.get('appointmentId');
 
-  let where: any = {};
+    let where: any = {};
 
-  if (session.user.role === 'PATIENT') {
-    // Patient sees their own uploads OR documents addressed to them.
-    where.OR = [
-      { uploadedById: session.user.id },
-      { recipientId: session.user.id },
-    ];
-  } else if (session.user.role === 'DOCTOR') {
-    // Doctor sees:
-    //   1. Their own uploads (sent or unsent)
-    //   2. Documents tied to any of their appointments
-    //   3. Standalone documents uploaded by any patient who has had at
-    //      least one appointment with them (covers patient-side uploads
-    //      from /patient/documents that aren't linked to an appointment)
-    const doctorProfile = await prisma.doctorProfile.findUnique({
-      where: { userId: session.user.id },
-    });
-    if (doctorProfile) {
-      const patientLinks = await prisma.appointment.findMany({
-        where: { doctorId: doctorProfile.id },
-        select: { patient: { select: { userId: true } } },
-        distinct: ['patientId'],
-      });
-      const patientUserIds = patientLinks.map((a) => a.patient.userId);
-
+    if (session.user.role === 'PATIENT') {
+      // Patient sees their own uploads OR documents addressed to them.
       where.OR = [
         { uploadedById: session.user.id },
-        { appointment: { doctorId: doctorProfile.id } },
-        ...(patientUserIds.length > 0
-          ? [{ uploadedById: { in: patientUserIds }, appointmentId: null }]
-          : []),
+        { recipientId: session.user.id },
       ];
+    } else if (session.user.role === 'DOCTOR') {
+      const doctorProfile = await prisma.doctorProfile.findUnique({
+        where: { userId: session.user.id },
+      });
+      if (doctorProfile) {
+        const patientLinks = await prisma.appointment.findMany({
+          where: { doctorId: doctorProfile.id },
+          select: { patient: { select: { userId: true } } },
+          distinct: ['patientId'],
+        });
+        const patientUserIds = patientLinks.map((a) => a.patient.userId);
+
+        where.OR = [
+          { uploadedById: session.user.id },
+          { appointment: { doctorId: doctorProfile.id } },
+          ...(patientUserIds.length > 0
+            ? [{ uploadedById: { in: patientUserIds }, appointmentId: null }]
+            : []),
+        ];
+      }
     }
+
+    if (appointmentId) where.appointmentId = appointmentId;
+
+    const documents = await prisma.document.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        title: true,
+        type: true,
+        fileUrl: true,
+        filePublicId: true,
+        fileType: true,
+        fileSize: true,
+        notes: true,
+        appointmentId: true,
+        isShared: true,
+        aiAnalyzedAt: true,
+        createdAt: true,
+        uploadedById: true,
+        recipientId: true,
+        uploadedBy: { select: { name: true, role: true } },
+        recipient: { select: { name: true } },
+      },
+    });
+
+    const docsWithFlag = documents.map((d) => ({ ...d, hasAiAnalysis: !!d.aiAnalyzedAt }));
+    return NextResponse.json({ documents: docsWithFlag });
+  } catch (e) {
+    console.error('GET /api/upload failed:', e);
+    return NextResponse.json({ documents: [], error: 'Failed to load documents' }, { status: 200 });
   }
-
-  if (appointmentId) where.appointmentId = appointmentId;
-
-  const documents = await prisma.document.findMany({
-    where,
-    orderBy: { createdAt: 'desc' },
-    select: {
-      id: true,
-      title: true,
-      type: true,
-      fileUrl: true,
-      filePublicId: true,
-      fileType: true,
-      fileSize: true,
-      notes: true,
-      appointmentId: true,
-      isShared: true,
-      aiAnalyzedAt: true,
-      createdAt: true,
-      uploadedById: true,
-      recipientId: true,
-      uploadedBy: { select: { name: true, role: true } },
-      recipient: { select: { name: true } },
-    },
-  });
-
-  // Add boolean flag so clients can show 'View Insights' vs 'AI Insights'
-  const docsWithFlag = documents.map((d) => ({ ...d, hasAiAnalysis: !!d.aiAnalyzedAt }));
-
-  return NextResponse.json({ documents: docsWithFlag });
 }
