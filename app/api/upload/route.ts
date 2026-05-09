@@ -13,6 +13,7 @@ export async function POST(req: NextRequest) {
   const title = formData.get('title') as string;
   const type = formData.get('type') as string;
   const appointmentId = formData.get('appointmentId') as string | null;
+  const recipientId = formData.get('recipientId') as string | null;
   const notes = formData.get('notes') as string | null;
 
   if (!file || !title || !type) {
@@ -29,12 +30,52 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'File too large (max 10MB)' }, { status: 400 });
   }
 
+  // Doctor must assign DIET_PLAN / PRESCRIPTION uploads to a specific patient,
+  // otherwise no one can see them.
+  if (session.user.role === 'DOCTOR' && !recipientId && (type === 'DIET_PLAN' || type === 'PRESCRIPTION')) {
+    return NextResponse.json(
+      { error: 'Please assign this document to a patient before uploading.' },
+      { status: 400 },
+    );
+  }
+
+  // If a recipient is specified, validate they exist and (for doctor uploads)
+  // that they are actually a patient who's had an appointment with this doctor.
+  let validRecipientId: string | null = null;
+  if (recipientId) {
+    const recipient = await prisma.user.findUnique({
+      where: { id: recipientId },
+      select: { id: true, role: true, patientProfile: { select: { id: true } } },
+    });
+    if (!recipient) {
+      return NextResponse.json({ error: 'Recipient not found' }, { status: 400 });
+    }
+    if (session.user.role === 'DOCTOR') {
+      const doctorProfile = await prisma.doctorProfile.findUnique({
+        where: { userId: session.user.id },
+        select: { id: true },
+      });
+      if (!doctorProfile || !recipient.patientProfile) {
+        return NextResponse.json({ error: 'Invalid recipient' }, { status: 400 });
+      }
+      const link = await prisma.appointment.findFirst({
+        where: { doctorId: doctorProfile.id, patientId: recipient.patientProfile.id },
+        select: { id: true },
+      });
+      if (!link) {
+        return NextResponse.json({ error: 'You can only assign documents to patients you have an appointment with.' }, { status: 403 });
+      }
+    }
+    validRecipientId = recipient.id;
+  }
+
   const buffer = Buffer.from(await file.arrayBuffer());
   const { url, publicId } = await uploadToCloudinary(buffer, file.name, 'nutrition-docs');
 
   const document = await prisma.document.create({
     data: {
       uploadedById: session.user.id,
+      recipientId: validRecipientId,
       title,
       type: type as any,
       fileUrl: url,
@@ -46,10 +87,10 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  // Notify doctor(s) when a patient uploads a document
+  // Notification routing
   if (session.user.role === 'PATIENT') {
+    // Patient uploaded — notify their doctor(s)
     if (appointmentId) {
-      // Linked to a specific appointment — notify that appointment's doctor
       const appt = await prisma.appointment.findUnique({
         where: { id: appointmentId },
         include: { doctor: { select: { userId: true } } },
@@ -64,8 +105,6 @@ export async function POST(req: NextRequest) {
         }).catch(() => {});
       }
     } else {
-      // Standalone upload — notify each doctor the patient has had an
-      // appointment with so they can review it from /doctor/documents.
       const patientProfile = await prisma.patientProfile.findUnique({
         where: { userId: session.user.id },
         select: { id: true },
@@ -87,6 +126,15 @@ export async function POST(req: NextRequest) {
         }
       }
     }
+  } else if (session.user.role === 'DOCTOR' && validRecipientId) {
+    // Doctor uploaded for a specific patient — notify the patient
+    createNotification({
+      userId: validRecipientId,
+      type: 'DOCUMENT',
+      title: 'Your dietitian sent you a document',
+      message: `"${title}" has been added to your documents.`,
+      link: '/patient/documents',
+    }).catch(() => {});
   }
 
   return NextResponse.json({ document }, { status: 201 });
@@ -102,10 +150,14 @@ export async function GET(req: NextRequest) {
   let where: any = {};
 
   if (session.user.role === 'PATIENT') {
-    where.uploadedById = session.user.id;
+    // Patient sees their own uploads OR documents addressed to them.
+    where.OR = [
+      { uploadedById: session.user.id },
+      { recipientId: session.user.id },
+    ];
   } else if (session.user.role === 'DOCTOR') {
     // Doctor sees:
-    //   1. Their own uploads
+    //   1. Their own uploads (sent or unsent)
     //   2. Documents tied to any of their appointments
     //   3. Standalone documents uploaded by any patient who has had at
     //      least one appointment with them (covers patient-side uploads
@@ -149,7 +201,10 @@ export async function GET(req: NextRequest) {
       isShared: true,
       aiAnalyzedAt: true,
       createdAt: true,
+      uploadedById: true,
+      recipientId: true,
       uploadedBy: { select: { name: true, role: true } },
+      recipient: { select: { name: true } },
     },
   });
 

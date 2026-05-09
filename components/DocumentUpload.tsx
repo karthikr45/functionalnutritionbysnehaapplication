@@ -1,12 +1,20 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 
 interface DocumentUploadProps {
   appointmentId?: string;
   onUploadSuccess?: (doc: any) => void;
   allowedTypes?: string[];
+  // When true, render the 'Assign to patient' dropdown (doctor-side upload)
+  showRecipientPicker?: boolean;
+}
+
+interface Patient {
+  userId: string;
+  name: string;
+  email: string;
 }
 
 const DOC_TYPES = [
@@ -18,14 +26,27 @@ const DOC_TYPES = [
   { value: 'OTHER', label: 'Other' },
 ];
 
-export default function DocumentUpload({ appointmentId, onUploadSuccess, allowedTypes }: DocumentUploadProps) {
+export default function DocumentUpload({ appointmentId, onUploadSuccess, allowedTypes, showRecipientPicker = false }: DocumentUploadProps) {
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState('');
-  const [type, setType] = useState('LAB_REPORT');
+  const [type, setType] = useState(allowedTypes?.[0] || 'LAB_REPORT');
   const [notes, setNotes] = useState('');
+  const [recipientId, setRecipientId] = useState('');
+  const [patients, setPatients] = useState<Patient[]>([]);
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!showRecipientPicker) return;
+    fetch('/api/doctor/patients')
+      .then((r) => r.json())
+      .then((d) => setPatients(d.patients || []))
+      .catch(() => {});
+  }, [showRecipientPicker]);
+
+  // Doctor-side: DIET_PLAN and PRESCRIPTION require a recipient
+  const recipientRequired = showRecipientPicker && (type === 'DIET_PLAN' || type === 'PRESCRIPTION');
 
   const filteredTypes = allowedTypes
     ? DOC_TYPES.filter((t) => allowedTypes.includes(t.value))
@@ -52,6 +73,10 @@ export default function DocumentUpload({ appointmentId, onUploadSuccess, allowed
   const handleUpload = async () => {
     if (!file || !title || !type) { toast.error('Please fill all fields'); return; }
     if (file.size > 10 * 1024 * 1024) { toast.error('File too large (max 10MB)'); return; }
+    if (recipientRequired && !recipientId) {
+      toast.error('Please select the patient this document is for.');
+      return;
+    }
 
     setUploading(true);
     const formData = new FormData();
@@ -59,18 +84,22 @@ export default function DocumentUpload({ appointmentId, onUploadSuccess, allowed
     formData.append('title', title);
     formData.append('type', type);
     if (appointmentId) formData.append('appointmentId', appointmentId);
+    if (recipientId) formData.append('recipientId', recipientId);
     if (notes) formData.append('notes', notes);
 
     try {
       const res = await fetch('/api/upload', { method: 'POST', body: formData });
-      if (!res.ok) throw new Error('Upload failed');
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Upload failed');
+      }
       const { document } = await res.json();
       toast.success('Document uploaded successfully!');
       onUploadSuccess?.(document);
-      setFile(null); setTitle(''); setNotes('');
+      setFile(null); setTitle(''); setNotes(''); setRecipientId('');
       if (inputRef.current) inputRef.current.value = '';
     } catch (err) {
-      toast.error('Upload failed. Please try again.');
+      toast.error((err as Error).message || 'Upload failed. Please try again.');
     } finally {
       setUploading(false);
     }
@@ -140,6 +169,30 @@ export default function DocumentUpload({ appointmentId, onUploadSuccess, allowed
           </select>
         </div>
       </div>
+
+      {showRecipientPicker && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            Send to Patient {recipientRequired ? '*' : <span className="text-gray-400 font-normal">(optional)</span>}
+          </label>
+          <select
+            value={recipientId}
+            onChange={(e) => setRecipientId(e.target.value)}
+            className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:border-primary-400 focus:ring-2 focus:ring-primary-100 outline-none bg-white"
+            required={recipientRequired}
+          >
+            <option value="">— Select a patient —</option>
+            {patients.map((p) => (
+              <option key={p.userId} value={p.userId}>
+                {p.name} ({p.email})
+              </option>
+            ))}
+          </select>
+          {patients.length === 0 && (
+            <p className="text-xs text-gray-400 mt-1">No patients yet. Patients you have appointments with will appear here.</p>
+          )}
+        </div>
+      )}
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1.5">Notes (optional)</label>

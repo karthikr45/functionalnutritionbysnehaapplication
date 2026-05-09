@@ -152,7 +152,8 @@ model User {
   passwordResetTokens PasswordResetToken[]
   doctorProfile       DoctorProfile?
   patientProfile      PatientProfile?
-  documents           Document[]
+  documents           Document[]           @relation("DocumentUploader")
+  receivedDocuments   Document[]           @relation("DocumentRecipient")
   messages            Message[]
   products            Product[]            @relation("ProductCreator")
   productReviews      ProductReview[]
@@ -504,6 +505,7 @@ model ThemeSettings {
 model Document {
   id            String       @id @default(cuid())
   uploadedById  String
+  recipientId   String? // optional 'this document is FOR this user' (e.g. doctor assigning to a patient)
   title         String
   type          DocumentType
   fileUrl       String
@@ -517,8 +519,12 @@ model Document {
   aiAnalyzedAt  DateTime?
   createdAt     DateTime     @default(now())
 
-  uploadedBy  User         @relation(fields: [uploadedById], references: [id])
+  uploadedBy  User         @relation("DocumentUploader", fields: [uploadedById], references: [id])
+  recipient   User?        @relation("DocumentRecipient", fields: [recipientId], references: [id])
   appointment Appointment? @relation(fields: [appointmentId], references: [id])
+
+  @@index([recipientId])
+  @@index([uploadedById])
 }
 
 // ─── Testimonials & Case Studies ──────────────────────────────────────────────
