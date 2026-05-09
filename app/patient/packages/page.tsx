@@ -105,7 +105,7 @@ function PackagesContent() {
                 <div className="flex items-end justify-between gap-4 mb-5 pb-4 border-b border-gray-200 flex-wrap">
                   <div>
                     <h2 className="text-2xl sm:text-3xl font-serif font-medium text-gray-900">{meta.label}</h2>
-                    <p className={`text-sm italic mt-0.5 ${meta.accentText}`}>{meta.tagline}</p>
+                    <p className="text-sm italic mt-0.5 text-gray-500">{meta.tagline}</p>
                   </div>
                   <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">
                     {pkgs.length} option{pkgs.length === 1 ? '' : 's'}
@@ -247,8 +247,8 @@ function PackageGrid({
                 </span>
               )}
               {showProgramBadge && (
-                <span className={`inline-flex items-center px-2.5 py-1 ${meta.accentBg} ${meta.accentText} text-[11px] font-semibold rounded-full`}>
-                  <span className="truncate max-w-[140px]">{meta.label}</span>
+                <span className="inline-flex items-center px-2.5 py-1 bg-primary-50 text-primary-700 text-[11px] font-semibold rounded-full">
+                  <span className="truncate max-w-[180px]">{meta.label}</span>
                 </span>
               )}
             </div>
