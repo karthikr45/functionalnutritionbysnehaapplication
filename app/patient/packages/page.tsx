@@ -84,8 +84,8 @@ function PackagesContent() {
                   <div className="flex items-center gap-2 text-amber-700 text-xs font-bold uppercase tracking-[0.2em] mb-1">
                     <span>★</span> Most Popular
                   </div>
-                  <h2 className="text-2xl sm:text-3xl font-serif font-medium text-gray-900">Patient favourites</h2>
-                  <p className="text-sm text-gray-600 mt-1">The programs our patients pick most often.</p>
+                  <h2 className="text-2xl sm:text-3xl font-serif font-medium text-gray-900">Top picks</h2>
+                  <p className="text-sm text-gray-600 mt-1">The programs picked most often.</p>
                 </div>
               </div>
               <PackageGrid
@@ -103,14 +103,9 @@ function PackagesContent() {
             return (
               <section key={slug}>
                 <div className="flex items-end justify-between gap-4 mb-5 pb-4 border-b border-gray-200 flex-wrap">
-                  <div className="flex items-start gap-3">
-                    <span className={`shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-2xl text-2xl ${meta.accentBg}`}>
-                      {meta.emoji}
-                    </span>
-                    <div>
-                      <h2 className="text-2xl sm:text-3xl font-serif font-medium text-gray-900">{meta.label}</h2>
-                      <p className={`text-sm italic mt-0.5 ${meta.accentText}`}>{meta.tagline}</p>
-                    </div>
+                  <div>
+                    <h2 className="text-2xl sm:text-3xl font-serif font-medium text-gray-900">{meta.label}</h2>
+                    <p className={`text-sm italic mt-0.5 ${meta.accentText}`}>{meta.tagline}</p>
                   </div>
                   <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">
                     {pkgs.length} option{pkgs.length === 1 ? '' : 's'}
@@ -252,8 +247,7 @@ function PackageGrid({
                 </span>
               )}
               {showProgramBadge && (
-                <span className={`inline-flex items-center gap-1 px-2.5 py-1 ${meta.accentBg} ${meta.accentText} text-[11px] font-semibold rounded-full`}>
-                  <span>{meta.emoji}</span>
+                <span className={`inline-flex items-center px-2.5 py-1 ${meta.accentBg} ${meta.accentText} text-[11px] font-semibold rounded-full`}>
                   <span className="truncate max-w-[140px]">{meta.label}</span>
                 </span>
               )}
