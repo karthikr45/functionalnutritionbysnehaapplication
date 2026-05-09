@@ -38,7 +38,6 @@ export default function DoctorSidebar() {
           </div>
           <div>
             <p className="font-semibold text-gray-800 text-sm">{session?.user?.name}</p>
-            <p className="text-xs text-primary-600 font-medium">Doctor</p>
           </div>
         </div>
       </div>
