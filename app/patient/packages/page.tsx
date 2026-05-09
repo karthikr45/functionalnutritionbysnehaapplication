@@ -48,10 +48,6 @@ function PackagesContent() {
     <div className="max-w-5xl mx-auto space-y-6">
       <h1 className="text-2xl font-bold text-gray-900 font-serif">Consultation Packages</h1>
 
-      {doctor && tab === 'buy' && (
-        <DoctorProfileCard doctor={doctor} showFees={false} />
-      )}
-
       <div className="flex gap-2 border-b border-gray-200">
         {(['buy', 'my'] as const).map((t) => (
           <button
@@ -111,6 +107,15 @@ function PackagesContent() {
               </section>
             );
           })}
+
+          {/* Doctor profile shown after the packages so the user picks a
+              program first, then learns about the practitioner. */}
+          {doctor && (
+            <section className="pt-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-gray-400 font-semibold mb-3">About your dietitian</p>
+              <DoctorProfileCard doctor={doctor} showFees={false} />
+            </section>
+          )}
         </div>
       )}
 
