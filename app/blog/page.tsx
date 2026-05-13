@@ -1,8 +1,21 @@
+import type { Metadata } from 'next';
 import { client } from '@/sanity/lib/client';
 import { ALL_POSTS_QUERY } from '@/sanity/lib/queries';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import Navbar from '@/components/Navbar';
+
+export const metadata: Metadata = {
+  title: 'Blog — Functional Nutrition Insights & Recipes',
+  description:
+    'Evidence-based articles on gut health, PCOS, thyroid, diabetes, pregnancy nutrition, weight management and more. Practical recipes and tips you can use today.',
+  alternates: { canonical: '/blog' },
+  openGraph: {
+    title: 'Gut Shell Blog — Functional Nutrition Insights',
+    description: 'Articles on gut health, PCOS, thyroid, diabetes, pregnancy nutrition & weight management — with recipes.',
+    url: 'https://gutshell.com/blog',
+  },
+};
 import Footer from '@/components/Footer';
 
 export const revalidate = 60;

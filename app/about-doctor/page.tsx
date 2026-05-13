@@ -7,8 +7,14 @@ import { prisma } from '@/lib/prisma';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Meet Your Doctor — Gut Shell',
-  description: 'Learn about the functional nutritionist behind your consultation — credentials, specialization, and approach.',
+  title: 'Meet Your Dietitian — Credentials & Approach',
+  description: 'Learn about the functional nutritionist behind your consultation — credentials, specializations, and approach to root-cause healing.',
+  alternates: { canonical: '/about-doctor' },
+  openGraph: {
+    title: 'Meet Your Dietitian — Gut Shell',
+    description: 'Credentials, specializations, and approach of the functional nutritionist behind Gut Shell.',
+    url: 'https://gutshell.com/about-doctor',
+  },
 };
 
 export default async function AboutDoctorPage() {

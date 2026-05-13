@@ -319,6 +319,42 @@ const fallbackData: Record<string, any> = {
   },
 };
 
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+  // Try Sanity for live data, fall back to the fallbackData dictionary above.
+  let title: string | undefined;
+  let subtitle: string | undefined;
+  let imageUrl: string | undefined;
+  try {
+    const s = await client.fetch(SERVICE_BY_SLUG_QUERY, { slug: params.slug });
+    title = s?.title;
+    subtitle = s?.subtitle;
+    imageUrl = s?.image;
+  } catch {}
+  const fb = fallbackData[params.slug];
+  title = title || fb?.title || 'Service';
+  subtitle = subtitle || fb?.subtitle || 'Personalized functional nutrition program';
+  imageUrl = imageUrl || fb?.image;
+
+  const canonical = `/services/${params.slug}`;
+  return {
+    title,
+    description: subtitle,
+    alternates: { canonical },
+    openGraph: {
+      title: `${title} — Gut Shell`,
+      description: subtitle,
+      url: `https://gutshell.com${canonical}`,
+      ...(imageUrl && { images: [imageUrl] }),
+    },
+    twitter: {
+      card: 'summary_large_image' as const,
+      title: `${title} — Gut Shell`,
+      description: subtitle,
+      ...(imageUrl && { images: [imageUrl] }),
+    },
+  };
+}
+
 export default async function ServicePage({ params }: { params: { slug: string } }) {
   let service: any = null;
   let siteSettings: any = null;

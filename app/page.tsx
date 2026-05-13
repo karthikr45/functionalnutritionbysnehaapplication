@@ -1,6 +1,20 @@
+import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: 'Functional Nutrition for Gut, PCOS, Thyroid & Weight',
+  description:
+    'Personalized 1:1 nutrition programs from a certified functional nutritionist. Heal gut issues, PCOS, thyroid, diabetes & lose weight sustainably. Book a consultation today.',
+  alternates: { canonical: '/' },
+  openGraph: {
+    title: 'Gut Shell — Functional Nutrition That Heals from the Root',
+    description:
+      'Personalized 1:1 nutrition programs for gut, PCOS, thyroid, diabetes & weight. No fad diets — just science-backed, sustainable transformation.',
+    url: 'https://gutshell.com',
+  },
+};
 
 import Hero, { HeroContent } from '@/components/Hero';
 

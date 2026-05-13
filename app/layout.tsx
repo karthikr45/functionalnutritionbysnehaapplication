@@ -7,14 +7,58 @@ import { prisma } from '@/lib/prisma';
 import { generatePalette, paletteToCss } from '@/lib/theme';
 
 export const metadata: Metadata = {
-  title: 'Gut Shell — Heal from the Root Cause',
+  metadataBase: new URL('https://gutshell.com'),
+  title: {
+    default: 'Gut Shell — Heal from the Root Cause',
+    template: '%s | Gut Shell',
+  },
   description:
     'Personalized functional nutrition consultations. Science-backed diet plans for PCOS, thyroid, gut health, diabetes, weight management, and more. Book online consultations today.',
-  keywords: 'functional nutrition, nutritionist, PCOS diet, thyroid nutrition, gut health, weight loss, diabetes diet, online consultation, India, Gut Shell',
+  keywords: [
+    'functional nutrition',
+    'nutritionist India',
+    'dietitian online',
+    'PCOS diet plan',
+    'thyroid nutrition',
+    'gut health',
+    'gut reset',
+    'weight loss program',
+    'diabetes diet',
+    'metabolic health',
+    'pregnancy nutrition',
+    'online nutritionist',
+    'Gut Shell',
+    'Sneha Agarwal',
+  ],
+  authors: [{ name: 'Gut Shell' }],
+  creator: 'Gut Shell',
+  publisher: 'Gut Shell',
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
-    title: 'Gut Shell',
-    description: 'Heal from the root cause with personalized, science-backed functional nutrition. Book your consultation today.',
     type: 'website',
+    locale: 'en_IN',
+    url: 'https://gutshell.com',
+    siteName: 'Gut Shell',
+    title: 'Gut Shell — Heal from the Root Cause',
+    description: 'Heal from the root cause with personalized, science-backed functional nutrition. Book your consultation today.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Gut Shell — Heal from the Root Cause',
+    description: 'Personalized functional nutrition consultations for PCOS, thyroid, gut health, diabetes & more.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
   },
 };
 

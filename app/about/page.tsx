@@ -11,8 +11,14 @@ import WhatsAppButton from '@/components/WhatsAppButton';
 export const revalidate = 60;
 
 export const metadata = {
-  title: 'About — Gut Shell',
-  description: 'Meet the functional nutritionist behind Gut Shell. Learn about our approach, qualifications, and philosophy.',
+  title: 'About — Functional Nutrition Approach & Philosophy',
+  description: 'Meet the functional nutritionist behind Gut Shell. Root-cause approach, clinical credentials, and the philosophy that guides every personalized plan.',
+  alternates: { canonical: '/about' },
+  openGraph: {
+    title: 'About Gut Shell — Functional Nutrition Approach',
+    description: 'Root-cause healing through personalized, science-backed functional nutrition.',
+    url: 'https://gutshell.com/about',
+  },
 };
 
 const defaultDescription = [
