@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { PortableText } from '@portabletext/react';
+import JsonLd from '@/components/JsonLd';
 
 export const revalidate = 60;
 
@@ -67,8 +68,29 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
   if (!post) notFound();
 
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    '@id': `https://gutshell.com/blog/${params.slug}#article`,
+    headline: post.title,
+    description: post.excerpt,
+    ...(post.mainImage && { image: [post.mainImage] }),
+    ...(post.publishedAt && { datePublished: post.publishedAt }),
+    ...(post.publishedAt && { dateModified: post.publishedAt }),
+    author: {
+      '@type': 'Person',
+      name: post.author?.name || 'Gut Shell',
+    },
+    publisher: { '@id': 'https://gutshell.com#organization' },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://gutshell.com/blog/${params.slug}`,
+    },
+  };
+
   return (
     <div className="min-h-screen bg-cream">
+      <JsonLd data={articleJsonLd} />
       <Navbar />
       <main>
         {/* Hero */}

@@ -1,6 +1,7 @@
 import { client } from '@/sanity/lib/client';
 import { SERVICE_BY_SLUG_QUERY, SITE_SETTINGS_QUERY } from '@/sanity/lib/queries';
 import { PortableText } from '@portabletext/react';
+import JsonLd from '@/components/JsonLd';
 
 export const revalidate = 60;
 import Link from 'next/link';
@@ -359,17 +360,23 @@ export default async function ServicePage({ params }: { params: { slug: string }
   let service: any = null;
   let siteSettings: any = null;
   let hasPackages = false;
+  let packagesForJsonLd: Array<{ name: string; price: number }> = [];
 
   try {
     const { prisma } = await import('@/lib/prisma');
-    const [s, ss, pkgCount] = await Promise.all([
+    const [s, ss, pkgs] = await Promise.all([
       client.fetch(SERVICE_BY_SLUG_QUERY, { slug: params.slug }),
       client.fetch(SITE_SETTINGS_QUERY),
-      prisma.package.count({ where: { serviceSlug: params.slug, isActive: true } }),
+      prisma.package.findMany({
+        where: { serviceSlug: params.slug, isActive: true },
+        select: { name: true, price: true },
+        orderBy: { sortOrder: 'asc' },
+      }),
     ]);
     service = s;
     siteSettings = ss;
-    hasPackages = pkgCount > 0;
+    hasPackages = pkgs.length > 0;
+    packagesForJsonLd = pkgs;
   } catch {}
 
   // Use fallback if Sanity data not available, or merge fallback for missing fields
@@ -397,8 +404,30 @@ export default async function ServicePage({ params }: { params: { slug: string }
   const benefits = service.benefits || [];
   const conditions = service.conditions || [];
 
+  const serviceJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    '@id': `https://gutshell.com/services/${params.slug}#service`,
+    name: service.title,
+    description: service.subtitle || service.description,
+    provider: { '@id': 'https://gutshell.com#organization' },
+    areaServed: { '@type': 'Country', name: 'India' },
+    serviceType: 'Functional Nutrition',
+    ...(service.image && { image: service.image }),
+    ...(packagesForJsonLd.length > 0 && {
+      offers: packagesForJsonLd.map((p) => ({
+        '@type': 'Offer',
+        name: p.name,
+        price: p.price,
+        priceCurrency: 'INR',
+        availability: 'https://schema.org/InStock',
+      })),
+    }),
+  };
+
   return (
     <div className="min-h-screen bg-cream">
+      <JsonLd data={serviceJsonLd} />
       <Navbar />
 
       {/* Hero */}
