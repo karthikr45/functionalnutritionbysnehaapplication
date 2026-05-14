@@ -219,7 +219,7 @@ export default function DoctorProfilePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className={labelCls}>Specialization</label>
-              <input type="text" value={form.specialization} onChange={(e) => setForm({ ...form, specialization: e.target.value })} placeholder="Gut Shell, PCOS..." className={inputCls} />
+              <input type="text" value={form.specialization} onChange={(e) => setForm({ ...form, specialization: e.target.value })} placeholder="Gut Shell, PMOS..." className={inputCls} />
             </div>
             <div>
               <label className={labelCls}>Qualifications (comma separated)</label>

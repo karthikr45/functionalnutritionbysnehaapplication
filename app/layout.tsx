@@ -25,7 +25,7 @@ function buildOrgJsonLd(logoUrl: string) {
         url: SITE_URL,
         logo: logoUrl,
         sameAs: [] as string[], // populate with Instagram/YouTube/etc. URLs if available
-        description: 'Personalized functional nutrition consultations for gut health, PCOS, thyroid, diabetes, weight management and more.',
+        description: 'Personalized functional nutrition consultations for gut health, PMOS, thyroid, diabetes, weight management and more.',
       },
       {
         '@type': 'MedicalBusiness',
@@ -62,12 +62,12 @@ export const metadata: Metadata = {
     template: '%s | Gut Shell',
   },
   description:
-    'Personalized functional nutrition consultations. Science-backed diet plans for PCOS, thyroid, gut health, diabetes, weight management, and more. Book online consultations today.',
+    'Personalized functional nutrition consultations. Science-backed diet plans for PMOS, thyroid, gut health, diabetes, weight management, and more. Book online consultations today.',
   keywords: [
     'functional nutrition',
     'nutritionist India',
     'dietitian online',
-    'PCOS diet plan',
+    'PMOS diet plan',
     'thyroid nutrition',
     'gut health',
     'gut reset',
@@ -96,7 +96,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Gut Shell — Heal from the Root Cause',
-    description: 'Personalized functional nutrition consultations for PCOS, thyroid, gut health, diabetes & more.',
+    description: 'Personalized functional nutrition consultations for PMOS, thyroid, gut health, diabetes & more.',
   },
   robots: {
     index: true,

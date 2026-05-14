@@ -37,7 +37,7 @@ export default function Hero({ settings }: HeroProps) {
   const doctorImage = settings?.doctorImage;
   const desktopImage = settings?.heroDesktopImage;
   const name = settings?.aboutName || 'Sneha Agarwal';
-  const specializations = settings?.aboutSpecializations || 'PCOS | Thyroid | Gut Health | Weight Management | Diabetes';
+  const specializations = settings?.aboutSpecializations || 'PMOS | Thyroid | Gut Health | Weight Management | Diabetes';
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);

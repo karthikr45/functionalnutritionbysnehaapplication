@@ -23,7 +23,7 @@ const fallbackData: Record<string, any> = {
       'H. pylori and gut infections',
       'Stomach acid imbalances',
       'Digestive enzyme deficiencies',
-      'Hormonal imbalances (e.g., PCOS linked to chronic iron deficiency)',
+      'Hormonal imbalances (e.g., PMOS linked to chronic iron deficiency)',
       'Motility disorders (chronic constipation, incomplete evacuation)',
       'Autoimmune thyroid conditions',
       'Chronic inflammation',
@@ -127,7 +127,7 @@ const fallbackData: Record<string, any> = {
     title: 'Metabolic Health Nutrition',
     subtitle: 'Root-Cause Nutrition for Metabolic Conditions',
     image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1200&h=600&fit=crop',
-    description: 'Your body isn\'t broken. It just needs the right support. If you\'re living with Insulin Resistance, PCOS, Type 2 Diabetes, High Cholesterol, High Blood Pressure, Uric Acid Imbalance, Obesity, or Fatty Liver — healing your metabolism isn\'t about eating less. It\'s about eating right, for your body.',
+    description: 'Your body isn\'t broken. It just needs the right support. If you\'re living with Insulin Resistance, PMOS, Type 2 Diabetes, High Cholesterol, High Blood Pressure, Uric Acid Imbalance, Obesity, or Fatty Liver — healing your metabolism isn\'t about eating less. It\'s about eating right, for your body.',
     philosophy: 'No starvation. No extreme cutting out of food groups. Just real, evidence-based nutrition that fits your life — and stays with you for good.',
     benefits: [
       'Stable blood sugar, naturally',
@@ -135,7 +135,7 @@ const fallbackData: Record<string, any> = {
       'Reduced inflammation throughout your body',
       'Stronger liver and heart function',
     ],
-    conditions: ['Insulin Resistance', 'PCOS', 'Type 2 Diabetes', 'High Cholesterol', 'High Blood Pressure', 'Uric Acid Imbalance', 'Obesity', 'Fatty Liver'],
+    conditions: ['Insulin Resistance', 'PMOS', 'Type 2 Diabetes', 'High Cholesterol', 'High Blood Pressure', 'Uric Acid Imbalance', 'Obesity', 'Fatty Liver'],
     whyGutHealth: 'This isn\'t a quick fix. It\'s a transformation — one meal, one habit, one day at a time. Whether you were just diagnosed or have been struggling for years, we give you the tools, knowledge, and steady support to take back control of your health.',
     steps: [
       {
@@ -190,7 +190,7 @@ const fallbackData: Record<string, any> = {
       'Safe supplement recommendations, only if needed',
       'Ongoing check-ins and WhatsApp support for all your questions',
     ],
-    conditions: ['Obesity', 'Insulin resistance', 'Thyroid imbalances', 'PCOS', 'Constipation', 'Anemia', 'Gestational diabetes'],
+    conditions: ['Obesity', 'Insulin resistance', 'Thyroid imbalances', 'PMOS', 'Constipation', 'Anemia', 'Gestational diabetes'],
     whyGutHealth: null,
     steps: [
       {
@@ -224,7 +224,7 @@ const fallbackData: Record<string, any> = {
       suitable: [
         'Consultation with Sneha Agarwal',
         'Support for every stage — from planning to postpartum',
-        'Medical conditions supported: Obesity, Insulin resistance, Thyroid, PCOS, Anemia, Gestational diabetes',
+        'Medical conditions supported: Obesity, Insulin resistance, Thyroid, PMOS, Anemia, Gestational diabetes',
       ],
       notIncluded: [
         'Irritable Bowel Syndrome (IBS)',
@@ -285,13 +285,13 @@ const fallbackData: Record<string, any> = {
     },
   },
   'group-program': {
-    title: '21 Days to PCOS Wellness',
+    title: '21 Days to PMOS Wellness',
     subtitle: 'You Don\'t Have to Do This Alone.',
     image: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=600&fit=crop',
-    description: 'Irregular periods. Hormonal chaos. Weight that won\'t budge. Exhaustion that never lifts. Mood swings that leave you confused. You\'ve been managing PCOS on your own for too long. It\'s time to try something different — a group journey designed specifically for women, by gut and hormonal health expert Sneha Agarwal.',
-    philosophy: 'Because PCOS can feel isolating. But healing doesn\'t have to be. When you join this program, you\'re not just getting a plan. You\'re getting a circle of women who truly understand. You\'ll share, learn, support each other, and grow together. There\'s power in that. Real power.',
+    description: 'Irregular periods. Hormonal chaos. Weight that won\'t budge. Exhaustion that never lifts. Mood swings that leave you confused. You\'ve been managing PMOS on your own for too long. It\'s time to try something different — a group journey designed specifically for women, by gut and hormonal health expert Sneha Agarwal.',
+    philosophy: 'Because PMOS can feel isolating. But healing doesn\'t have to be. When you join this program, you\'re not just getting a plan. You\'re getting a circle of women who truly understand. You\'ll share, learn, support each other, and grow together. There\'s power in that. Real power.',
     benefits: [
-      'A clearer understanding of your PCOS',
+      'A clearer understanding of your PMOS',
       'Daily habits that support hormonal balance',
       'Better energy and mood',
       'Practical nutrition strategies you can keep using',
@@ -307,12 +307,12 @@ const fallbackData: Record<string, any> = {
       'Natural & Sustainable — No harsh protocols. No extreme restrictions. Just nutrition and lifestyle changes that work with your body',
       'Community at the Heart — Sisters on this journey who get the late-night cravings, the frustration, the wins, and the setbacks',
     ],
-    investment: '₹9,999 only — 21 Days PCOS Wellness Program',
+    investment: '₹9,999 only — 21 Days PMOS Wellness Program',
     guidelines: {
       suitable: [
         'Women experiencing irregular periods, hormonal acne, stubborn weight gain',
         'Those dealing with constant fatigue, mood swings, or brain fog',
-        'Anyone ready to stop struggling with PCOS alone',
+        'Anyone ready to stop struggling with PMOS alone',
         '🎉 Registrations Are Open',
       ],
       notIncluded: null,

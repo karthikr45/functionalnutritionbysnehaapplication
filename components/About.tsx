@@ -16,7 +16,7 @@ interface AboutProps {
 
 const defaultDescription = [
   "I'm Sneha, a certified Gut Shell Consultant passionate about helping people heal from the root cause — not just manage symptoms. I combine the principles of functional medicine with personalized nutrition to create lasting health transformations.",
-  'I specialize in hormonal imbalances (PCOS, thyroid), gut health issues (IBS, bloating, acid reflux), diabetes management, weight loss, and autoimmune conditions. My approach goes beyond calorie counting — I look at your complete health picture including lab work, lifestyle, stress, sleep, and gut health.',
+  'I specialize in hormonal imbalances (PMOS, thyroid), gut health issues (IBS, bloating, acid reflux), diabetes management, weight loss, and autoimmune conditions. My approach goes beyond calorie counting — I look at your complete health picture including lab work, lifestyle, stress, sleep, and gut health.',
   'My philosophy is simple: food is medicine. When you give your body the right nutrition, it has an incredible ability to heal itself. Every plan I create is rooted in science, customized to Indian food habits, and designed for real life — not just theory.',
 ];
 

@@ -55,7 +55,7 @@ export default async function OpengraphImage() {
               lineHeight: 1.35,
             }}
           >
-            Personalized functional nutrition for gut health, PCOS, thyroid, diabetes &amp; weight.
+            Personalized functional nutrition for gut health, PMOS, thyroid, diabetes &amp; weight.
           </div>
         </div>
 

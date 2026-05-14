@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Gut Shell',
     short_name: 'Gut Shell',
-    description: 'Personalized functional nutrition consultations for gut, PCOS, thyroid, diabetes, and weight management.',
+    description: 'Personalized functional nutrition consultations for gut, PMOS, thyroid, diabetes, and weight management.',
     start_url: '/',
     display: 'standalone',
     background_color: '#FAF6EE',

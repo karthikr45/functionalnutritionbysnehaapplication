@@ -169,7 +169,7 @@ export default function PatientProfilePage() {
           <p className="text-xs text-gray-400 -mt-2">This helps the doctor prepare better for your consultation.</p>
           <div>
             <label className={labelCls}>Health Goals</label>
-            <textarea value={form.healthGoals} onChange={(e) => setForm({ ...form, healthGoals: e.target.value })} rows={2} placeholder="e.g. Lose weight, fix gut issues, manage PCOS..." className={`${inputCls} resize-none`} />
+            <textarea value={form.healthGoals} onChange={(e) => setForm({ ...form, healthGoals: e.target.value })} rows={2} placeholder="e.g. Lose weight, fix gut issues, manage PMOS..." className={`${inputCls} resize-none`} />
           </div>
           <div>
             <label className={labelCls}>Medical History</label>

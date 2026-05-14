@@ -21,12 +21,12 @@ const faqs = [
   {
     question: 'How soon will I see results?',
     answer:
-      'Most clients start noticing improvements in energy, digestion, and overall well-being within 2-3 weeks. For conditions like PCOS, thyroid, and diabetes, significant improvements in lab markers are typically seen within 2-3 months. Sustainable weight loss usually happens at 2-4 kg per month.',
+      'Most clients start noticing improvements in energy, digestion, and overall well-being within 2-3 weeks. For conditions like PMOS, thyroid, and diabetes, significant improvements in lab markers are typically seen within 2-3 months. Sustainable weight loss usually happens at 2-4 kg per month.',
   },
   {
     question: 'Can you help with multiple health conditions at once?',
     answer:
-      'Yes! In fact, most clients come with interconnected issues — for example, PCOS often comes with weight gain, acne, and gut issues. The functional nutrition approach addresses the underlying imbalance that connects all these symptoms, so improving one often improves everything.',
+      'Yes! In fact, most clients come with interconnected issues — for example, PMOS often comes with weight gain, acne, and gut issues. The functional nutrition approach addresses the underlying imbalance that connects all these symptoms, so improving one often improves everything.',
   },
   {
     question: 'What if I have food allergies or am vegetarian/vegan?',
