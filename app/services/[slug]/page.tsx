@@ -607,22 +607,11 @@ export default async function ServicePage({ params }: { params: { slug: string }
             </div>
           )}
 
-          {/* Guidelines */}
-          {service.guidelines && (service.guidelines.suitable || service.guidelines.notIncluded) && (
-            <div className="max-w-3xl mx-auto mb-16 grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {service.guidelines.suitable?.length > 0 && (
-              <div className="bg-cream-dark rounded-3xl p-8 border border-primary-100/30">
-                <h3 className="font-semibold text-gray-900 mb-4"><span className="text-gray-400">•</span> Suitable For</h3>
-                <ul className="space-y-2">
-                  {service.guidelines.suitable.map((item: string, i: number) => (
-                    <li key={i} className="text-sm text-warm-text flex items-start gap-2">
-                      <span className="text-primary-600">✓</span> {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              )}
-              {service.guidelines.notIncluded?.length > 0 && (
+          {/* Guidelines — 'Suitable For' was removed (pricing is in the
+              package cards now). Only 'Not Included' remains as a medical
+              disclaimer. */}
+          {service.guidelines?.notIncluded?.length > 0 && (
+            <div className="max-w-3xl mx-auto mb-16">
               <div className="bg-cream-dark rounded-3xl p-8 border border-red-100/30">
                 <h3 className="font-semibold text-gray-900 mb-4"><span className="text-gray-400">•</span> Not Included</h3>
                 <ul className="space-y-2">
@@ -633,7 +622,6 @@ export default async function ServicePage({ params }: { params: { slug: string }
                   ))}
                 </ul>
               </div>
-              )}
             </div>
           )}
 
