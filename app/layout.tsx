@@ -12,44 +12,48 @@ const ORG_NAME = 'Gut Shell';
 
 // Site-wide structured data — Organization + LocalBusiness merged so
 // Google can present rich brand info, hours, and contact on SERPs.
-const orgJsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'Organization',
-      '@id': `${SITE_URL}#organization`,
-      name: ORG_NAME,
-      url: SITE_URL,
-      logo: `${SITE_URL}/icon.png`,
-      sameAs: [] as string[], // populate with Instagram/YouTube/etc. URLs if available
-      description: 'Personalized functional nutrition consultations for gut health, PCOS, thyroid, diabetes, weight management and more.',
-    },
-    {
-      '@type': 'MedicalBusiness',
-      '@id': `${SITE_URL}#business`,
-      name: ORG_NAME,
-      url: SITE_URL,
-      image: `${SITE_URL}/opengraph-image`,
-      priceRange: '₹₹',
-      areaServed: { '@type': 'Country', name: 'India' },
-      availableLanguage: ['English', 'Hindi'],
-      medicalSpecialty: [
-        'Nutrition',
-        'Dietetics',
-        'Gastroenterology',
-        'Endocrinology',
-      ],
-    },
-    {
-      '@type': 'WebSite',
-      '@id': `${SITE_URL}#website`,
-      url: SITE_URL,
-      name: ORG_NAME,
-      publisher: { '@id': `${SITE_URL}#organization` },
-      inLanguage: 'en-IN',
-    },
-  ],
-};
+// logoUrl is resolved per-render so changing it in Sanity Studio is reflected
+// without a redeploy.
+function buildOrgJsonLd(logoUrl: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': `${SITE_URL}#organization`,
+        name: ORG_NAME,
+        url: SITE_URL,
+        logo: logoUrl,
+        sameAs: [] as string[], // populate with Instagram/YouTube/etc. URLs if available
+        description: 'Personalized functional nutrition consultations for gut health, PCOS, thyroid, diabetes, weight management and more.',
+      },
+      {
+        '@type': 'MedicalBusiness',
+        '@id': `${SITE_URL}#business`,
+        name: ORG_NAME,
+        url: SITE_URL,
+        image: `${SITE_URL}/opengraph-image`,
+        priceRange: '₹₹',
+        areaServed: { '@type': 'Country', name: 'India' },
+        availableLanguage: ['English', 'Hindi'],
+        medicalSpecialty: [
+          'Nutrition',
+          'Dietetics',
+          'Gastroenterology',
+          'Endocrinology',
+        ],
+      },
+      {
+        '@type': 'WebSite',
+        '@id': `${SITE_URL}#website`,
+        url: SITE_URL,
+        name: ORG_NAME,
+        publisher: { '@id': `${SITE_URL}#organization` },
+        inLanguage: 'en-IN',
+      },
+    ],
+  };
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://gutshell.com'),
@@ -116,9 +120,21 @@ async function getThemeColor(): Promise<string> {
   }
 }
 
+async function getLogoUrl(): Promise<string> {
+  try {
+    const { client } = await import('@/sanity/lib/client');
+    const { SITE_SETTINGS_QUERY } = await import('@/sanity/lib/queries');
+    const settings = await client.fetch(SITE_SETTINGS_QUERY);
+    return settings?.logo || `${SITE_URL}/icon`;
+  } catch {
+    return `${SITE_URL}/icon`;
+  }
+}
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const primaryColor = await getThemeColor();
+  const [primaryColor, logoUrl] = await Promise.all([getThemeColor(), getLogoUrl()]);
   const palette = generatePalette(primaryColor);
+  const orgJsonLd = buildOrgJsonLd(logoUrl);
   const cssVars = paletteToCss(palette);
 
   return (
