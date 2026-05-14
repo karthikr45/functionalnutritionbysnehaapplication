@@ -16,6 +16,7 @@ const navItems = [
   { href: '/doctor/revenue', label: 'Revenue', icon: '💰' },
   { href: '/doctor/documents', label: 'Documents', icon: '📄' },
   { href: '/doctor/testimonials', label: 'Stories', icon: '⭐' },
+  { href: '/doctor/reviews', label: 'Reviews', icon: '⚖️' },
   { href: '/doctor/profile', label: 'My Profile', icon: '👤' },
   { href: '/studio', label: 'Blog CMS', icon: '✍️' },
 ];

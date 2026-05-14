@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getAuthSession } from '@/lib/auth';
+import { createNotification } from '@/lib/notifications';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const page = parseInt(req.nextUrl.searchParams.get('page') || '1');
@@ -33,20 +34,38 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   });
   if (!order) return NextResponse.json({ error: 'You can only review products from delivered orders' }, { status: 403 });
 
+  // New reviews are unapproved until the doctor explicitly approves them.
   const review = await prisma.productReview.create({
-    data: { productId: params.id, userId: session.user.id, orderId, rating, title, comment },
+    data: {
+      productId: params.id,
+      userId: session.user.id,
+      orderId,
+      rating,
+      title,
+      comment,
+      isApproved: false,
+    },
+    include: { product: { select: { name: true } } },
   });
 
-  // Update product avg rating and total reviews
-  const stats = await prisma.productReview.aggregate({
-    where: { productId: params.id, isApproved: true },
-    _avg: { rating: true },
-    _count: true,
-  });
-  await prisma.product.update({
-    where: { id: params.id },
-    data: { avgRating: stats._avg.rating || 0, totalReviews: stats._count },
-  });
+  // Notify the (single) doctor that there's a pending review to moderate.
+  try {
+    const doctor = await prisma.user.findFirst({
+      where: { role: 'DOCTOR' },
+      select: { id: true },
+    });
+    if (doctor) {
+      createNotification({
+        userId: doctor.id,
+        type: 'REVIEW_PENDING',
+        title: 'New review awaiting approval',
+        message: `${session.user.name} left a ${rating}-star review for ${review.product.name}.`,
+        link: '/doctor/reviews?status=pending',
+      }).catch(() => {});
+    }
+  } catch {
+    /* notification failure is non-fatal */
+  }
 
   return NextResponse.json({ review }, { status: 201 });
 }
