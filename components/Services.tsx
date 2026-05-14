@@ -130,6 +130,8 @@ function ServiceIcon({ slug }: { slug: string }) {
 export default function Services() {
   const [services, setServices] = useState<Service[]>([]);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const [canPrev, setCanPrev] = useState(false);
+  const [canNext, setCanNext] = useState(false);
 
   useEffect(() => {
     fetch('/api/services')
@@ -147,6 +149,60 @@ export default function Services() {
   }, []);
 
   const displayServices = services.length > 0 ? services : fallbackServices;
+
+  // One "page" = roughly one card + gap. Falls back to 320px if no card found.
+  const stepSize = () => {
+    const carousel = carouselRef.current;
+    if (!carousel) return 320;
+    const firstCard = carousel.querySelector<HTMLElement>('[data-arc-card]');
+    const cardW = firstCard?.getBoundingClientRect().width ?? 300;
+    return cardW + 32; // gap-8 = 32px
+  };
+
+  const scrollByStep = (dir: 1 | -1) => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+    carousel.scrollBy({ left: dir * stepSize(), behavior: 'smooth' });
+  };
+
+  // Refresh "can scroll prev/next" state on scroll + resize so we can disable
+  // the nav buttons at the edges.
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+    const refresh = () => {
+      const max = carousel.scrollWidth - carousel.clientWidth;
+      setCanPrev(carousel.scrollLeft > 4);
+      setCanNext(carousel.scrollLeft < max - 4);
+    };
+    refresh();
+    carousel.addEventListener('scroll', refresh, { passive: true });
+    window.addEventListener('resize', refresh);
+    return () => {
+      carousel.removeEventListener('scroll', refresh);
+      window.removeEventListener('resize', refresh);
+    };
+  }, [displayServices]);
+
+  // Keyboard navigation: when the carousel itself has focus (tabIndex=0),
+  // arrow keys scroll one card at a time. Up/Down also work so mouse users
+  // who land in the section can navigate without learning a special key.
+  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      scrollByStep(1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      scrollByStep(-1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      carouselRef.current?.scrollTo({ left: 0, behavior: 'smooth' });
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      const c = carouselRef.current;
+      if (c) c.scrollTo({ left: c.scrollWidth, behavior: 'smooth' });
+    }
+  };
 
   // Dynamically compute each card's tilt based on its viewport position.
   // Cards near the left edge of the viewport tilt right (+rotateY),
@@ -205,17 +261,37 @@ export default function Services() {
           </div>
 
           <div className="flex items-center gap-3 text-gray-600 shrink-0 lg:mt-2">
-            {/* Vertical capsule indicator: 14×28px, 1px #C5BFB0, no fill, no arrow */}
-            <div
-              className="w-[14px] h-7 rounded-full shrink-0"
-              style={{ border: '1px solid #C5BFB0' }}
-              aria-hidden="true"
-            />
             <p className="text-[13px] leading-tight">
-              Scroll to explore
+              Scroll or use{' '}
+              <kbd className="px-1.5 py-0.5 text-[11px] bg-white border border-gray-300 rounded">←</kbd>{' '}
+              <kbd className="px-1.5 py-0.5 text-[11px] bg-white border border-gray-300 rounded">→</kbd>
               <br />
-              our programs
+              to explore programs
             </p>
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={() => scrollByStep(-1)}
+                disabled={!canPrev}
+                aria-label="Previous program"
+                className="w-10 h-10 rounded-full border border-gray-300 bg-white text-gray-800 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollByStep(1)}
+                disabled={!canNext}
+                aria-label="Next program"
+                className="w-10 h-10 rounded-full border border-gray-300 bg-white text-gray-800 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -224,7 +300,26 @@ export default function Services() {
           Each card's tilt is computed dynamically on scroll (see useEffect above). */}
       <div
         ref={carouselRef}
-        className="flex gap-8 overflow-x-auto snap-x snap-mandatory scroll-smooth py-12 scrollbar-hide"
+        role="region"
+        aria-label="Signature programs carousel — use arrow keys to navigate"
+        tabIndex={0}
+        onKeyDown={onKeyDown}
+        onWheel={(e) => {
+          // Desktop mouse wheels emit deltaY; translate that to horizontal
+          // scroll so users without a trackpad can still navigate the row.
+          // Trackpad horizontal swipes (deltaX) are left alone.
+          if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && e.deltaY !== 0) {
+            const c = carouselRef.current;
+            if (!c) return;
+            const max = c.scrollWidth - c.clientWidth;
+            const atStart = c.scrollLeft <= 0 && e.deltaY < 0;
+            const atEnd = c.scrollLeft >= max && e.deltaY > 0;
+            if (atStart || atEnd) return; // let the page scroll past the section
+            e.preventDefault();
+            c.scrollBy({ left: e.deltaY, behavior: 'auto' });
+          }
+        }}
+        className="flex gap-8 overflow-x-auto snap-x snap-mandatory scroll-smooth py-12 scrollbar-hide focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF6EE] rounded-2xl"
         style={{
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
