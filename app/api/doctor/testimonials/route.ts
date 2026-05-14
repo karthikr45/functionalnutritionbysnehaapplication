@@ -3,21 +3,53 @@ import { prisma } from '@/lib/prisma';
 import { getAuthSession } from '@/lib/auth';
 import type { TestimonialType } from '@prisma/client';
 
-// GET — list all testimonials authored by the logged-in doctor
-export async function GET() {
+// GET — list ALL testimonials (own + patient submissions) with optional
+// status filter (pending | approved | rejected). Single-doctor practice.
+export async function GET(req: NextRequest) {
   const session = await getAuthSession();
   if (!session || session.user.role !== 'DOCTOR') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const items = await prisma.testimonial.findMany({
-    where: { authorId: session.user.id },
-    orderBy: [{ isFeatured: 'desc' }, { sortOrder: 'asc' }, { createdAt: 'desc' }],
-  });
-  return NextResponse.json({ testimonials: items });
+  try {
+    const status = req.nextUrl.searchParams.get('status'); // 'pending' | 'approved' | 'rejected' | null
+    const where: any = {};
+    if (status === 'pending') {
+      where.isApproved = false;
+      where.approvedAt = null;
+    } else if (status === 'approved') {
+      where.isApproved = true;
+    } else if (status === 'rejected') {
+      where.isApproved = false;
+      where.approvedAt = { not: null };
+    }
+
+    const items = await prisma.testimonial.findMany({
+      where,
+      orderBy: [{ isFeatured: 'desc' }, { sortOrder: 'asc' }, { createdAt: 'desc' }],
+      include: {
+        author: { select: { name: true, email: true, role: true } },
+      },
+    });
+
+    const counts = await prisma.$transaction([
+      prisma.testimonial.count({ where: { isApproved: false, approvedAt: null } }),
+      prisma.testimonial.count({ where: { isApproved: true } }),
+      prisma.testimonial.count({ where: { isApproved: false, approvedAt: { not: null } } }),
+    ]);
+
+    return NextResponse.json({
+      testimonials: items,
+      counts: { pending: counts[0], approved: counts[1], rejected: counts[2] },
+    });
+  } catch (e) {
+    console.error('GET /api/doctor/testimonials failed:', e);
+    return NextResponse.json({ testimonials: [], counts: { pending: 0, approved: 0, rejected: 0 }, error: 'Failed to load' }, { status: 200 });
+  }
 }
 
-// POST — create a new testimonial / case study
+// POST — doctor creates a new testimonial directly. Marked as approved
+// on creation since the doctor is the moderator.
 export async function POST(req: NextRequest) {
   const session = await getAuthSession();
   if (!session || session.user.role !== 'DOCTOR') {
@@ -48,6 +80,7 @@ export async function POST(req: NextRequest) {
   const created = await prisma.testimonial.create({
     data: {
       authorId: session.user.id,
+      source: 'DOCTOR',
       patientName: String(patientName).trim(),
       type: t,
       title: title ? String(title).trim() : null,
@@ -58,6 +91,9 @@ export async function POST(req: NextRequest) {
       isPublished: isPublished !== undefined ? Boolean(isPublished) : true,
       isFeatured: Boolean(isFeatured),
       sortOrder: Number.isFinite(Number(sortOrder)) ? Math.trunc(Number(sortOrder)) : 0,
+      isApproved: true,
+      approvedAt: new Date(),
+      approvedById: session.user.id,
     },
   });
   return NextResponse.json({ testimonial: created });

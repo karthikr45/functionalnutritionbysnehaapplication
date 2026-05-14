@@ -69,6 +69,11 @@ enum TestimonialType {
   CASE_STUDY
 }
 
+enum TestimonialSource {
+  DOCTOR // authored directly by the doctor / admin
+  PATIENT // submitted by a patient via the dashboard
+}
+
 enum PaymentMode {
   TEST
   LIVE
@@ -565,23 +570,31 @@ model Document {
 // by `type`). Authored by the doctor (User with role DOCTOR).
 
 model Testimonial {
-  id          String          @id @default(cuid())
-  authorId    String // doctor user.id who created the entry
-  patientName String // patient name shown publicly (or anonymized)
-  type        TestimonialType @default(TESTIMONIAL)
-  title       String?
-  quote       String? // optional standout pull-quote shown above the body
-  content     String          @db.Text
-  rating      Int             @default(5) // 1-5
-  imageUrl    String? // optional patient photo / outcome chart
-  isPublished Boolean         @default(true)
-  isFeatured  Boolean         @default(false)
-  sortOrder   Int             @default(0)
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
+  id           String            @id @default(cuid())
+  authorId     String // user who created the entry (doctor when source=DOCTOR, patient when source=PATIENT)
+  source       TestimonialSource @default(DOCTOR)
+  patientName  String // patient name shown publicly (or anonymized)
+  type         TestimonialType   @default(TESTIMONIAL)
+  title        String?
+  quote        String? // optional standout pull-quote shown above the body
+  content      String            @db.Text
+  rating       Int               @default(5) // 1-5
+  imageUrl     String? // optional patient photo / outcome chart
+  // Approval — doctor-authored entries default to approved; patient-
+  // submitted entries default to NOT approved and require moderation.
+  isApproved   Boolean           @default(true)
+  approvedAt   DateTime?
+  approvedById String?
+  approvalNote String?
+  isPublished  Boolean           @default(true)
+  isFeatured   Boolean           @default(false)
+  sortOrder    Int               @default(0)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
 
   author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   @@index([authorId])
   @@index([isPublished, sortOrder])
+  @@index([isApproved, source])
 }

@@ -9,7 +9,9 @@ export const revalidate = 0;
 export async function GET() {
   try {
     const items = await prisma.testimonial.findMany({
-      where: { isPublished: true },
+      // Public list: only published AND approved. Doctor-authored entries
+      // default to approved; patient submissions need explicit approval.
+      where: { isPublished: true, isApproved: true },
       orderBy: [
         { isFeatured: 'desc' },
         { sortOrder: 'asc' },

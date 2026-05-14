@@ -5,9 +5,12 @@ import toast from 'react-hot-toast';
 
 type Type = 'TESTIMONIAL' | 'CASE_STUDY';
 
+type Status = 'all' | 'pending' | 'approved' | 'rejected';
+
 interface Testimonial {
   id: string;
   authorId: string;
+  source: 'DOCTOR' | 'PATIENT';
   patientName: string;
   type: Type;
   title: string | null;
@@ -17,9 +20,13 @@ interface Testimonial {
   imageUrl: string | null;
   isPublished: boolean;
   isFeatured: boolean;
+  isApproved: boolean;
+  approvedAt: string | null;
+  approvalNote: string | null;
   sortOrder: number;
   createdAt: string;
   updatedAt: string;
+  author?: { name: string; email: string; role: string };
 }
 
 const emptyForm = {
@@ -71,13 +78,35 @@ export default function DoctorTestimonialsPage() {
     }
   };
 
-  const load = () => {
+  const [status, setStatus] = useState<Status>('all');
+  const [counts, setCounts] = useState({ pending: 0, approved: 0, rejected: 0 });
+
+  const load = (s: Status = status) => {
     setLoading(true);
-    fetch('/api/doctor/testimonials')
+    const url = s === 'all' ? '/api/doctor/testimonials' : `/api/doctor/testimonials?status=${s}`;
+    fetch(url)
       .then((r) => r.json())
-      .then((d) => setItems(d.testimonials || []))
+      .then((d) => {
+        setItems(d.testimonials || []);
+        if (d.counts) setCounts(d.counts);
+      })
       .catch(() => toast.error('Failed to load testimonials'))
       .finally(() => setLoading(false));
+  };
+
+  const moderate = async (id: string, action: 'approve' | 'reject', note?: string) => {
+    try {
+      const res = await fetch(`/api/doctor/testimonials/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, note }),
+      });
+      if (!res.ok) throw new Error('Failed');
+      toast.success(action === 'approve' ? 'Approved — now visible on the homepage.' : 'Rejected.');
+      load(status);
+    } catch {
+      toast.error('Action failed.');
+    }
   };
 
   useEffect(() => { load(); }, []);
@@ -165,7 +194,7 @@ export default function DoctorTestimonialsPage() {
       <div className="flex items-start justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Testimonials &amp; Case Studies</h1>
-          <p className="text-sm text-gray-500 mt-1">Stories you write here are shown on the public homepage.</p>
+          <p className="text-sm text-gray-500 mt-1">Stories you write here are published immediately. Patient submissions wait for your approval before appearing on the homepage.</p>
         </div>
         <button
           onClick={showForm ? resetForm : openCreate}
@@ -277,38 +306,114 @@ export default function DoctorTestimonialsPage() {
         </form>
       )}
 
+      <div className="flex items-center gap-1 mb-5 border-b border-gray-200 overflow-x-auto">
+        {([
+          { key: 'all', label: 'All' },
+          { key: 'pending', label: `Pending review${counts.pending ? ` (${counts.pending})` : ''}` },
+          { key: 'approved', label: `Approved${counts.approved ? ` (${counts.approved})` : ''}` },
+          { key: 'rejected', label: `Rejected${counts.rejected ? ` (${counts.rejected})` : ''}` },
+        ] as { key: Status; label: string }[]).map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => { setStatus(tab.key); load(tab.key); }}
+            className={`px-4 py-2 text-sm font-medium whitespace-nowrap border-b-2 -mb-px transition-colors ${
+              status === tab.key
+                ? 'border-primary-700 text-primary-800'
+                : 'border-transparent text-gray-500 hover:text-gray-800'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
       {loading ? (
         <p className="text-sm text-gray-500">Loading…</p>
       ) : items.length === 0 ? (
         <div className="text-center py-16 bg-cream-dark rounded-2xl">
-          <p className="text-gray-500 text-sm">No stories yet. Click <strong>+ New Story</strong> to add the first one.</p>
+          <p className="text-gray-500 text-sm">
+            {status === 'pending'
+              ? 'No pending submissions. Patient stories will appear here for review.'
+              : status === 'rejected'
+              ? 'No rejected stories.'
+              : 'No stories yet. Click + New Story to add the first one.'}
+          </p>
         </div>
       ) : (
         <div className="space-y-3">
-          {items.map((t) => (
-            <div key={t.id} className="bg-white border border-gray-100 rounded-2xl p-5 flex flex-col sm:flex-row gap-4 items-start">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap mb-1">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-primary-700">
-                    {t.type === 'CASE_STUDY' ? 'Case Study' : 'Testimonial'}
-                  </span>
-                  {t.isFeatured && <span className="text-xs px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full">Featured</span>}
-                  {!t.isPublished && <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-500 rounded-full">Hidden</span>}
+          {items.map((t) => {
+            const isPending = !t.isApproved && !t.approvedAt;
+            const isRejected = !t.isApproved && !!t.approvedAt;
+            return (
+              <div key={t.id} className="bg-white border border-gray-100 rounded-2xl p-5 flex flex-col sm:flex-row gap-4 items-start">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap mb-1">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-primary-700">
+                      {t.type === 'CASE_STUDY' ? 'Case Study' : 'Testimonial'}
+                    </span>
+                    {t.source === 'PATIENT' && (
+                      <span className="text-xs px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full">Patient submission</span>
+                    )}
+                    {isPending && (
+                      <span className="text-xs px-2 py-0.5 bg-amber-50 text-amber-700 rounded-full">Pending review</span>
+                    )}
+                    {isRejected && (
+                      <span className="text-xs px-2 py-0.5 bg-red-50 text-red-700 rounded-full">Rejected</span>
+                    )}
+                    {t.isApproved && t.source === 'PATIENT' && (
+                      <span className="text-xs px-2 py-0.5 bg-green-50 text-green-700 rounded-full">Approved</span>
+                    )}
+                    {t.isFeatured && <span className="text-xs px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full">Featured</span>}
+                    {!t.isPublished && <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-500 rounded-full">Hidden</span>}
+                  </div>
+                  <p className="font-semibold text-gray-900">{t.patientName}</p>
+                  {t.source === 'PATIENT' && t.author?.email && (
+                    <p className="text-[11px] text-gray-400">Submitted by {t.author.name || t.author.email}</p>
+                  )}
+                  {t.title && <p className="text-sm text-gray-700 mt-0.5">{t.title}</p>}
+                  <p className="text-sm text-gray-500 mt-2 line-clamp-2">{t.content}</p>
+                  <div className="text-xs text-amber-500 mt-1">{'★'.repeat(t.rating)}{'☆'.repeat(5 - t.rating)}</div>
+                  {t.approvalNote && (
+                    <p className="text-[11px] text-gray-500 mt-2 italic">Note: {t.approvalNote}</p>
+                  )}
                 </div>
-                <p className="font-semibold text-gray-900">{t.patientName}</p>
-                {t.title && <p className="text-sm text-gray-700 mt-0.5">{t.title}</p>}
-                <p className="text-sm text-gray-500 mt-2 line-clamp-2">{t.content}</p>
-                <div className="text-xs text-amber-500 mt-1">{'★'.repeat(t.rating)}{'☆'.repeat(5 - t.rating)}</div>
+                <div className="flex flex-col gap-2 shrink-0 w-full sm:w-auto">
+                  {isPending && (
+                    <>
+                      <button
+                        onClick={() => moderate(t.id, 'approve')}
+                        className="px-4 py-1.5 text-xs font-semibold text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
+                      >
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => {
+                          const note = prompt('Optional reason (shown to the patient on their submissions page):') ?? undefined;
+                          moderate(t.id, 'reject', note || undefined);
+                        }}
+                        className="px-4 py-1.5 text-xs font-semibold text-red-700 border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
+                      >
+                        Reject
+                      </button>
+                    </>
+                  )}
+                  {isRejected && (
+                    <button
+                      onClick={() => moderate(t.id, 'approve')}
+                      className="px-4 py-1.5 text-xs font-semibold text-green-700 border border-green-200 rounded-lg hover:bg-green-50 transition-colors"
+                    >
+                      Approve
+                    </button>
+                  )}
+                  <button onClick={() => openEdit(t)} className="px-4 py-1.5 text-xs font-semibold text-primary-700 border border-primary-200 rounded-lg hover:bg-primary-50 transition-colors">Edit</button>
+                  <button onClick={() => togglePublished(t)} className="px-4 py-1.5 text-xs font-semibold text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    {t.isPublished ? 'Hide' : 'Publish'}
+                  </button>
+                  <button onClick={() => remove(t.id)} className="px-4 py-1.5 text-xs font-semibold text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors">Delete</button>
+                </div>
               </div>
-              <div className="flex flex-col gap-2 shrink-0">
-                <button onClick={() => openEdit(t)} className="px-4 py-1.5 text-xs font-semibold text-primary-700 border border-primary-200 rounded-lg hover:bg-primary-50 transition-colors">Edit</button>
-                <button onClick={() => togglePublished(t)} className="px-4 py-1.5 text-xs font-semibold text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                  {t.isPublished ? 'Hide' : 'Publish'}
-                </button>
-                <button onClick={() => remove(t.id)} className="px-4 py-1.5 text-xs font-semibold text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors">Delete</button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
